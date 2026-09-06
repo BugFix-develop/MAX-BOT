@@ -1,0 +1,372 @@
+[
+  {
+    "id": 1,
+    "group": "Разность квадратов",
+    "name": "Разность квадратов, базовый",
+    "formula": "(x - a)(x + a) = x^2 - a^2",
+    "params": {
+      "a": {"min": 2, "max": 15}
+    },
+    "question": "Раскройте скобки: (x - {a})(x + {a})",
+    "answer": "x^2-{ans}",
+    "logic": "ans = a ** 2"
+  },
+  {
+    "id": 2,
+    "group": "Разность квадратов",
+    "name": "Разность квадратов, зеркальный",
+    "formula": "(a - x)(a + x) = a^2 - x^2",
+    "params": {
+      "a": {"min": 2, "max": 15}
+    },
+    "question": "Раскройте скобки: ({a} - x)({a} + x)",
+    "answer": "{ans}-x^2",
+    "logic": "ans = a ** 2"
+  },
+  {
+    "id": 3,
+    "group": "Разность квадратов",
+    "name": "Разность квадратов, с коэффициентом при x",
+    "formula": "(kx - a)(kx + a) = k^2*x^2 - a^2",
+    "params": {
+      "k": {"min": 2, "max": 6},
+      "a": {"min": 2, "max": 12}
+    },
+    "question": "Раскройте скобки: ({k}x - {a})({k}x + {a})",
+    "answer": "{k_sq}x^2-{a_sq}",
+    "logic": "k_sq = k ** 2, a_sq = a ** 2"
+  },
+  {
+    "id": 4,
+    "group": "Разность квадратов",
+    "name": "Разность квадратов, две переменные",
+    "formula": "(x - ay)(x + ay) = x^2 - a^2*y^2",
+    "params": {
+      "a": {"min": 2, "max": 12}
+    },
+    "question": "Раскройте скобки: (x - {a}y)(x + {a}y)",
+    "answer": "x^2-{a_sq}y^2",
+    "logic": "a_sq = a ** 2"
+  },
+  {
+    "id": 5,
+    "group": "Разность квадратов",
+    "name": "Разность квадратов, две переменные с коэффициентами",
+    "formula": "(kx - my)(kx + my) = k^2*x^2 - m^2*y^2",
+    "params": {
+      "k": {"min": 2, "max": 6},
+      "m": {"min": 2, "max": 8}
+    },
+    "question": "Раскройте скобки: ({k}x - {m}y)({k}x + {m}y)",
+    "answer": "{k_sq}x^2-{m_sq}y^2",
+    "logic": "k_sq = k ** 2, m_sq = m ** 2"
+  },
+  {
+    "id": 6,
+    "group": "Разность квадратов",
+    "name": "Разность квадратов, x в квадрате",
+    "formula": "(x^2 - a)(x^2 + a) = x^4 - a^2",
+    "params": {
+      "a": {"min": 2, "max": 10}
+    },
+    "question": "Раскройте скобки: (x^2 - {a})(x^2 + {a})",
+    "answer": "x^4-{a_sq}",
+    "logic": "a_sq = a ** 2"
+  },
+  {
+    "id": 7,
+    "group": "Разность квадратов",
+    "name": "Разность квадратов, десятичные дроби",
+    "formula": "(x - a)(x + a) = x^2 - a^2",
+    "params": {
+      "a": {"choices": [0.1, 0.2, 0.3, 0.4, 0.5]}
+    },
+    "question": "Раскройте скобки: (x - {a})(x + {a})",
+    "answer": "x^2-{ans}",
+    "logic": "ans = round(a ** 2, 2)"
+  },
+  {
+    "id": 8,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат суммы, базовый",
+    "formula": "(x + a)^2 = x^2 + 2ax + a^2",
+    "params": {
+      "a": {"min": 2, "max": 12}
+    },
+    "question": "Раскройте скобки: (x + {a})^2",
+    "answer": "x^2+{coef}x+{free_term}",
+    "logic": "coef = 2 * a, free_term = a ** 2"
+  },
+  {
+    "id": 9,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат суммы, зеркальный",
+    "formula": "(a + x)^2 = a^2 + 2ax + x^2",
+    "params": {
+      "a": {"min": 2, "max": 12}
+    },
+    "question": "Раскройте скобки: ({a} + x)^2",
+    "answer": "{free_term}+{coef}x+x^2",
+    "logic": "coef = 2 * a, free_term = a ** 2"
+  },
+  {
+    "id": 10,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат суммы, с коэффициентом при x",
+    "formula": "(kx + a)^2 = k^2*x^2 + 2kax + a^2",
+    "params": {
+      "k": {"min": 2, "max": 5},
+      "a": {"min": 2, "max": 9}
+    },
+    "question": "Раскройте скобки: ({k}x + {a})^2",
+    "answer": "{k_sq}x^2+{coef}x+{a_sq}",
+    "logic": "k_sq = k ** 2, coef = 2 * k * a, a_sq = a ** 2"
+  },
+  {
+    "id": 11,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат суммы, две переменные",
+    "formula": "(x + ay)^2 = x^2 + 2axy + a^2*y^2",
+    "params": {
+      "a": {"min": 2, "max": 10}
+    },
+    "question": "Раскройте скобки: (x + {a}y)^2",
+    "answer": "x^2+{coef}xy+{a_sq}y^2",
+    "logic": "coef = 2 * a, a_sq = a ** 2"
+  },
+  {
+    "id": 12,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат суммы, две переменные с коэффициентами",
+    "formula": "(kx + my)^2 = k^2*x^2 + 2kmxy + m^2*y^2",
+    "params": {
+      "k": {"min": 2, "max": 5},
+      "m": {"min": 2, "max": 5}
+    },
+    "question": "Раскройте скобки: ({k}x + {m}y)^2",
+    "answer": "{k_sq}x^2+{coef}xy+{m_sq}y^2",
+    "logic": "k_sq = k ** 2, coef = 2 * k * m, m_sq = m ** 2"
+  },
+  {
+    "id": 13,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат суммы, x в квадрате",
+    "formula": "(x^2 + a)^2 = x^4 + 2ax^2 + a^2",
+    "params": {
+      "a": {"min": 2, "max": 8}
+    },
+    "question": "Раскройте скобки: (x^2 + {a})^2",
+    "answer": "x^4+{coef}x^2+{a_sq}",
+    "logic": "coef = 2 * a, a_sq = a ** 2"
+  },
+  {
+    "id": 14,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат разности, базовый",
+    "formula": "(x - a)^2 = x^2 - 2ax + a^2",
+    "params": {
+      "a": {"min": 2, "max": 12}
+    },
+    "question": "Раскройте скобки: (x - {a})^2",
+    "answer": "x^2-{coef}x+{free_term}",
+    "logic": "coef = 2 * a, free_term = a ** 2"
+  },
+  {
+    "id": 15,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат разности, зеркальный",
+    "formula": "(a - x)^2 = a^2 - 2ax + x^2",
+    "params": {
+      "a": {"min": 2, "max": 12}
+    },
+    "question": "Раскройте скобки: ({a} - x)^2",
+    "answer": "{free_term}-{coef}x+x^2",
+    "logic": "coef = 2 * a, free_term = a ** 2"
+  },
+  {
+    "id": 16,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат разности, с коэффициентом при x",
+    "formula": "(kx - a)^2 = k^2*x^2 - 2kax + a^2",
+    "params": {
+      "k": {"min": 2, "max": 5},
+      "a": {"min": 2, "max": 9}
+    },
+    "question": "Раскройте скобки: ({k}x - {a})^2",
+    "answer": "{k_sq}x^2-{coef}x+{a_sq}",
+    "logic": "k_sq = k ** 2, coef = 2 * k * a, a_sq = a ** 2"
+  },
+  {
+    "id": 17,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат разности, две переменные",
+    "formula": "(x - ay)^2 = x^2 - 2axy + a^2*y^2",
+    "params": {
+      "a": {"min": 2, "max": 10}
+    },
+    "question": "Раскройте скобки: (x - {a}y)^2",
+    "answer": "x^2-{coef}xy+{a_sq}y^2",
+    "logic": "coef = 2 * a, a_sq = a ** 2"
+  },
+  {
+    "id": 18,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат разности, две переменные с коэффициентами",
+    "formula": "(kx - my)^2 = k^2*x^2 - 2kmxy + m^2*y^2",
+    "params": {
+      "k": {"min": 2, "max": 5},
+      "m": {"min": 2, "max": 5}
+    },
+    "question": "Раскройте скобки: ({k}x - {m}y)({k}x + {m}y)",
+    "answer": "{k_sq}x^2-{coef}xy+{m_sq}y^2",
+    "logic": "k_sq = k ** 2, coef = 2 * k * m, m_sq = m ** 2"
+  },
+  {
+    "id": 19,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат разности, x в квадрате",
+    "formula": "(x^2 - a)^2 = x^4 - 2ax^2 + a^2",
+    "params": {
+      "a": {"min": 2, "max": 8}
+    },
+    "question": "Раскройте скобки: (x^2 - {a})^2",
+    "answer": "x^4-{coef}x^2+{a_sq}",
+    "logic": "coef = 2 * a, a_sq = a ** 2"
+  },
+  {
+    "id": 20,
+    "group": "Квадрат суммы и разности",
+    "name": "Квадрат суммы со скрытым минусом",
+    "formula": "(-x - a)^2 = x^2 + 2ax + a^2",
+    "params": {
+      "a": {"min": 2, "max": 10}
+    },
+    "question": "Раскройте скобки: (-x - {a})^2",
+    "answer": "x^2+{coef}x+{a_sq}",
+    "logic": "coef = 2 * a, a_sq = a ** 2"
+  },
+  {
+    "id": 21,
+    "group": "Кубы и разложение на множители",
+    "name": "Куб суммы, базовый",
+    "formula": "(x + a)^3 = x^3 + 3ax^2 + 3a^2x + a^3",
+    "params": {
+      "a": {"min": 2, "max": 5}
+    },
+    "question": "Раскройте скобки: (x + {a})^3",
+    "answer": "x^3+{coef1}x^2+{coef2}x+{free_term}",
+    "logic": "coef1 = 3 * a, coef2 = 3 * (a ** 2), free_term = a ** 3"
+  },
+  {
+    "id": 22,
+    "group": "Кубы и разложение на множители",
+    "name": "Куб разности, базовый",
+    "formula": "(x - a)^3 = x^3 - 3ax^2 + 3a^2x - a^3",
+    "params": {
+      "a": {"min": 2, "max": 5}
+    },
+    "question": "Раскройте скобки: (x - {a})^3",
+    "answer": "x^3-{coef1}x^2+{coef2}x-{free_term}",
+    "logic": "coef1 = 3 * a, coef2 = 3 * (a ** 2), free_term = a ** 3"
+  },
+  {
+    "id": 23,
+    "group": "Кубы и разложение на множители",
+    "name": "Куб суммы, с коэффициентом при x",
+    "formula": "(kx + a)^3 = k^3*x^3 + 3k^2*a*x^2 + 3k*a^2*x + a^3",
+    "params": {
+      "k": {"min": 2, "max": 4},
+      "a": {"min": 2, "max": 4}
+    },
+    "question": "Раскройте скобки: ({k}x + {a})^3",
+    "answer": "{k_cub}x^3+{coef1}x^2+{coef2}x+{free_term}",
+    "logic": "k_cub = k ** 3, coef1 = 3 * (k ** 2) * a, coef2 = 3 * k * (a ** 2), free_term = a ** 3"
+  },
+  {
+    "id": 24,
+    "group": "Кубы и разложение на множители",
+    "name": "Куб разности, с коэффициентом при x",
+    "formula": "(kx - a)^3 = k^3*x^3 - 3k^2*a*x^2 + 3k*a^2*x - a^3",
+    "params": {
+      "k": {"min": 2, "max": 4},
+      "a": {"min": 2, "max": 4}
+    },
+    "question": "Раскройте скобки: ({k}x - {a})^3",
+    "answer": "{k_cub}x^3-{coef1}x^2+{coef2}x-{free_term}",
+    "logic": "k_cub = k ** 3, coef1 = 3 * (k ** 2) * a, coef2 = 3 * k * (a ** 2), free_term = a ** 3"
+  },
+  {
+    "id": 25,
+    "group": "Кубы и разложение на множители",
+    "name": "Сумма кубов, умножение скобок",
+    "formula": "(x + a)(x^2 - ax + a^2) = x^3 + a^3",
+    "params": {
+      "a": {"min": 2, "max": 6}
+    },
+    "question": "Выполните умножение: (x + {a})(x^2 - {a}x + {a_sq})",
+    "answer": "x^3+{free_term}",
+    "logic": "a_sq = a ** 2, free_term = a ** 3"
+  },
+  {
+    "id": 26,
+    "group": "Кубы и разложение на множители",
+    "name": "Разность кубов, умножение скобок",
+    "formula": "(x - a)(x^2 + ax + a^2) = x^3 - a^3",
+    "params": {
+      "a": {"min": 2, "max": 6}
+    },
+    "question": "Выполните умножение: (x - {a})(x^2 + {a}x + {a_sq})",
+    "answer": "x^3-{free_term}",
+    "logic": "a_sq = a ** 2, free_term = a ** 3"
+  },
+  {
+    "id": 27,
+    "group": "Кубы и разложение на множители",
+    "name": "Сумма кубов, разложение на множители",
+    "formula": "x^3 + a^3 = (x + a)(x^2 - ax + a^2)",
+    "params": {
+      "a": {"min": 2, "max": 6}
+    },
+    "question": "Разложите на множители: x^3 + {free_term}",
+    "answer": "(x+{a})(x^2-{a}x+{a_sq})",
+    "logic": "free_term = a ** 3, a_sq = a ** 2"
+  },
+  {
+    "id": 28,
+    "group": "Кубы и разложение на множители",
+    "name": "Разность кубов, разложение на множители",
+    "formula": "x^3 - a^3 = (x - a)(x^2 + ax + a^2)",
+    "params": {
+      "a": {"min": 2, "max": 6}
+    },
+    "question": "Разложите на множители: x^3 - {free_term}",
+    "answer": "(x-{a})(x^2+{a}x+{a_sq})",
+    "logic": "free_term = a ** 3, a_sq = a ** 2"
+  },
+  {
+    "id": 29,
+    "group": "Кубы и разложение на множители",
+    "name": "Сумма кубов, с коэффициентом при x, разложение",
+    "formula": "k^3*x^3 + a^3 = (kx + a)(k^2*x^2 - ka*x + a^2)",
+    "params": {
+      "k": {"min": 2, "max": 4},
+      "a": {"min": 2, "max": 5}
+    },
+    "question": "Разложите на множители: {k_cub}x^3 + {free_term}",
+    "answer": "({k}x+{a})({k_sq}x^2-{ka}x+{a_sq})",
+    "logic": "k_cub = k ** 3, free_term = a ** 3, k_sq = k ** 2, ka = k * a, a_sq = a ** 2"
+  },
+  {
+    "id": 30,
+    "group": "Кубы и разложение на множители",
+    "name": "Разность кубов, с коэффициентом при x, разложение",
+    "formula": "k^3*x^3 - a^3 = (kx - a)(k^2*x^2 + ka*x + a^2)",
+    "params": {
+      "k": {"min": 2, "max": 4},
+      "a": {"min": 2, "max": 5}
+    },
+    "question": "Разложите на множители: {k_cub}x^3 - {free_term}",
+    "answer": "({k}x-{a})({k_sq}x^2+{ka}x+{a_sq})",
+    "logic": "k_cub = k ** 3, free_term = a ** 3, k_sq = k ** 2, ka = k * a, a_sq = a ** 2"
+  }
+]
