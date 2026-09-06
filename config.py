@@ -6,7 +6,7 @@ BASE_DIR: Path  = Path(__file__).resolve().parent
 
 DATA_DIR: Path = BASE_DIR / "data"
 
-TAMPLATES_PATH: Path  = DATA_DIR / "templates.json"
+TEMPLATES_PATH: Path  = DATA_DIR / "templates.json"
 
 ENV_FILE: Path = BASE_DIR / ".env"
 
