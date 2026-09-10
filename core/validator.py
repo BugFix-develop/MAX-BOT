@@ -44,5 +44,5 @@ def check_answer(user_input: str, expected_answer: str) -> tuple[bool, str]:
     if(expected_answer == answer_of_user):
         return(True, "Ответ верный!")
     else:
-        return(False, f"Ответ неверный.Верный ответ: {expected_answer}")
+        return (False, f"Ответ неверный. Верный ответ: {expected_answer}")
 
