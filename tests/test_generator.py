@@ -69,3 +69,30 @@ def test_get_unique_task_fallback(generator):
     )
     assert task is not None
     assert isinstance(task, Task)
+
+
+def test_generate_lesson_cycle(generator):
+    tasks = generator.generate_lesson_cycle()
+    assert len(tasks) == 5
+    for task in tasks:
+        assert isinstance(task, Task)
+        assert len(task.question_text) > 0
+        assert len(task.reference_answer) > 0
+    assert tasks[0].template_id in range(1, 8)
+    assert tasks[1].template_id in range(1, 8)
+    assert tasks[2].template_id in range(8, 21)
+    assert tasks[3].template_id in range(8, 21)
+    assert tasks[4].template_id in range(21, 31)
+
+
+def test_generate_teacher_variant(generator):
+    tasks = generator.generate_teacher_variant(count=15)
+    assert len(tasks) == 15
+    template_ids = [t.template_id for t in tasks]
+    assert len(set(template_ids)) == 15
+    for task in tasks:
+        assert isinstance(task, Task)
+        assert len(task.question_text) > 0
+        assert len(task.reference_answer) > 0
+
+

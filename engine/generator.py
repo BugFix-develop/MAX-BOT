@@ -62,3 +62,28 @@ class TaskGenerator:
                 return task
 
         return task
+
+    def generate_lesson_cycle(self,user_id: Optional[str] = None)->list[Task]:
+        basic_ids = random.sample(range(1,8),2)
+        medium_ids = random.sample(range(8,21),2)
+        hard_ids = random.sample(range(21,31),1)
+        selected_ids = basic_ids + medium_ids + hard_ids
+        tasks = []
+        for template_id in selected_ids:
+            if user_id is None:
+                task = self.generate_task(template_id=template_id )
+            else:
+                task = self.get_unique_task(user_id,template_id)
+            tasks.append(task)
+        return tasks
+
+    def generate_teacher_variant(self, count: int = 15, user_id: Optional[str] = None) -> list[Task]:
+        selected_ids = random.sample(range(1,31),count)
+        tasks = []
+        for template_id in selected_ids:
+            if user_id is None:
+                task = self.generate_task(template_id=template_id )
+            else:
+                task = self.get_unique_task(user_id,template_id)
+            tasks.append(task)
+        return tasks
