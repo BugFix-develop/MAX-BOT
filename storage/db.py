@@ -48,3 +48,16 @@ def init_db(db_path: str = DB_NAME):
     conn.commit()
     conn.close()
 
+
+def is_task_already_solved(user_id: str, task_text: str, db_path: str = DB_NAME) -> bool:
+    conn = get_connection(db_path)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT 1 FROM task_history WHERE user_id = ? AND task_text = ? LIMIT 1",
+        (user_id, task_text),
+    )
+    row = cursor.fetchone()
+    conn.close()
+    return row is not None
+
+

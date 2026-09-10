@@ -217,7 +217,7 @@
       "k": {"min": 2, "max": 5},
       "m": {"min": 2, "max": 5}
     },
-    "question": "Раскройте скобки: ({k}x - {m}y)({k}x + {m}y)",
+    "question": "Раскройте скобки: ({k}x - {m}y)^2",
     "answer": "{k_sq}x^2-{coef}xy+{m_sq}y^2",
     "logic": "k_sq = k ** 2, coef = 2 * k * m, m_sq = m ** 2"
   },
