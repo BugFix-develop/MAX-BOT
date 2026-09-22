@@ -45,14 +45,30 @@ def init_db(db_path: str = DB_NAME):
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
     """)
 
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS user_sessions (
+        user_id TEXT PRIMARY KEY,
+        state TEXT NOT NULL DEFAULT 'STATE_ONBOARDING',
+        role TEXT DEFAULT 'student',
+        grade INTEGER DEFAULT 7,
+        topic TEXT DEFAULT 'ФСУ',
+        format TEXT,
+        current_task_idx INTEGER DEFAULT 0,
+        total_tasks INTEGER DEFAULT 5,
+        correct_count INTEGER DEFAULT 0,
+        current_task_text TEXT,
+        current_expected_answer TEXT,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+
     conn.commit()
     conn.close()
 
 
-def is_task_already_solved(user_id: str, task_text: str, db_path: str = DB_NAME ) -> bool:
+def is_task_already_solved(user_id: str, task_text: str, db_path: str = DB_NAME) -> bool:
     conn = get_connection(db_path)
     cursor = conn.cursor()
-
 
     cursor.execute(
         """
@@ -156,3 +172,4 @@ def save_lesson_plan(user_id: str, topic: str, grade: int, markdown: str, db_pat
     plan_id = cursor.lastrowid
     conn.close()
     return plan_id
+
