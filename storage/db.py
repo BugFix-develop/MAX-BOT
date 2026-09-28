@@ -19,9 +19,14 @@ def init_db(db_path: str = DB_NAME):
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             max_user_id TEXT UNIQUE NOT NULL,
             role TEXT DEFAULT 'student',
+            chat_id TEXT,
             first_seen TIMESTAMP default CURRENT_TIMESTAMP
         )
     """)
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN chat_id TEXT")
+    except Exception:
+        pass
 
 
     cursor.execute("""CREATE TABLE IF NOT EXISTS task_history (
@@ -81,26 +86,40 @@ def is_task_already_solved(user_id: str, task_text: str, db_path: str = DB_NAME)
     return row is not None
 
 
-def get_or_create_user(max_user_id: str, role: str = "student", db_path: str = DB_NAME) -> dict:
-    """Регистрация или получение пользователя из базы."""
+def get_or_create_user(max_user_id: str, role: str = "student", chat_id: str | int | None = None, db_path: str = DB_NAME) -> dict:
+    """Регистрация или получение пользователя из базы с сохранением chat_id."""
     conn = get_connection(db_path)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM users WHERE max_user_id = ?", (max_user_id,))
+    cursor.execute("SELECT * FROM users WHERE max_user_id = ?", (str(max_user_id),))
     row = cursor.fetchone()
     if row is not None:
         user_data = dict(row)
+        if chat_id is not None and str(user_data.get("chat_id") or "") != str(chat_id):
+            cursor.execute("UPDATE users SET chat_id = ? WHERE max_user_id = ?", (str(chat_id), str(max_user_id)))
+            conn.commit()
+            user_data["chat_id"] = str(chat_id)
         conn.close()
         return user_data
 
-    cursor.execute("INSERT INTO users (max_user_id, role) VALUES (?, ?)", (max_user_id, role))
+    cursor.execute("INSERT INTO users (max_user_id, role, chat_id) VALUES (?, ?, ?)", (str(max_user_id), role, str(chat_id) if chat_id else None))
     conn.commit()
 
-    cursor.execute("SELECT * FROM users WHERE max_user_id = ?", (max_user_id,))
+    cursor.execute("SELECT * FROM users WHERE max_user_id = ?", (str(max_user_id),))
     new_row = cursor.fetchone()
     user_data = dict(new_row) if new_row else {}
     conn.close()
     return user_data
+
+
+def get_all_active_users(db_path: str = DB_NAME) -> list[dict]:
+    """Возвращает список всех зарегистрированных пользователей."""
+    conn = get_connection(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE max_user_id IS NOT NULL")
+    rows = [dict(r) for r in cursor.fetchall()]
+    conn.close()
+    return rows
 
 
 def save_task_issue(user_id: str, template_id: int, task_text: str, expected_answer: str, db_path: str = DB_NAME,

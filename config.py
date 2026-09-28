@@ -18,5 +18,7 @@ except ImportError:
                     os.environ.setdefault(k.strip(), v.strip())
 
 MAX_BOT_TOKEN: str = os.getenv("MAX_BOT_TOKEN", "")
+MAX_API_BASE_URL: str = os.getenv("MAX_API_BASE_URL", "https://platform-api2.max.ru")
 
 DB_PATH: str = os.getenv("DB_PATH", str(BASE_DIR / "math_bot.db"))
+

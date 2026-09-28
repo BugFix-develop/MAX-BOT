@@ -35,63 +35,73 @@ FALLBACK_TASKS = [
 ]
 
 
-def handle_start(user_id: str, client, db_path: str = DB_NAME) -> None:
+def handle_start(user_id: str, client, chat_id: str | int | None = None, db_path: str = DB_NAME, **kwargs) -> None:
     """
     Обработчик команды /start:
-    - Регистрирует ученика в базе данных (если новый)
+    - Регистрирует ученика в базе данных (если новый) с сохранением chat_id
     - Сбрасывает текущее состояние в главное меню
     - Отправляет приветствие и знакомит с возможностями бота
     """
-    USER_SESSIONS[user_id] = {"state": "MAIN_MENU"}
-    get_or_create_user(max_user_id=user_id, role="student", db_path=db_path)
+    cid = chat_id or USER_SESSIONS.get(user_id, {}).get("chat_id")
+    USER_SESSIONS[user_id] = {"state": "MAIN_MENU", "chat_id": cid}
+    get_or_create_user(max_user_id=user_id, role="student", chat_id=cid, db_path=db_path)
 
     welcome_text = (
-        "👋 Привет! Я чат-бот «Образовательные решения» по математике для 7 класса.\n\n"
-        "🎯 Я помогу тебе легко освоить и отработать **Формулы сокращенного умножения (ФСУ)**:\n"
-        "• Разность квадратов\n"
-        "• Квадрат суммы и квадрат разности\n"
-        "• Кубы и сложные выражения\n\n"
-        "Доступные команды:\n"
-        "• /task — получить математическую задачу\n"
-        "• /stats — посмотреть свою статистику\n"
-        "• /lesson — составить 45-минутный план урока\n"
-        "• /help — правила ввода формул и степеней"
+        "👋 **Добро пожаловать в тренажёр ФСУ!**\n"
+        "────────────────────────\n"
+        "Я чат-бот **«Образовательные решения»** по математике для 7 класса.\n\n"
+        "🎯 **Здесь ты легко отработаешь 30 формул:**\n"
+        "• Разность квадратов: `(a - b)(a + b) = a² - b²`\n"
+        "• Квадрат суммы и разности: `(a ± b)²`\n"
+        "• Кубы и сложные выражения с коэффициентами\n\n"
+        "⚡ **Главные команды:**\n"
+        "👉 `/task` — получить задачу для решения\n"
+        "👉 `/stats` — посмотреть свой прогресс\n"
+        "👉 `/help` — как вводить степени и ответы\n"
+        "👉 `/lesson` — составить 45-мин план урока (для учителей)\n\n"
+        "Напиши **/task**, чтобы начать прямо сейчас! 🚀"
     )
 
-    client.send_message(user_id=user_id, text=welcome_text)
+    client.send_message(user_id=user_id, chat_id=cid, text=welcome_text)
 
 
-def handle_help(user_id: str, client, *args, **kwargs) -> None:
+def handle_help(user_id: str, client, chat_id: str | int | None = None, *args, **kwargs) -> None:
     """
     Обработчик команды /help:
     - Отправляет ученику памятку по правилам ввода математических ответов
     - Объясняет, как писать степени, знаки умножения и переменные
     """
+    cid = chat_id or USER_SESSIONS.get(user_id, {}).get("chat_id")
     help_text = (
-        "📖 **Памятка: Как правильно вводить ответы**\n\n"
-        "✨ Наш валидатор очень умный и понимает разные способы записи:\n\n"
-        "1. **Степени (квадраты и кубы):**\n"
-        "   • Стандартный вид: `x^2`, `y^3`\n"
-        "   • В стиле Python: `x**2`, `x**3`\n"
-        "   • Словами: `x во 2`, `x в квадрате`, `x в кубе`\n\n"
-        "2. **Коэффициенты и умножение:**\n"
-        "   • Можно писать слитно: `4x`, `12xy`\n"
-        "   • Можно со знаком умножения: `4*x`, `12*x*y`\n\n"
-        "3. **Раскладка клавиатуры:**\n"
-        "   • Не переживай, если случайно напечатал русскую букву «х» вместо английской «x» — бот поймет оба варианта!\n\n"
-        "💡 **Пример правильного ответа:**\n"
-        "`x^2 + 4x + 4` или `x**2 + 4*x + 4`"
+        "📖 **Памятка: Как вводить ответы**\n"
+        "────────────────────────\n"
+        "Бот автоматически поймёт твой ввод в любом удобном виде:\n\n"
+        "1️⃣ **Степени (квадраты и кубы):**\n"
+        "• Через символ `^`: `x^2`, `y^3`, `a^2`\n"
+        "• В стиле Python: `x**2`, `x**3`\n"
+        "• Словами: `x во 2`, `x в квадрате`, `x в кубе`\n\n"
+        "2️⃣ **Коэффициенты и умножение:**\n"
+        "• Слитно: `4x`, `12xy`, `9a^2`\n"
+        "• Со знаком `*`: `4*x`, `12*x*y`\n\n"
+        "3️⃣ **Раскладка клавиатуры:**\n"
+        "• Случайно напечатал русскую «х» вместо английской `x`? Бот поймёт оба варианта!\n\n"
+        "💡 **Пример решения:**\n"
+        "Задача: `(x + 2)^2`\n"
+        "Твой ответ: `x^2 + 4x + 4`\n"
+        "────────────────────────\n"
+        "Напиши **/task**, чтобы проверить свои силы!"
     )
 
-    client.send_message(user_id=user_id, text=help_text)
+    client.send_message(user_id=user_id, chat_id=cid, text=help_text)
 
 
-def handle_stats(user_id: str, client, db_path: str = DB_NAME) -> None:
+def handle_stats(user_id: str, client, chat_id: str | int | None = None, db_path: str = DB_NAME, **kwargs) -> None:
     """
     Обработчик команды /stats (кнопка «Моя статистика»):
     - Получает из БД статистику ученика (всего решено, верных, % точности)
     - Отправляет наглядный отчет с результатами
     """
+    cid = chat_id or USER_SESSIONS.get(user_id, {}).get("chat_id")
     stats = get_user_statistics(user_id=user_id, db_path=db_path)
 
     total = stats.get("total_solved", 0)
@@ -100,35 +110,47 @@ def handle_stats(user_id: str, client, db_path: str = DB_NAME) -> None:
 
     if total == 0:
         stats_text = (
-            "📊 **Твоя статистика успеваемости**\n\n"
-            "Ты еще не решил ни одной задачи!\n"
-            "Самое время нажать /task и сделать первый шаг!"
+            "📊 **Твоя статистика успеваемости**\n"
+            "────────────────────────\n"
+            "Ты пока не решил ни одной задачи.\n\n"
+            "Самое время начать! Напиши **/task**, чтобы сделать первый шаг! 🚀"
         )
     else:
-        stats_text = (
-            "📊 **Твоя статистика успеваемости**\n\n"
-            f"• Всего решено задач: `{total}`\n"
-            f"• Верных ответов: `{correct}`\n"
-            f"• Процент успешности: `{accuracy}%`\n\n"
-        )
+        # Прогресс-бар из 10 делений
+        filled = max(0, min(10, int(round(accuracy / 10))))
+        bar = "🟩" * filled + "⬜" * (10 - filled)
+
         if accuracy >= 80.0:
-            stats_text += "🔥 **Великолепный результат!** Ты отлично знаешь формулы!"
+            badge = "🏆 **Уровень:** Эксперт ФСУ\nОтличный результат, формулы отскакивают от зубов!"
         elif accuracy >= 50.0:
-            stats_text += "👍 **Хороший темп!** Ещё немного практики, и будет 100%!"
+            badge = "🥈 **Уровень:** Практик\nХороший темп! Ещё немного практики, и будет 100%!"
         else:
-            stats_text += "💡 **Рекомендуется повторить формулы.** Напиши /help для подсказки!"
+            badge = "🌱 **Уровень:** Ученик\nНужно немного повторить теорию. Напиши `/help` за подсказкой!"
 
-    client.send_message(user_id=user_id, text=stats_text)
+        stats_text = (
+            "📊 **Твоя статистика успеваемости**\n"
+            "────────────────────────\n"
+            f"🎯 Решено задач: `{total}`\n"
+            f"✅ Верных ответов: `{correct}`\n"
+            f"📈 Успешность: `{accuracy:.1f}%`\n"
+            f"Прогресс: {bar}\n"
+            "────────────────────────\n"
+            f"{badge}\n\n"
+            "👉 Напиши **/task**, чтобы продолжить тренировку"
+        )
+
+    client.send_message(user_id=user_id, chat_id=cid, text=stats_text)
 
 
-def handle_lesson_plan(user_id: str, client, topic: str = "ФСУ (7 класс)", db_path: str = DB_NAME) -> None:
+def handle_lesson_plan(user_id: str, client, topic: str = "ФСУ (7 класс)", chat_id: str | int | None = None, db_path: str = DB_NAME, **kwargs) -> None:
     """
     Обработчик команды /lesson (кнопка «План урока»):
     - Генерирует 45-минутный конспект урока через core.lesson_builder
     - Сохраняет план в базу данных
     - Отправляет конспект в формате Markdown учителю
     """
-    client.send_message(user_id=user_id, text="⏳ Формирую методический план урока на 45 минут...")
+    cid = chat_id or USER_SESSIONS.get(user_id, {}).get("chat_id")
+    client.send_message(user_id=user_id, chat_id=cid, text="⏳ **Формирую методический план урока на 45 минут...**")
     plan_markdown = build_lesson_plan(
         topic=topic,
         grade=7,
@@ -136,10 +158,10 @@ def handle_lesson_plan(user_id: str, client, topic: str = "ФСУ (7 класс)
         save_to_db=True,
         db_path=db_path
     )
-    client.send_message(user_id=user_id, text=plan_markdown)
+    client.send_message(user_id=user_id, chat_id=cid, text=plan_markdown)
 
 
-def handle_task(user_id: str, client, template_id: int = None, db_path: str = DB_NAME) -> None:
+def handle_task(user_id: str, client, template_id: int = None, chat_id: str | int | None = None, db_path: str = DB_NAME, **kwargs) -> None:
     """
     Обработчик команды /task (кнопка «🎯 Решать задачи»):
     - Генерирует уникальную задачу (проверяет отсутствие повторов через is_task_already_solved)
@@ -147,6 +169,7 @@ def handle_task(user_id: str, client, template_id: int = None, db_path: str = DB
     - Переводит пользователя в состояние FSM: SOLVING_TASK
     - Отправляет условие задачи ученику
     """
+    cid = chat_id or USER_SESSIONS.get(user_id, {}).get("chat_id")
     t_id, question, answer = None, None, None
 
     if generator_instance is not None:
@@ -179,19 +202,23 @@ def handle_task(user_id: str, client, template_id: int = None, db_path: str = DB
         "task_id": task_db_id,
         "template_id": t_id,
         "expected_answer": answer,
-        "question": question
+        "question": question,
+        "chat_id": cid
     }
 
     # 3. Отправка задания ученику:
     task_message = (
-        f"🎯 **Задание (Шаблон #{t_id}):**\n"
-        f"> {question}\n\n"
-        f"✍️ Напиши свой ответ в чат (или /help для справки):"
+        f"🎯 **Задание #{t_id}**\n"
+        f"────────────────────────\n"
+        f"📝 **{question}**\n"
+        f"────────────────────────\n"
+        f"✍️ Напиши свой ответ сообщением в чат.\n\n"
+        f"💡 *Справка по вводу:* `/help`  |  ❌ *Отмена:* `/cancel`"
     )
-    client.send_message(user_id=user_id, text=task_message)
+    client.send_message(user_id=user_id, chat_id=cid, text=task_message)
 
 
-def handle_answer(user_id: str, text: str, client, db_path: str = DB_NAME) -> bool:
+def handle_answer(user_id: str, text: str, client, chat_id: str | int | None = None, db_path: str = DB_NAME, **kwargs) -> bool:
     """
     Обработка ответа ученика в состоянии решения задачи (SOLVING_TASK):
     - Вызывает валидатор check_answer()
@@ -205,6 +232,7 @@ def handle_answer(user_id: str, text: str, client, db_path: str = DB_NAME) -> bo
 
     task_id = session["task_id"]
     expected_answer = session["expected_answer"]
+    cid = chat_id or session.get("chat_id")
 
     # 1. Валидация ответа ученика:
     is_correct, feedback = check_answer(user_input=text, expected_answer=expected_answer)
@@ -213,58 +241,115 @@ def handle_answer(user_id: str, text: str, client, db_path: str = DB_NAME) -> bo
     save_task_result(task_id=task_id, user_answer=text, is_correct=is_correct, db_path=db_path)
 
     # 3. Сброс состояния:
-    USER_SESSIONS[user_id] = {"state": "MAIN_MENU"}
+    USER_SESSIONS[user_id] = {"state": "MAIN_MENU", "chat_id": cid}
 
     # 4. Формирование ответа:
     if is_correct:
-        response = f"🎉 **{feedback}**\n\nЧтобы получить следующую задачу, напиши /task"
+        response = (
+            "🎉 **Отлично! Ответ верный!**\n"
+            "────────────────────────\n"
+            f"✅ Твой ответ: `{text.strip()}`\n\n"
+            "👉 Напиши **/task**, чтобы решить следующее задание\n"
+            "👉 Напиши **/stats**, чтобы посмотреть свой прогресс"
+        )
     else:
-        response = f"❌ **{feedback}**\n\nПопробуй решить другую задачу: /task или напиши /help"
+        response = (
+            "❌ **Увы, ответ не совпал.**\n"
+            "────────────────────────\n"
+            f"Твой ответ: `{text.strip()}`\n"
+            f"Правильный ответ: `{expected_answer}`\n\n"
+            "Не расстраивайся, математика любит упорство! 💪\n\n"
+            "👉 Напиши **/task**, чтобы попробовать снова\n"
+            "👉 Напиши **/help**, чтобы посмотреть правила записи"
+        )
 
-    client.send_message(user_id=user_id, text=response)
+    client.send_message(user_id=user_id, chat_id=cid, text=response)
     return True
 
 
-def handle_cancel(user_id: str, client, *args, **kwargs) -> None:
+def handle_cancel(user_id: str, client, chat_id: str | int | None = None, *args, **kwargs) -> None:
     """
     Обработчик отмены текущего действия (/cancel, 'отмена'):
     - Сбрасывает состояние сессии в MAIN_MENU
     - Отправляет подтверждение ученику
     """
-    USER_SESSIONS[user_id] = {"state": "MAIN_MENU"}
-    client.send_message(
-        user_id=user_id,
-        text="👌 Действие отменено. Ты вернулся в главное меню.\n"
-             "Напиши /task, чтобы получить новую задачу, или /stats для просмотра прогресса."
+    cid = chat_id or USER_SESSIONS.get(user_id, {}).get("chat_id")
+    USER_SESSIONS[user_id] = {"state": "MAIN_MENU", "chat_id": cid}
+    cancel_text = (
+        "👌 **Действие отменено**\n"
+        "────────────────────────\n"
+        "Ты вернулся в главное меню.\n\n"
+        "👉 `/task` — получить новую задачу\n"
+        "👉 `/stats` — посмотреть свой прогресс"
     )
+    client.send_message(user_id=user_id, chat_id=cid, text=cancel_text)
 
 
 # Словарь сопоставления команд и обработчиков (Dispatcher Registry)
 COMMAND_HANDLERS = {
     "/start": handle_start,
+    "start": handle_start,
+    "старт": handle_start,
+    "/старт": handle_start,
+    "начать": handle_start,
+    "/начать": handle_start,
+    "запуск": handle_start,
+    "/запуск": handle_start,
+    "запустить": handle_start,
+    "/запустить": handle_start,
+    "начало": handle_start,
+    "/начало": handle_start,
+    "привет": handle_start,
+    "здравствуйте": handle_start,
+    "хай": handle_start,
+    "меню": handle_start,
+    "/меню": handle_start,
     "/help": handle_help,
+    "help": handle_help,
+    "помощь": handle_help,
+    "/помощь": handle_help,
+    "справка": handle_help,
+    "/справка": handle_help,
     "/stats": handle_stats,
+    "stats": handle_stats,
+    "статистика": handle_stats,
+    "/статистика": handle_stats,
     "📊 моя статистика": handle_stats,
     "/lesson": handle_lesson_plan,
+    "lesson": handle_lesson_plan,
     "📚 план урока": handle_lesson_plan,
     "план урока": handle_lesson_plan,
+    "/урок": handle_lesson_plan,
+    "урок": handle_lesson_plan,
     "/task": handle_task,
+    "task": handle_task,
     "🎯 решать задачи": handle_task,
     "решать задачи": handle_task,
     "задача": handle_task,
+    "/задача": handle_task,
     "/cancel": handle_cancel,
+    "cancel": handle_cancel,
     "отмена": handle_cancel,
+    "/отмена": handle_cancel,
 }
 
 
-def handle_message(user_id: str, text: str, client, db_path: str = DB_NAME) -> None:
+def handle_message(user_id: str, text: str, client, chat_id: str | int | None = None, db_path: str = DB_NAME) -> None:
     """
     Главный диспетчер текстовых сообщений:
+    - Сохраняет chat_id пользователя в БД и FSM
+    - Если сообщение пустое или событие старта без текста -> автоматически запускает /start
     - Если пользователь в состоянии решения задачи (SOLVING_TASK), передает ввод в handle_answer
     - Иначе маршрутизирует команды /start, /help, /stats, /lesson, /task
     - Отвечает подсказкой на неизвестный текст
     """
+    if chat_id:
+        if user_id in USER_SESSIONS:
+            USER_SESSIONS[user_id]["chat_id"] = chat_id
+        get_or_create_user(max_user_id=user_id, chat_id=chat_id, db_path=db_path)
+
     if not text:
+        handle_start(user_id=user_id, client=client, chat_id=chat_id, db_path=db_path)
         return
 
     clean_text = text.strip()
@@ -273,24 +358,28 @@ def handle_message(user_id: str, text: str, client, db_path: str = DB_NAME) -> N
     # 1. Проверка системных команд (команды начинающиеся со слеша обрабатываются в первую очередь)
     if command in COMMAND_HANDLERS:
         handler = COMMAND_HANDLERS[command]
-        handler(user_id=user_id, client=client, db_path=db_path)
+        handler(user_id=user_id, client=client, chat_id=chat_id, db_path=db_path)
         return
 
     # 2. Если пользователь в режиме решения задачи — проверяем его математический ответ:
     session = USER_SESSIONS.get(user_id, {})
     if session.get("state") == "SOLVING_TASK":
-        handled = handle_answer(user_id=user_id, text=clean_text, client=client, db_path=db_path)
+        handled = handle_answer(user_id=user_id, text=clean_text, client=client, chat_id=chat_id, db_path=db_path)
         if handled:
             return
 
     # 3. Текст не распознан как команда и пользователь не решает задачу:
+    cid = chat_id or session.get("chat_id")
     fallback_text = (
-        "🤖 Я пока понимаю следующие команды:\n"
-        "• /task — получить математическую задачу\n"
-        "• /stats — твоя статистика успеваемости\n"
-        "• /lesson — составить 45-минутный план урока\n"
-        "• /help — правила ввода формул и степеней\n"
-        "• /start — главное меню\n\n"
-        "Напиши /task, чтобы начать решать задачи!"
+        "🤖 **Команда не распознана**\n"
+        "────────────────────────\n"
+        "Я чат-бот для тренировки формул сокращенного умножения (7 класс).\n\n"
+        "⚡ **Доступные команды:**\n"
+        "• `/task` — получить математическую задачу\n"
+        "• `/stats` — твоя статистика успеваемости\n"
+        "• `/help` — правила ввода формул и степеней\n"
+        "• `/lesson` — составить 45-минутный план урока\n"
+        "• `/start` — главное меню и перезапуск\n\n"
+        "Напиши **/task**, чтобы начать решать задачи! 🎯"
     )
-    client.send_message(user_id=user_id, text=fallback_text)
+    client.send_message(user_id=user_id, chat_id=cid, text=fallback_text)

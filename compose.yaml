@@ -1,0 +1,9 @@
+services:
+  max-math-bot:
+    build: .
+    container_name: max_math_bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./math_bot.db:/app/math_bot.db

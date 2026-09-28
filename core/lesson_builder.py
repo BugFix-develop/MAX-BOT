@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import datetime
+import re
 import textwrap
 
 
@@ -40,16 +41,57 @@ FALLBACK_CATALOG = {
 }
 
 
+def _clean_question(text: str) -> str:
+    """Очищает условие от типовых префиксов ('Раскройте скобки: ', и т.д.) для краткости."""
+    prefixes = [
+        "Раскройте скобки:",
+        "Разложите на множители:",
+        "Представьте в виде многочлена:",
+        "Выполните умножение:",
+        "Упростите выражение:",
+    ]
+    cleaned = text.strip()
+    for p in prefixes:
+        if cleaned.lower().startswith(p.lower()):
+            cleaned = cleaned[len(p):].strip()
+    return cleaned
+
+
+def _format_math(expr: str) -> str:
+    """Делает формулу красивой для отображения: степени в виде ², ³, нормализация пробелов."""
+    if not expr:
+        return expr
+    text = expr.strip()
+    # Заменяем степени на юникод
+    text = text.replace("^2", "²").replace("**2", "²")
+    text = text.replace("^3", "³").replace("**3", "³")
+    # Нормализуем пробелы вокруг + и - (но не в начале отрицательного числа)
+    text = re.sub(r'(?<![+\-*/^(\s])\s*([+\-])\s*', r' \1 ', text)
+    # Убираем двойные пробелы
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+
 def _get_task(template_id: int) -> LessonTask:
     """Получает задачу из генератора Даниса или из автономного каталога-заглушки."""
     if generator_instance is not None:
         try:
             raw = generator_instance.generate_task(template_id)
+            if hasattr(raw, "question_text"):
+                q = raw.question_text
+                a = raw.reference_answer
+                h = getattr(raw, "hint", "")
+            elif isinstance(raw, dict):
+                q = raw.get("question", raw.get("task_text", ""))
+                a = raw.get("answer", raw.get("expected_answer", ""))
+                h = raw.get("hint", "")
+            else:
+                q, a, h = str(raw), "", ""
             return LessonTask(
                 template_id=template_id,
-                question=raw.get("question", raw.get("task_text", "")),
-                expected_answer=raw.get("answer", raw.get("expected_answer", "")),
-                hint=raw.get("hint", "")
+                question=_clean_question(q),
+                expected_answer=a,
+                hint=h
             )
         except Exception:
             pass
@@ -58,7 +100,7 @@ def _get_task(template_id: int) -> LessonTask:
         template_id,
         (f"Задача по шаблону #{template_id}", "ответ", "подсказка")
     )
-    return LessonTask(template_id=template_id, question=q, expected_answer=a, hint=h)
+    return LessonTask(template_id=template_id, question=_clean_question(q), expected_answer=a, hint=h)
 
 
 def build_lesson_plan(
@@ -68,7 +110,7 @@ def build_lesson_plan(
     save_to_db: bool = True,
     db_path: str = "math_bot.db",
 ) -> str:
-    #Генерирует 45-минутный методический план урока :
+    # Генерирует 45-минутный методический план урока:
     
     warmup_tasks = [_get_task(1), _get_task(8), _get_task(14)]
     board_tasks = [_get_task(3), _get_task(5), _get_task(10), _get_task(16)]
@@ -93,11 +135,12 @@ def build_lesson_plan(
     sections.append(header)
 
     # Разминка
-    warmup_text = "### ⚡ Этап 1. Устная фронтальная разминка (5 минут)\n"
-    warmup_text += "*Форма работы:* устный экспресс-опрос класса. Ученики отвечают с места без записи в тетрадь.\n\n"
+    warmup_text = "### ⚡ Этап 1. Устная фронтальная разминка (5 минут)\n\n"
+    warmup_text += "*Форма работы:* устный экспресс-опрос класса (без записи в тетрадь).\n\n"
     for i, t in enumerate(warmup_tasks, 1):
-        warmup_text += f"{i}. Вычислите устно: `{t.question}`\n"
-    warmup_text += "\n> 💡 **Методический акцент:** Обратите внимание класса на быстроту счета с помощью формул без умножения столбиком."
+        q_fmt = _format_math(t.question)
+        warmup_text += f"{i}. Вычислите устно: `{q_fmt}`\n"
+    warmup_text += "\n💡 *Методический акцент: обратите внимание на быстроту счета с помощью формул.*"
     sections.append(warmup_text)
 
     # Теория
@@ -106,71 +149,83 @@ def build_lesson_plan(
     *Повторение ключевых формул и разбор типичных ошибок 7 класса:*
 
     1. **Разность квадратов:**
-       $$(a - b)(a + b) = a^2 - b^2$$
-       *Типичная ошибка:* Путаница с $(a - b)^2$. Напоминаем: в разности квадратов **нет** удвоенного произведения!
+       `(a - b)(a + b) = a² - b²`
+       *Типичная ошибка:* Путаница с `(a - b)²`. Напоминаем: в разности квадратов **нет** удвоенного произведения!
 
     2. **Квадрат суммы и квадрат разности:**
-       $$(a + b)^2 = a^2 + 2ab + b^2$$
-       $$(a - b)^2 = a^2 - 2ab + b^2$$
-       *Критическая точка:* При возведении выражения с коэффициентом $(3x)^2$ в квадрат возводится и коэффициент, и переменная: $(3x)^2 = 9x^2$, а не $3x^2$!
+       `(a + b)² = a² + 2ab + b²`
+       `(a - b)² = a² - 2ab + b²`
+       *Критическая точка:* При возведении выражения с коэффициентом в квадрат возводится и коэффициент, и переменная: `(3x)² = 9x²`, а не `3x²`!
 
     3. **Ловушка знака «минус»:**
-       $$(-a - b)^2 = (-(a + b))^2 = (a + b)^2$$
+       `(-a - b)² = (-(a + b))² = (a + b)²`
        Минусы под четной степенью взаимно уничтожаются!
     """).strip()
     sections.append(theory_text)
 
-    # работа у доски 
-    board_text = "### ✍️ Этап 3. Закрепление материала у доски (20 минут)\n"
+    # Работа у доски 
+    board_text = "### ✍️ Этап 3. Закрепление материала у доски (20 минут)\n\n"
     board_text += "*Форма работы:* решение задач у доски с подробным комментированием каждого шага.\n\n"
     for i, t in enumerate(board_tasks, 1):
+        q_fmt = _format_math(t.question)
         board_text += f"**Задание {i}** (Шаблон #{t.template_id}):\n"
-        board_text += f"> Раскройте скобки: `{t.question}`\n\n"
+        board_text += f"👉 Раскройте скобки: `{q_fmt}`\n\n"
     sections.append(board_text.strip())
 
     # Задачи повышенной сложности
-    hard_text = "### 🌟 Задачи повышенной сложности (Дифференцированная работа)\n"
+    hard_text = "### 🌟 Задачи повышенной сложности (Дифференцированная работа)\n\n"
     hard_text += "*Для успевающих учеников и индивидуальной работы:*\n\n"
     for i, t in enumerate(hard_tasks, 1):
-        hard_text += f"{i}. Преобразуйте выражение (Шаблон #{t.template_id}): `{t.question}` *(Подсказка: {t.hint})*\n"
+        q_fmt = _format_math(t.question)
+        hint_suffix = f" *(Подсказка: {_format_math(t.hint)})*" if t.hint else ""
+        hard_text += f"{i}. Преобразуйте выражение: `{q_fmt}`{hint_suffix}\n"
     sections.append(hard_text)
 
     # ДЗ и итоги
-    summary_text = textwrap.dedent(f"""
-    ### 🎯 Этап 4. Подведение итогов и Домашнее задание (5 минут)
-    **Вопросы для экспресс-рефлексии:**
-    - В чем главное отличие между «разностью квадратов» и «квадратом разности»?
-    - Чему равно удвоенное произведение в выражении $(3x - 4y)^2$?
-
-    **Домашнее задание (на следующий урок):**
-    1. `{hw_tasks[0].question}`
-    2. `{hw_tasks[1].question}`
-    3. `{hw_tasks[2].question}`
-    """).strip()
+    hw_items = "\n".join([f"{i}. `{_format_math(t.question)}`" for i, t in enumerate(hw_tasks, 1)])
+    summary_text = (
+        "### 🎯 Этап 4. Подведение итогов и Домашнее задание (5 минут)\n\n"
+        "**Вопросы для экспресс-рефлексии:**\n"
+        "• В чем главное отличие между «разностью квадратов» и «квадратом разности»?\n"
+        "• Чему равно удвоенное произведение в выражении `(3x - 4y)²`?\n\n"
+        "**Домашнее задание (на следующий урок):**\n"
+        f"{hw_items}"
+    )
     sections.append(summary_text)
 
-    # Шпаргалка для учителя 
-    answers_text = "### 🔑 Шпаргалка для учителя (Ответы ко всем задачам урока)\n"
-    answers_text += "| Этап | № | Условие | Эталонный ответ |\n"
-    answers_text += "| :--- | :---: | :--- | :--- |\n"
+    # Шпаргалка для учителя (удобный мобильный формат: условие и ответ на отдельных строках)
+    answers_text = "### 🔑 Шпаргалка с ответами (для учителя)\n\n"
 
-    num = 1
-    for t in warmup_tasks:
-        answers_text += f"| Разминка | #{num} | `{t.question}` | `{t.expected_answer}` |\n"
-        num += 1
-    for t in board_tasks:
-        answers_text += f"| У доски | #{num} | `{t.question}` | `{t.expected_answer}` |\n"
-        num += 1
-    for t in hard_tasks:
-        answers_text += f"| Со звездочкой | #{num} | `{t.question}` | `{t.expected_answer}` |\n"
-        num += 1
-    for t in hw_tasks:
-        answers_text += f"| Домашнее задание | #{num} | `{t.question}` | `{t.expected_answer}` |\n"
-        num += 1
+    answers_text += "⚡ **Разминка:**\n"
+    for i, t in enumerate(warmup_tasks, 1):
+        q_fmt = _format_math(t.question)
+        ans_fmt = _format_math(t.expected_answer)
+        answers_text += f"{i}. `{q_fmt}`\n   👉 `{ans_fmt}`\n\n"
+
+    answers_text += "✍️ **У доски:**\n"
+    start_num = len(warmup_tasks) + 1
+    for i, t in enumerate(board_tasks, start_num):
+        q_fmt = _format_math(t.question)
+        ans_fmt = _format_math(t.expected_answer)
+        answers_text += f"{i}. `{q_fmt}`\n   👉 `{ans_fmt}`\n\n"
+
+    answers_text += "🌟 **Повышенная сложность:**\n"
+    start_num += len(board_tasks)
+    for i, t in enumerate(hard_tasks, start_num):
+        q_fmt = _format_math(t.question)
+        ans_fmt = _format_math(t.expected_answer)
+        answers_text += f"{i}. `{q_fmt}`\n   👉 `{ans_fmt}`\n\n"
+
+    answers_text += "🏠 **Домашнее задание:**\n"
+    start_num += len(hard_tasks)
+    for i, t in enumerate(hw_tasks, start_num):
+        q_fmt = _format_math(t.question)
+        ans_fmt = _format_math(t.expected_answer)
+        answers_text += f"{i}. `{q_fmt}`\n   👉 `{ans_fmt}`\n\n"
 
     sections.append(answers_text.strip())
 
-    full_markdown = "\n\n---\n\n".join(sections)
+    full_markdown = "\n\n\n".join(sections)
 
     # Сохранение плана в базу данных SQLite 
     if save_to_db and DB_AVAILABLE:
