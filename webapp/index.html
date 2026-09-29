@@ -1399,8 +1399,8 @@
 
         if (resp.ok) {
           const res = await resp.json();
-          isCorrect = !!res.correct;
-          explanation = res.explanation || (isCorrect ? "Ответ математически эквивалентен эталону." : `Эталон: ${currentTask.expected}`);
+          isCorrect = !!res.is_correct;
+          explanation = res.feedback || (isCorrect ? "Ответ математически эквивалентен эталону." : `Эталон: ${formatMath(currentTask.expected)}`);
         } else {
           throw new Error("Ошибка API");
         }
