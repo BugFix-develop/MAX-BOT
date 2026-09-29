@@ -195,6 +195,7 @@
       justify-content: center;
       color: var(--text-muted);
       cursor: pointer;
+      text-decoration: none;
       transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
     }
     .btn-close-app:hover {
@@ -380,7 +381,7 @@
 
     .math-keypad {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       gap: 6px;
       margin-bottom: 18px;
     }
@@ -860,12 +861,12 @@
       </div>
       <div class="header-actions">
         <span class="user-pill" id="userPill">Ученик</span>
-        <button type="button" class="btn-close-app" id="closeAppBtn" onclick="closeWebApp()" title="Закрыть приложение" aria-label="Закрыть">
+        <a href="https://max.ru/t594_hakaton_max_bot" class="btn-close-app" id="closeAppBtn" onclick="closeWebApp(); return false;" title="Закрыть приложение и вернуться в бот" aria-label="Закрыть">
           <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
-        </button>
+        </a>
       </div>
     </div>
   </header>
@@ -909,14 +910,16 @@
         <div class="math-keypad" id="keypad">
           <button type="button" class="key-btn key-btn-power" onclick="insertPower('²')" title="Возвести в квадрат">x²</button>
           <button type="button" class="key-btn key-btn-power" onclick="insertPower('³')" title="Возвести в куб">x³</button>
+          <button type="button" class="key-btn key-btn-power" onclick="insertPower('⁴')" title="Возвести в 4-ю степень">x⁴</button>
+          <button type="button" class="key-btn key-btn-power" onclick="insertPower('⁵')" title="Возвести в 5-ю степень">x⁵</button>
           <button type="button" class="key-btn" onclick="insertSymbol('x')">x</button>
           <button type="button" class="key-btn" onclick="insertSymbol('y')">y</button>
           <button type="button" class="key-btn" onclick="insertSymbol('+')">+</button>
-          <button type="button" class="key-btn" onclick="insertSymbol('-')">−</button>
-          <button type="button" class="key-btn" onclick="insertSymbol('(')">(</button>
-          <button type="button" class="key-btn" onclick="insertSymbol(')')">)</button>
           <button type="button" class="key-btn" onclick="insertSymbol('a')">a</button>
           <button type="button" class="key-btn" onclick="insertSymbol('b')">b</button>
+          <button type="button" class="key-btn" onclick="insertSymbol('(')">(</button>
+          <button type="button" class="key-btn" onclick="insertSymbol(')')">)</button>
+          <button type="button" class="key-btn" onclick="insertSymbol('-')">−</button>
           <button type="button" class="key-btn key-btn-action" onclick="backspaceInput()" title="Стереть символ" aria-label="Стереть символ">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none">
               <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
@@ -1153,6 +1156,22 @@
     let userName = "Ученик";
     let allTemplates = [];
 
+    // Мгновенная инициализация userId из query/hash параметров или localStorage до запуска любых запросов
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+      const qUserId = urlParams.get("user_id") || urlParams.get("userId") || hashParams.get("user_id") || hashParams.get("userId");
+      if (qUserId && qUserId !== "None" && qUserId !== "undefined") {
+        userId = String(qUserId).trim();
+        localStorage.setItem("max_trainer_user_id", userId);
+      } else {
+        const savedId = localStorage.getItem("max_trainer_user_id");
+        if (savedId && savedId !== "None" && savedId !== "undefined" && savedId !== "guest_user") {
+          userId = savedId;
+        }
+      }
+    } catch (err) {}
+
     // Автономные задачи на случай офлайна
     const LOCAL_FALLBACK_TASKS = [
       { template_id: 1, task_id: 101, question: "Раскройте скобки: (x - 3)(x + 3)", answer: "x^2-9", category: "Разность квадратов", hint: "(a - b)(a + b) = a² - b²" },
@@ -1166,17 +1185,11 @@
     ];
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Инициализация пользователя: читаем из URL параметров (переданных ботом) или моста MAX
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const qUserId = urlParams.get("user_id") || urlParams.get("userId");
-        if (qUserId) {
-          userId = String(qUserId);
-          localStorage.setItem("max_trainer_user_id", userId);
-        } else if (localStorage.getItem("max_trainer_user_id")) {
-          userId = localStorage.getItem("max_trainer_user_id");
-        }
-      } catch (err) {}
+      // Обновляем бейдж профиля пользователя
+      if (userId && userId !== "guest_user") {
+        const pill = document.getElementById("userPill");
+        if (pill) pill.textContent = userName !== "Ученик" ? userName : `ID: ${userId}`;
+      }
 
       // Инициализация моста MAX Messenger
       if (window.WebApp) {
@@ -1187,8 +1200,9 @@
             const u = window.WebApp.initDataUnsafe.user;
             userId = String(u.id);
             localStorage.setItem("max_trainer_user_id", userId);
-            userName = u.first_name || (u.username ? "@" + u.username : "Ученик");
-            document.getElementById("userPill").textContent = userName;
+            userName = u.first_name || (u.username ? "@" + u.username : `ID: ${userId}`);
+            const pill = document.getElementById("userPill");
+            if (pill) pill.textContent = userName;
           }
         } catch (e) {
           console.warn("MAX WebApp bridge:", e);
@@ -1224,35 +1238,39 @@
 
     // --- Закрытие окна WebApp и возврат в чат бота ---
     function closeWebApp() {
-      // 1. Попытка закрыть через нативные мосты мессенджера
+      // 1. Попытка нативного закрытия через WebApp SDK мессенджера (MAX / Telegram)
       try {
         if (window.WebApp && typeof window.WebApp.close === 'function') {
           window.WebApp.close();
-          return;
         }
       } catch (e) {}
       try {
         if (window.MaxWebApp && typeof window.MaxWebApp.close === 'function') {
           window.MaxWebApp.close();
-          return;
         }
       } catch (e) {}
       try {
         if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === 'function') {
           window.Telegram.WebApp.close();
-          return;
         }
       } catch (e) {}
 
-      // 2. Если открыто во встроенном браузере (In-App Browser / Safari / Chrome)
+      // 2. Попытка закрыть текущую вкладку / окно браузера
       try {
         window.close();
       } catch (e) {}
 
-      // 3. Перенаправление обратно в диалог с ботом в MAX
+      // 3. Возврат по истории на предыдущий экран (чат бота в webview)
+      try {
+        if (window.history && window.history.length > 1) {
+          window.history.back();
+        }
+      } catch (e) {}
+
+      // 4. Гарантированный редирект в чат бота через deep link / ссылку мессенджера
       setTimeout(() => {
-        window.location.href = "https://max.ru/t594_hakaton_max_bot";
-      }, 100);
+        window.location.replace("https://max.ru/t594_hakaton_max_bot");
+      }, 150);
     }
 
     // --- Переключение вкладок ---
@@ -1271,7 +1289,7 @@
     }
 
     
-    // --- Математическое форматирование степеней: X^2 и X2 превращаются в красивый X² ---
+    // --- Математическое форматирование степеней: X^2, X2, X^3, X3, X^4, X4, X^5, X5 превращаются в красивый X², X³, X⁴, X⁵ ---
     function formatMath(expr) {
       if (!expr) return "";
       return String(expr)
@@ -1280,7 +1298,9 @@
         .replace(/\^4/g, "⁴")
         .replace(/\^5/g, "⁵")
         .replace(/([a-zA-Z\)])2(?![0-9])/g, "$1²")
-        .replace(/([a-zA-Z\)])3(?![0-9])/g, "$1³");
+        .replace(/([a-zA-Z\)])3(?![0-9])/g, "$1³")
+        .replace(/([a-zA-Z\)])4(?![0-9])/g, "$1⁴")
+        .replace(/([a-zA-Z\)])5(?![0-9])/g, "$1⁵");
     }
 
     function insertPower(pow) {

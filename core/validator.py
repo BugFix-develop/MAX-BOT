@@ -25,15 +25,19 @@ def normalize_answer(raw_answer: str) -> str:
 
     text = text.replace("**2", "^2").replace("²", "^2")
     text = text.replace("**3", "^3").replace("³", "^3")
-
-
+    text = text.replace("**4", "^4").replace("⁴", "^4")
+    text = text.replace("**5", "^5").replace("⁵", "^5")
 
     text = re.sub(r"(вквадрате|во2|вовторой|встепени2)", "^2", text)
     text = re.sub(r"(вкубе|в3|втретьей|встепени3)", "^3", text)
+    text = re.sub(r"(в4|вчетвертой|вчетвёртой|встепени4)", "^4", text)
+    text = re.sub(r"(в5|впятой|встепени5)", "^5", text)
 
-    # Поддержка записи x2, y2, a2, b2, )2 как x^2
+    # Поддержка записи x2, y2, a2, b2, )2 как x^2, x^3, x^4, x^5
     text = re.sub(r'([a-z\)])2(?![0-9])', r'\g<1>^2', text)
     text = re.sub(r'([a-z\)])3(?![0-9])', r'\g<1>^3', text)
+    text = re.sub(r'([a-z\)])4(?![0-9])', r'\g<1>^4', text)
+    text = re.sub(r'([a-z\)])5(?![0-9])', r'\g<1>^5', text)
 
     text = text.replace("*", "")
     return text

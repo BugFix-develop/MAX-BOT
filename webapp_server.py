@@ -202,7 +202,7 @@ class MiniAppRequestHandler(SimpleHTTPRequestHandler):
             is_correct, feedback = check_answer(user_input=user_answer, expected_answer=expected_answer)
 
             if task_id > 0:
-                save_task_result(task_id=task_id, user_answer=user_answer, is_correct=is_correct, db_path=self.db_path)
+                save_task_result(task_id=task_id, user_answer=user_answer, is_correct=is_correct, user_id=user_id, db_path=self.db_path)
 
             stats = get_user_statistics(user_id=user_id, db_path=self.db_path)
 

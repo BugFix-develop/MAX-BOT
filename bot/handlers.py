@@ -89,6 +89,10 @@ def handle_app(user_id: str, client, chat_id: str | int | None = None, *args, **
     import config
     app_url = getattr(config, "WEBAPP_URL", f"http://{config.LOCAL_IP}:{config.WEBAPP_PORT}")
 
+    # Передаем user_id в URL веб-приложения для синхронизации единой статистики с ботом (/stats)
+    sep = "&" if "?" in app_url else "?"
+    user_app_url = f"{app_url}{sep}user_id={user_id}"
+
     app_text = (
         "**Интерактивный «Тренажёр»**\n"
         "────────────────────────\n"
@@ -98,26 +102,22 @@ def handle_app(user_id: str, client, chat_id: str | int | None = None, *args, **
         "• Аналитика успеваемости и уровни мастерства\n"
         "• Конструктор конспектов уроков на 45 минут для учителей\n"
         "• Полный справочник всех 30 формул курса 7 класса\n\n"
-        f"Прямая ссылка для браузера: {app_url}\n\n"
+        f"Прямая ссылка для запуска: {user_app_url}\n\n"
         "Нажмите кнопку ниже, чтобы запустить приложение, или начните решать прямо в диалоге."
     )
-
-    # Передаем user_id в URL веб-приложения для синхронизации единой статистики с ботом (/stats)
-    sep = "&" if "?" in app_url else "?"
-    user_app_url = f"{app_url}{sep}user_id={user_id}"
 
     if hasattr(client, "send_app_button"):
         client.send_app_button(user_id=user_id, chat_id=cid, text=app_text, webapp_url=user_app_url, button_text="Открыть тренажёр")
     else:
         buttons = [
-            [{"type": "link", "text": "Открыть тренажёр", "url": app_url}],
+            [{"type": "link", "text": "Открыть тренажёр", "url": user_app_url}],
             [{"type": "callback", "text": "Решать в чате", "payload": "/task"}, {"type": "callback", "text": "Моя статистика", "payload": "/stats"}],
             [{"type": "callback", "text": "Закрыть тренажёр", "payload": "/close"}]
         ]
         if hasattr(client, "send_keyboard"):
             client.send_keyboard(user_id=user_id, chat_id=cid, text=app_text, buttons=buttons)
         else:
-            client.send_message(user_id=user_id, chat_id=cid, text=f"{app_text}\n\nСсылка: {app_url}")
+            client.send_message(user_id=user_id, chat_id=cid, text=f"{app_text}\n\nСсылка: {user_app_url}")
 
 
 def handle_close(user_id: str, client, chat_id: str | int | None = None, *args, **kwargs) -> None:

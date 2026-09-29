@@ -215,4 +215,38 @@ def test_handle_start_includes_webapp_invitation():
     assert "Интерактивный тренажёр" in call["text"]
     assert "/app" in call["text"]
     assert "скрепкой" in call["text"]
+    assert f"user_id={user_id}" in call["url"]
+
+
+def test_webapp_sync_stats_with_bot(webapp_test_server):
+    from bot.handlers import handle_stats
+    base_url = webapp_test_server["base_url"]
+    db_path = webapp_test_server["db_path"]
+    user_id = "max_student_sync_99"
+
+    # 1. Task initially fetched as webapp_guest
+    with urllib.request.urlopen(f"{base_url}/api/task") as resp:
+        task_data = json.loads(resp.read().decode("utf-8"))
+    task_id = task_data["task_id"]
+    expected = task_data["expected_answer"]
+
+    # 2. Answered by the student with user_id
+    payload = json.dumps({
+        "user_id": user_id,
+        "task_id": task_id,
+        "user_answer": expected,
+        "expected_answer": expected
+    }).encode("utf-8")
+    req = urllib.request.Request(f"{base_url}/api/check", data=payload, headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req) as resp:
+        assert resp.status == 200
+
+    # 3. Check stats via bot handler
+    client = MockClient()
+    handle_stats(user_id=user_id, client=client, chat_id=123, db_path=db_path)
+    assert len(client.sent_messages) == 1
+    stats_msg = client.sent_messages[0]["text"]
+    assert "Решено задач: `1`" in stats_msg
+    assert "Верных ответов: `1`" in stats_msg
+
 

@@ -147,15 +147,22 @@ def save_task_issue(user_id: str, template_id: int, task_text: str, expected_ans
         conn.close()
 
 
-def save_task_result(task_id: int, user_answer: str, is_correct: bool, db_path: str = DB_NAME) -> None:
+def save_task_result(task_id: int, user_answer: str, is_correct: bool, user_id: str | None = None, db_path: str = DB_NAME) -> None:
     conn = get_connection(db_path)
     try:
         cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE task_history
-            SET user_answer = ?, is_correct = ?
-            WHERE id = ?
-        """, (user_answer, int(is_correct), task_id))
+        if user_id and str(user_id) not in ("webapp_guest", "guest_user", "None", ""):
+            cursor.execute("""
+                UPDATE task_history
+                SET user_answer = ?, is_correct = ?, user_id = ?
+                WHERE id = ?
+            """, (user_answer, int(is_correct), str(user_id), task_id))
+        else:
+            cursor.execute("""
+                UPDATE task_history
+                SET user_answer = ?, is_correct = ?
+                WHERE id = ?
+            """, (user_answer, int(is_correct), task_id))
         conn.commit()
     finally:
         conn.close()
