@@ -1,0 +1,81 @@
+version: "1.0"
+solution_name: "Gubkin's Team - MAX Math Trainer"
+team_id: "t594_hakaton_max_bot"
+base_url: "https://oioyj-135-106-228-49.free.pinggy.net"
+required_checks:
+  - name: "Получение случайной математической задачи (ФСУ)"
+    method: "GET"
+    path: "/api/task"
+    params:
+      query:
+        user_id: "jury_test_user"
+    user_role: "student"
+    expected_status: 200
+    expected_response:
+      content_type: "application/json"
+      required_fields:
+        - "status"
+        - "question"
+        - "expected_answer"
+        - "category"
+
+  - name: "Проверка корректного ответа через математический валидатор"
+    method: "POST"
+    path: "/api/check"
+    headers:
+      Content-Type: "application/json"
+    body:
+      user_id: "jury_test_user"
+      task_id: 1
+      user_answer: "x^2 - 16"
+      expected_answer: "x^2 - 16"
+    user_role: "student"
+    expected_status: 200
+    expected_response:
+      content_type: "application/json"
+      required_fields:
+        - "status"
+        - "is_correct"
+        - "feedback"
+
+  - name: "Получение персональной статистики и истории решений"
+    method: "GET"
+    path: "/api/stats"
+    params:
+      query:
+        user_id: "jury_test_user"
+    user_role: "student"
+    expected_status: 200
+    expected_response:
+      content_type: "application/json"
+      required_fields:
+        - "status"
+        - "total_solved"
+        - "correct_answers"
+        - "accuracy_percent"
+
+  - name: "Получение каталога 30 формул сокращённого умножения"
+    method: "GET"
+    path: "/api/templates"
+    user_role: "student"
+    expected_status: 200
+    expected_response:
+      content_type: "application/json"
+
+  - name: "Генерация 45-минутного плана урока для учителя"
+    method: "POST"
+    path: "/api/lesson"
+    headers:
+      Content-Type: "application/json"
+    body:
+      topic: "ФСУ (7 класс)"
+      grade: 7
+      author_id: "jury_teacher"
+    user_role: "teacher"
+    expected_status: 200
+    expected_response:
+      content_type: "application/json"
+      required_fields:
+        - "status"
+        - "markdown"
+        - "variant_15"

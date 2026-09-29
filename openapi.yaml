@@ -1,0 +1,172 @@
+openapi: 3.1.0
+info:
+  title: MAX Math Trainer API
+  description: REST API образовательной платформы «Тренажёр ФСУ» для мессенджера MAX
+  version: 1.0.0
+servers:
+  - url: https://oioyj-135-106-228-49.free.pinggy.net
+    description: Production HTTPS Server (Cloud.ru VM)
+  - url: http://135.106.228.49:8080
+    description: Direct IP Server
+paths:
+  /api/task:
+    get:
+      summary: Получить случайную математическую задачу по 30 шаблонам ФСУ
+      parameters:
+        - name: user_id
+          in: query
+          required: false
+          schema:
+            type: string
+            default: webapp_guest
+        - name: template_id
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешная генерация задачи
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  task_id:
+                    type: integer
+                  template_id:
+                    type: integer
+                  question:
+                    type: string
+                  expected_answer:
+                    type: string
+                  category:
+                    type: string
+                  hint:
+                    type: string
+
+  /api/check:
+    post:
+      summary: Проверить ответ пользователя через математический валидатор
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_answer
+                - expected_answer
+              properties:
+                user_id:
+                  type: string
+                task_id:
+                  type: integer
+                user_answer:
+                  type: string
+                expected_answer:
+                  type: string
+      responses:
+        '200':
+          description: Результат валидации ответа
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  is_correct:
+                    type: boolean
+                  expected_answer:
+                    type: string
+                  feedback:
+                    type: string
+                  stats:
+                    type: object
+
+  /api/stats:
+    get:
+      summary: Получить статистику решений пользователя
+      parameters:
+        - name: user_id
+          in: query
+          required: false
+          schema:
+            type: string
+            default: webapp_guest
+      responses:
+        '200':
+          description: Статистика и история решений
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  total_solved:
+                    type: integer
+                  correct_answers:
+                    type: integer
+                  accuracy_percent:
+                    type: number
+                  recent_history:
+                    type: array
+                    items:
+                      type: object
+
+  /api/templates:
+    get:
+      summary: Получить каталог 30 формул сокращённого умножения курса 7 класса
+      responses:
+        '200':
+          description: Список всех 30 шаблонов ФСУ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /api/lesson:
+    post:
+      summary: Сгенерировать методический план урока на 45 минут или вариант к/р
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                topic:
+                  type: string
+                  default: "ФСУ (7 класс)"
+                grade:
+                  type: integer
+                  default: 7
+                author_id:
+                  type: string
+                  default: "teacher_webapp"
+      responses:
+        '200':
+          description: Готовый план урока и контрольный вариант
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  topic:
+                    type: string
+                  markdown:
+                    type: string
+                  variant_15:
+                    type: string
