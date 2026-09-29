@@ -3,64 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Тренажёр — Формулы сокращённого умножения | Mate Style</title>
-  <meta name="description" content="Интерактивный образовательный тренажёр по математике в стиле Mate academy. Практика для учеников и готовые материалы для учителей.">
+  <title>Тренажёр — Формулы сокращённого умножения</title>
+  <meta name="description" content="Интерактивный образовательный тренажёр по математике. Практика для учеников и готовые материалы для учителей.">
   <meta property="og:title" content="Тренажёр — Формулы сокращённого умножения">
   <meta property="og:description" content="Онлайн-тренажёр по формулам сокращённого умножения с мгновенной проверкой и конструктором уроков.">
   <meta property="og:type" content="website">
 
-  <!-- Inline Vector Favicon: Mate Academy Style Electric Purple Mark -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236600FF'/%3E%3Cpath d='M8 22 L13 10 L16 17 L19 10 L24 22' fill='none' stroke='%23FFFFFF' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <!-- Inline Vector Favicon: Dark Violet Architectural Geometry -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23382054'/%3E%3Cpath d='M8 22 L13 10 L16 17 L19 10 L24 22' fill='none' stroke='%23FFFFFF' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts: Manrope (гуманитарный строгий гротеск) + JetBrains Mono (для математики) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- MAX Bridge SDK -->
   <script src="https://st.max.ru/js/max-web-app.js"></script>
 
   <style>
     /* ==========================================================================
-       ДИЗАЙН-ТОКЕНЫ: MATE ACADEMY СТИЛЬ
-       (Белый, Светло-серый, Электрик-фиолетовый #6600FF, Карточный минимализм)
+       ДИЗАЙН-ТОКЕНЫ: СТРОГИЙ АКАДЕМИЧЕСКИЙ МИНИМАЛИЗМ
+       (Тёмно-фиолетовый #382054, плоский дизайн без теней, уменьшенные скругления)
        ========================================================================== */
     :root {
-      /* Палитра Mate Academy */
-      --bg: #F5F6F8;                  /* Воздушный нейтральный фон */
+      /* Поверхности и фон */
+      --bg: #F6F7F9;                  /* Спокойный нейтральный фон бумаги */
       --card-bg: #FFFFFF;             /* Чистая белая карточка */
-      --card-surface: #F8F9FA;        /* Вторичная поверхность карточки */
-      --card-border: #E5E7EB;         /* Тонкая мягкая граница */
-      --card-border-hover: #D1D5DB;
+      --card-surface: #F2F4F7;        /* Вторичная поверхность карточки */
+      --card-border: #D8DCE3;         /* Чёткая аккуратная граница */
+      --card-border-hover: #BAC1CC;
 
-      /* Фирменные цвета Mate */
-      --brand: #6600FF;               /* Фирменный электрик-фиолетовый */
-      --brand-hover: #5200CC;
-      --brand-active: #4100A3;
-      --brand-light: #F0EDFF;         /* Мягкая лавандовая подложка */
-      --brand-light-border: #D8CEFF;
+      /* Фирменный тёмно-фиолетовый (глубокий сливовый/графитовый) */
+      --brand: #382054;
+      --brand-hover: #4A2E6D;
+      --brand-active: #29153F;
+      --brand-light: #F3EFF7;         /* Мягкая ненавязчивая подложка */
+      --brand-light-border: #D8CCE4;
 
-      /* Текст */
-      --text-main: #2A2F3C;           /* Глубокий тёмно-серый для заголовков и текста */
-      --text-muted: #6B7280;          /* Читаемый вторичный текст */
+      /* Текст с повышенной контрастностью */
+      --text-main: #1D232C;           /* Глубокий тёмный уголь */
+      --text-muted: #5F6B7A;          /* Сбалансированный серый */
       --text-light: #FFFFFF;
 
-      /* Акценты и валидация */
-      --accent-gold: #FFBB00;         /* Тёплое золото для стриков и звезд */
-      --accent-gold-light: #FFF8E6;
-      --success: #00B074;             /* Свежий зелёный для верных решений */
-      --success-light: #E6F7F1;
-      --success-border: #A3E5D0;
-      --error: #FF3B30;               /* Чёткий красный для ошибок */
-      --error-light: #FEECEB;
-      --error-border: #FCA5A5;
+      /* Акценты и валидация (строгие приглушённые тона) */
+      --accent-gold: #966100;
+      --accent-gold-light: #FEF7E6;
+      --accent-gold-border: #F3DC9B;
 
-      /* Скругления и тени */
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 20px;
-      --radius-pill: 999px;
+      --success: #0C7A58;             /* Строгий изумрудный */
+      --success-light: #EBF7F3;
+      --success-border: #A6E3D1;
 
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
-      --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.05);
-      --shadow-hover: 0 8px 24px rgba(102, 0, 255, 0.08);
-      --shadow-brand: 0 4px 14px rgba(102, 0, 255, 0.25);
+      --error: #B52A2A;               /* Сдержанный терракотово-красный */
+      --error-light: #FDF2F2;
+      --error-border: #F8B4B4;
+
+      /* Уменьшенные скругления (без овалов и гигантских пилюль) */
+      --radius-xs: 3px;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --radius-xl: 10px;
+      --radius-pill: 4px;             /* Бейджи аккуратные прямоугольные */
+
+      /* Тени полностью отключены — плоский архитектурный стиль */
+      --shadow-sm: none;
+      --shadow-card: none;
+      --shadow-hover: none;
+      --shadow-brand: none;
     }
 
     /* Базовые стили */
@@ -74,7 +84,7 @@
     body {
       background-color: var(--bg);
       color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
       min-height: 100vh;
       display: flex;
@@ -85,13 +95,14 @@
 
     /* Заголовки */
     h1, h2, h3, h4, .brand-title {
+      font-family: 'Manrope', sans-serif;
       font-weight: 700;
       color: var(--text-main);
-      letter-spacing: -0.3px;
+      letter-spacing: -0.2px;
     }
 
     /* ==========================================================================
-       ШАПКА (HEADER)
+       ШАПКА (HEADER) — ПЛОСКАЯ, ЧЁТКАЯ
        ========================================================================== */
     header {
       background: #FFFFFF;
@@ -99,7 +110,6 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: var(--shadow-sm);
     }
 
     .header-inner {
@@ -118,10 +128,9 @@
       gap: 12px;
     }
 
-    /* Mate Academy стиль иконки */
     .brand-logo {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       background: var(--brand);
       border-radius: var(--radius-md);
       display: flex;
@@ -129,21 +138,20 @@
       justify-content: center;
       color: #FFFFFF;
       flex-shrink: 0;
-      box-shadow: var(--shadow-brand);
     }
 
     .brand-logo svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       stroke: #FFFFFF;
-      stroke-width: 2.4;
+      stroke-width: 2.2;
       stroke-linecap: round;
       stroke-linejoin: round;
       fill: none;
     }
 
     .brand-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       line-height: 1.2;
       color: var(--text-main);
@@ -155,22 +163,51 @@
       font-weight: 500;
     }
 
-    /* Бейдж пользователя в стиле Mate */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Бейдж пользователя */
     .user-pill {
       font-size: 12px;
       font-weight: 600;
       background: var(--brand-light);
       color: var(--brand);
       border: 1px solid var(--brand-light-border);
-      padding: 6px 14px;
+      padding: 5px 10px;
       border-radius: var(--radius-pill);
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
 
+    /* Рабочая кнопка закрытия */
+    .btn-close-app {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+    }
+    .btn-close-app:hover {
+      background: var(--card-surface);
+      color: var(--text-main);
+      border-color: var(--card-border-hover);
+    }
+    .btn-close-app:active {
+      background: #E5E8ED;
+    }
+
     /* ==========================================================================
-       ОСНОВНОЙ КОНТЕНТ И СТИЛЬ КАРТОЧЕК MATE
+       ОСНОВНОЙ КОНТЕНТ И СТИЛЬ КАРТОЧЕК
        ========================================================================== */
     main {
       flex: 1;
@@ -185,23 +222,25 @@
     }
     .tab-content.active {
       display: block;
-      animation: fadeIn 0.2s ease-out;
+      animation: fadeIn 0.15s ease-out;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    /* Карточка Mate Academy */
+    /* Плоская модульная карточка */
     .mate-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-card);
-      padding: 20px;
-      margin-bottom: 16px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      transition: border-color 0.15s ease;
+    }
+    .mate-card:hover {
+      border-color: var(--card-border-hover);
     }
 
     /* Шапка карточки задания */
@@ -214,13 +253,14 @@
     }
 
     .category-badge {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--brand);
       background: var(--brand-light);
       border: 1px solid var(--brand-light-border);
-      padding: 4px 12px;
+      padding: 4px 8px;
       border-radius: var(--radius-pill);
+      letter-spacing: 0.2px;
     }
 
     .streak-badge {
@@ -228,18 +268,18 @@
       align-items: center;
       gap: 5px;
       background: var(--accent-gold-light);
-      border: 1px solid #FFE082;
-      color: #B28000;
-      font-size: 12px;
+      border: 1px solid var(--accent-gold-border);
+      color: var(--accent-gold);
+      font-size: 11px;
       font-weight: 700;
-      padding: 4px 12px;
+      padding: 4px 8px;
       border-radius: var(--radius-pill);
     }
 
     .streak-badge svg {
-      width: 15px;
-      height: 15px;
-      stroke: #B28000;
+      width: 14px;
+      height: 14px;
+      stroke: var(--accent-gold);
       stroke-width: 2.2;
       fill: none;
     }
@@ -248,10 +288,10 @@
     .task-hero-box {
       background: var(--card-surface);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      padding: 24px 16px;
+      border-radius: var(--radius-md);
+      padding: 22px 16px;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .task-label {
@@ -262,8 +302,9 @@
     }
 
     .task-equation {
-      font-size: 24px;
-      font-weight: 800;
+      font-family: 'JetBrains Mono', 'Manrope', monospace;
+      font-size: 22px;
+      font-weight: 700;
       color: var(--text-main);
       line-height: 1.3;
       user-select: text;
@@ -271,7 +312,7 @@
 
     /* Поле ввода */
     .input-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .input-label {
@@ -279,27 +320,27 @@
       font-size: 13px;
       font-weight: 600;
       color: var(--text-main);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .input-control {
       width: 100%;
-      height: 52px;
+      height: 48px;
       background: #FFFFFF;
-      border: 2px solid var(--card-border);
+      border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
-      padding: 0 16px;
-      font-size: 18px;
-      font-weight: 700;
-      font-family: inherit;
+      padding: 0 14px;
+      font-size: 17px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
       color: var(--text-main);
       outline: none;
-      transition: all 0.2s ease;
+      transition: border-color 0.15s ease;
     }
 
     .input-control:focus {
       border-color: var(--brand);
-      box-shadow: 0 0 0 4px var(--brand-light);
+      background: #FFFFFF;
     }
 
     /* ==========================================================================
@@ -318,32 +359,32 @@
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 6px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .key-btn {
-      min-height: 44px;
+      min-height: 42px;
       background: var(--card-surface);
       color: var(--text-main);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.1s ease;
+      transition: background 0.1s ease, border-color 0.1s ease;
       user-select: none;
     }
 
     .key-btn:hover {
-      background: #ECEEF2;
-      border-color: #D1D5DB;
+      background: #E5E8ED;
+      border-color: var(--card-border-hover);
     }
     .key-btn:active {
-      transform: scale(0.95);
-      background: #E2E4E9;
+      background: #D8DCE3;
     }
 
     .key-btn-power {
@@ -351,26 +392,33 @@
       border-color: var(--brand-light-border);
       color: var(--brand);
     }
+    .key-btn-power:hover {
+      background: #EAE3F2;
+    }
 
     .key-btn-action {
       background: var(--error-light);
       border-color: var(--error-border);
       color: var(--error);
     }
+    .key-btn-action:hover {
+      background: #FCE8E8;
+    }
 
     /* ==========================================================================
-       КНОПКИ ДЕЙСТВИЯ MATE STYLE
+       КНОПКИ ДЕЙСТВИЯ — СТРОГИЕ, ПЛОСКИЕ, БЕЗ ТЕНЕЙ
        ========================================================================== */
     .action-row {
       display: grid;
       grid-template-columns: 1.4fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 8px;
+      margin-bottom: 10px;
     }
 
     .btn {
-      min-height: 48px;
+      min-height: 46px;
       border-radius: var(--radius-md);
+      font-family: 'Manrope', sans-serif;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
@@ -378,34 +426,31 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px 18px;
+      padding: 10px 16px;
       border: none;
-      transition: all 0.15s ease;
+      transition: background 0.12s ease, border-color 0.12s ease;
       text-decoration: none;
       user-select: none;
     }
 
     .btn svg {
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       stroke-width: 2.2;
       stroke: currentColor;
       fill: none;
     }
 
-    /* Главная кнопка Mate: #6600FF */
+    /* Главная кнопка: благородный тёмно-фиолетовый */
     .btn-primary {
       background: var(--brand);
       color: #FFFFFF;
-      box-shadow: var(--shadow-brand);
     }
     .btn-primary:hover {
       background: var(--brand-hover);
-      box-shadow: 0 6px 18px rgba(102, 0, 255, 0.35);
     }
     .btn-primary:active {
       background: var(--brand-active);
-      transform: scale(0.98);
     }
 
     /* Второстепенная кнопка */
@@ -419,13 +464,13 @@
       border-color: var(--card-border-hover);
     }
     .btn-secondary:active {
-      transform: scale(0.98);
+      background: #E5E8ED;
     }
 
     /* Тонкая сервисная кнопка */
     .btn-subtle {
       width: 100%;
-      min-height: 42px;
+      min-height: 40px;
       background: transparent;
       color: var(--brand);
       border: 1px dashed var(--brand-light-border);
@@ -435,6 +480,7 @@
     }
     .btn-subtle:hover {
       background: var(--brand-light);
+      border-color: var(--brand);
     }
 
     /* ==========================================================================
@@ -445,8 +491,8 @@
       background: var(--brand-light);
       border: 1px solid var(--brand-light-border);
       border-radius: var(--radius-md);
-      padding: 14px 16px;
-      margin-top: 14px;
+      padding: 12px 14px;
+      margin-top: 12px;
       font-size: 13px;
       color: var(--brand);
     }
@@ -457,22 +503,22 @@
     .alert-card {
       display: none;
       border-radius: var(--radius-md);
-      padding: 16px;
-      margin-top: 14px;
+      padding: 14px;
+      margin-top: 12px;
       align-items: flex-start;
-      gap: 12px;
+      gap: 10px;
     }
     .alert-card.correct {
       display: flex;
       background: var(--success-light);
       border: 1px solid var(--success-border);
-      color: #007A50;
+      color: var(--success);
     }
     .alert-card.wrong {
       display: flex;
       background: var(--error-light);
       border: 1px solid var(--error-border);
-      color: #C0261E;
+      color: var(--error);
     }
     .alert-card-title {
       font-weight: 700;
@@ -493,14 +539,14 @@
       gap: 14px;
       background: var(--brand-light);
       border: 1px solid var(--brand-light-border);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      margin-bottom: 16px;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 14px;
     }
     .rank-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--radius-md);
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
       background: var(--brand);
       color: #FFFFFF;
       display: flex;
@@ -509,12 +555,12 @@
       flex-shrink: 0;
     }
     .rank-avatar svg {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       stroke-width: 2.2;
     }
     .rank-info h4 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--brand);
     }
@@ -527,18 +573,19 @@
     .stats-triad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
     .stat-pill-box {
       background: var(--card-surface);
       border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
-      padding: 14px 8px;
+      padding: 12px 6px;
       text-align: center;
     }
     .stat-digit {
-      font-size: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
       font-weight: 800;
       color: var(--text-main);
       line-height: 1.1;
@@ -549,40 +596,41 @@
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.3px;
     }
 
     .progress-outer {
-      background: #E5E7EB;
-      height: 8px;
-      border-radius: var(--radius-pill);
+      background: #E5E8ED;
+      height: 6px;
+      border-radius: var(--radius-xs);
       overflow: hidden;
-      margin: 8px 0 16px 0;
+      margin: 8px 0 14px 0;
     }
     .progress-inner {
       height: 100%;
       background: var(--brand);
-      border-radius: var(--radius-pill);
+      border-radius: var(--radius-xs);
       width: 0%;
-      transition: width 0.4s ease;
+      transition: width 0.3s ease;
     }
 
     .history-card-row {
       background: var(--card-surface);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      margin-bottom: 8px;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
     }
     .history-q {
       font-weight: 600;
       font-size: 13px;
     }
     .history-a {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       color: var(--text-muted);
     }
@@ -593,17 +641,17 @@
     .teacher-action-stack {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
     .lesson-box {
       background: var(--card-surface);
       border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
-      padding: 16px;
-      font-family: inherit;
-      font-size: 13px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
       line-height: 1.6;
       color: var(--text-main);
       white-space: pre-wrap;
@@ -617,11 +665,11 @@
        ========================================================================== */
     .search-input-wrap {
       position: relative;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .search-input-wrap svg {
       position: absolute;
-      left: 14px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
@@ -629,35 +677,34 @@
     }
     .search-input-field {
       width: 100%;
-      height: 46px;
+      height: 44px;
       background: var(--card-surface);
       border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
-      padding-left: 42px;
-      padding-right: 14px;
-      font-size: 14px;
+      padding-left: 38px;
+      padding-right: 12px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
       color: var(--text-main);
       outline: none;
     }
     .search-input-field:focus {
       background: #FFFFFF;
       border-color: var(--brand);
-      box-shadow: 0 0 0 3px var(--brand-light);
     }
 
     .catalog-item {
       background: var(--card-surface);
       border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
-      padding: 12px 14px;
-      margin-bottom: 8px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
       cursor: pointer;
-      transition: all 0.12s ease;
+      transition: background 0.12s ease, border-color 0.12s ease;
     }
     .catalog-item:hover {
       background: #FFFFFF;
       border-color: var(--brand);
-      box-shadow: var(--shadow-sm);
     }
     .catalog-item-header {
       display: flex;
@@ -671,20 +718,21 @@
       color: var(--text-main);
     }
     .catalog-item-formula {
-      font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
       font-weight: 700;
       color: var(--brand);
     }
 
     /* ==========================================================================
-       НИЖНЯЯ НАВИГАЦИЯ (MATE STYLE)
+       НИЖНЯЯ НАВИГАЦИЯ — ПЛОСКАЯ, СТРОГАЯ
        ========================================================================== */
     nav.bottom-nav {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 68px;
+      height: 64px;
       background: #FFFFFF;
       border-top: 1px solid var(--card-border);
       display: flex;
@@ -693,7 +741,6 @@
       z-index: 200;
       max-width: 680px;
       margin: 0 auto;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
     }
 
     .nav-btn {
@@ -704,17 +751,19 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 2px;
       background: transparent;
       border: none;
       color: var(--text-muted);
       cursor: pointer;
+      font-family: 'Manrope', sans-serif;
       font-size: 11px;
       font-weight: 600;
-      transition: color 0.15s ease;
+      transition: color 0.12s ease;
     }
     .nav-btn.active {
       color: var(--brand);
+      font-weight: 700;
     }
     .nav-btn svg {
       width: 20px;
@@ -731,23 +780,23 @@
     /* Toast */
     .toast-pill {
       position: fixed;
-      bottom: 80px;
+      bottom: 76px;
       left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #18181B;
+      transform: translateX(-50%) translateY(16px);
+      background: #181C24;
       color: #FFFFFF;
-      padding: 10px 20px;
-      border-radius: var(--radius-pill);
-      font-size: 13px;
+      padding: 8px 16px;
+      border: 1px solid #323A46;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
       font-weight: 600;
       opacity: 0;
       pointer-events: none;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.15s ease;
       z-index: 999;
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     }
     .toast-pill.show {
       opacity: 1;
@@ -759,10 +808,10 @@
         grid-template-columns: 1fr;
       }
       .math-keypad {
-        gap: 5px;
+        gap: 4px;
       }
       .key-btn {
-        min-height: 44px;
+        min-height: 40px;
         font-size: 14px;
       }
     }
@@ -775,7 +824,7 @@
     <div class="header-inner">
       <div class="brand-wrap">
         <div class="brand-logo" title="Тренажёр">
-          <!-- Mate Academy Geometric Code/Math Symbol -->
+          <!-- Geometric Code/Math Symbol -->
           <svg viewBox="0 0 24 24">
             <polyline points="16 18 22 12 16 6"></polyline>
             <polyline points="8 6 2 12 8 18"></polyline>
@@ -786,8 +835,14 @@
           <div class="brand-subtitle">Формулы сокращённого умножения</div>
         </div>
       </div>
-      <div>
+      <div class="header-actions">
         <span class="user-pill" id="userPill">Ученик</span>
+        <button type="button" class="btn-close-app" id="closeAppBtn" onclick="closeWebApp()" title="Закрыть приложение" aria-label="Закрыть">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
   </header>
@@ -840,7 +895,7 @@
           <button type="button" class="key-btn" onclick="insertSymbol('a')">a</button>
           <button type="button" class="key-btn" onclick="insertSymbol('b')">b</button>
           <button type="button" class="key-btn key-btn-action" onclick="backspaceInput()" title="Стереть символ" aria-label="Стереть символ">
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none">
               <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
               <line x1="18" y1="9" x2="12" y2="15"></line>
               <line x1="12" y1="9" x2="18" y2="15"></line>
@@ -928,15 +983,15 @@
           <div class="progress-inner" id="statProgressBar"></div>
         </div>
 
-        <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="switchTab('trainer')">
+        <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 8px;" onclick="switchTab('trainer')">
           <span>Продолжить тренировку</span>
         </button>
       </div>
 
       <div class="mate-card">
-        <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;">История решений</h4>
+        <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 10px;">История решений</h4>
         <div id="historyList">
-          <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 14px;">
+          <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 12px;">
             Пока нет решённых задач. Начните практику во вкладке «Тренажёр»!
           </div>
         </div>
@@ -951,7 +1006,7 @@
           <span style="font-size: 12px; font-weight: 600; color: var(--brand);">Учителю / Репетитору</span>
         </div>
 
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5;">
           Автоматическая генерация структурированных материалов для уроков математики в 7 классе: тайминг, разминка, отработка с коэффициентами и готовые ответы.
         </p>
 
@@ -978,10 +1033,10 @@
           </button>
         </div>
 
-        <div id="lessonResultWrap" style="display: none; margin-top: 16px;">
+        <div id="lessonResultWrap" style="display: none; margin-top: 14px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Готовый материал</span>
-            <button type="button" class="btn btn-secondary" style="min-height: 36px; padding: 4px 12px; font-size: 12px;" onclick="copyLessonPlan()">
+            <button type="button" class="btn btn-secondary" style="min-height: 34px; padding: 4px 10px; font-size: 12px;" onclick="copyLessonPlan()">
               <svg viewBox="0 0 24 24">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -1003,7 +1058,7 @@
         </div>
 
         <div class="search-input-wrap">
-          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
@@ -1017,7 +1072,7 @@
         </div>
 
         <div id="catalogList">
-          <!-- Populated by JS -->
+          <!-- Заполняется динамически -->
         </div>
       </div>
     </section>
@@ -1060,7 +1115,7 @@
 
   <!-- Всплывающий Toast -->
   <div class="toast-pill" id="toastNotification">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="10"></circle>
       <polyline points="12 6 12 12 14 14"></polyline>
     </svg>
@@ -1116,6 +1171,29 @@
       loadTemplatesCatalog();
       updateStatsDisplay();
     });
+
+    // --- Закрытие окна WebApp ---
+    function closeWebApp() {
+      try {
+        if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === 'function') {
+          window.Telegram.WebApp.close();
+          return;
+        }
+      } catch (e) {}
+      try {
+        if (window.WebApp && typeof window.WebApp.close === 'function') {
+          window.WebApp.close();
+          return;
+        }
+      } catch (e) {}
+      try {
+        if (window.MaxWebApp && typeof window.MaxWebApp.close === 'function') {
+          window.MaxWebApp.close();
+          return;
+        }
+      } catch (e) {}
+      window.close();
+    }
 
     // --- Переключение вкладок ---
     function switchTab(tabId) {
@@ -1283,11 +1361,11 @@
       if (isCorrect) {
         title.textContent = "Решение верно!";
         desc.textContent = explanation || "Формула раскрыта абсолютно правильно.";
-        icon.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.4" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        icon.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
       } else {
         title.textContent = "Есть расхождение";
         desc.textContent = explanation || `Эталон: ${currentTask ? currentTask.expected : ""}`;
-        icon.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.4" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
+        icon.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
       }
     }
 
