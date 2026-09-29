@@ -1459,7 +1459,7 @@
         const d = await resp.json();
 
         const solved = d.total_solved || 0;
-        const correct = d.correct_solved || 0;
+        const correct = d.correct_answers || 0;
         const accuracy = solved > 0 ? Math.round((correct / solved) * 100) : 0;
 
         document.getElementById("statTotalSolved").textContent = solved;
