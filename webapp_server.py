@@ -119,7 +119,7 @@ class MiniAppRequestHandler(SimpleHTTPRequestHandler):
             elif t_id <= 20:
                 category = "Квадрат суммы / разности"
             else:
-                category = "Кубы формул"
+                category = "Формулы кубов"
 
             res = {
                 "status": "ok",
