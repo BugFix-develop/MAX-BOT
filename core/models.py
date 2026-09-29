@@ -13,6 +13,7 @@ class Task:
     template_id: int
     question_text: str
     reference_answer: str
+    hint: str = ""
 
 #Проверка на верность ответа, которую ввел пользователь
 @dataclass

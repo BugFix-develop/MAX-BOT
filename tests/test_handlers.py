@@ -116,6 +116,33 @@ def test_cancel_flow(temp_db):
     assert "Действие отменено" in client.sent_messages[-1]["text"]
 
 
+def test_task_hint_flow(temp_db):
+    client = DummyClient()
+    user_id = "test_user_hint"
+
+    # 1. Request task
+    handle_task(user_id=user_id, client=client, db_path=temp_db)
+    assert USER_SESSIONS[user_id]["state"] == "SOLVING_TASK"
+    hint_formula = USER_SESSIONS[user_id]["hint"]
+    assert "=" in hint_formula
+
+    # 2. Ask for hint via /hint
+    handle_message(user_id=user_id, text="/hint", client=client, db_path=temp_db)
+    assert len(client.sent_messages) == 2
+    hint_msg = client.sent_messages[1]["text"]
+    assert "Формула для решения:" in hint_msg
+    assert hint_formula in hint_msg
+    assert USER_SESSIONS[user_id]["state"] == "SOLVING_TASK"
+
+    # 3. Answering incorrectly shows formula as well
+    handle_message(user_id=user_id, text="неверный_ответ", client=client, db_path=temp_db)
+    assert len(client.sent_messages) == 3
+    wrong_msg = client.sent_messages[2]["text"]
+    assert "Формула решения:" in wrong_msg
+    assert hint_formula in wrong_msg
+
+
+
 def test_fallback(temp_db):
     client = DummyClient()
     user_id = "test_user_fallback"

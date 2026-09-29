@@ -35,6 +35,40 @@ FALLBACK_TASKS = [
     (20, "Раскройте скобки: (-x - 4)^2", "x^2+8x+16"),
 ]
 
+# Канонические формулы для подсказок к каждой задаче
+TEMPLATE_FORMULAS = {
+    1: "(x - a)(x + a) = x² - a²",
+    2: "(a - x)(a + x) = a² - x²",
+    3: "(kx - a)(kx + a) = k²x² - a²",
+    4: "(x - ay)(x + ay) = x² - a²y²",
+    5: "(kx - my)(kx + my) = k²x² - m²y²",
+    6: "(x² - a)(x² + a) = x⁴ - a²",
+    7: "(x - a)(x + a) = x² - a²",
+    8: "(x + a)² = x² + 2ax + a²",
+    9: "(a + x)² = a² + 2ax + x²",
+    10: "(kx + a)² = k²x² + 2kax + a²",
+    11: "(x + ay)² = x² + 2axy + a²y²",
+    12: "(kx + my)² = k²x² + 2kmxy + m²y²",
+    13: "(x² + a)² = x⁴ + 2ax² + a²",
+    14: "(x - a)² = x² - 2ax + a²",
+    15: "(a - x)² = a² - 2ax + x²",
+    16: "(kx - a)² = k²x² - 2kax + a²",
+    17: "(x - ay)² = x² - 2axy + a²y²",
+    18: "(kx - my)² = k²x² - 2kmxy + m²y²",
+    19: "(x² - a)² = x⁴ - 2ax² + a²",
+    20: "(-x - a)² = x² + 2ax + a²",
+    21: "(x + a)³ = x³ + 3ax² + 3a²x + a³",
+    22: "(x - a)³ = x³ - 3ax² + 3a²x - a³",
+    23: "(kx + a)³ = k³x³ + 3k²ax² + 3ka²x + a³",
+    24: "(kx - a)³ = k³x³ - 3k²ax² + 3ka²x - a³",
+    25: "(x + a)(x² - ax + a²) = x³ + a³",
+    26: "(x - a)(x² + ax + a²) = x³ - a³",
+    27: "x³ + a³ = (x + a)(x² - ax + a²)",
+    28: "x³ - a³ = (x - a)(x² + ax + a²)",
+    29: "k³x³ + a³ = (kx + a)(k²x² - kax + a²)",
+    30: "k³x³ - a³ = (kx - a)(k²x² + kax + a²)",
+}
+
 
 def handle_start(user_id: str, client, chat_id: str | int | None = None, db_path: str = DB_NAME, **kwargs) -> None:
     """
@@ -272,6 +306,10 @@ def handle_task(user_id: str, client, template_id: int = None, chat_id: str | in
         chosen = random.choice(FALLBACK_TASKS)
         t_id, question, answer = chosen[0], chosen[1], chosen[2]
 
+    hint = getattr(task_obj, "hint", None) if 'task_obj' in locals() and task_obj else None
+    if not hint:
+        hint = TEMPLATE_FORMULAS.get(t_id, "(a - b)(a + b) = a² - b²")
+
     # 1. Запись выдачи задачи в SQLite:
     task_db_id = save_task_issue(
         user_id=user_id,
@@ -288,6 +326,7 @@ def handle_task(user_id: str, client, template_id: int = None, chat_id: str | in
         "template_id": t_id,
         "expected_answer": answer,
         "question": question,
+        "hint": hint,
         "chat_id": cid
     }
 
@@ -298,9 +337,33 @@ def handle_task(user_id: str, client, template_id: int = None, chat_id: str | in
         f"📝 **{question}**\n"
         f"────────────────────────\n"
         f"✍️ Напиши свой ответ сообщением в чат.\n\n"
-        f"💡 *Справка по вводу:* `/help`  |  ❌ *Отмена:* `/cancel`"
+        f"💡 *Подсказка формулы:* `/hint`  |  📖 *Справка:* `/help`  |  ❌ *Отмена:* `/cancel`"
     )
     client.send_message(user_id=user_id, chat_id=cid, text=task_message)
+
+
+def handle_hint(user_id: str, client, chat_id: str | int | None = None, *args, **kwargs) -> None:
+    """
+    Обработчик команды /hint (или 'подсказка'):
+    - Отправляет математическую формулу, по которой решается текущая задача
+    """
+    session = USER_SESSIONS.get(user_id, {})
+    cid = chat_id or session.get("chat_id")
+    if session.get("state") == "SOLVING_TASK" and session.get("hint"):
+        hint_formula = session["hint"]
+        t_id = session.get("template_id", "")
+        hint_text = (
+            f"💡 **Подсказка к задаче #{t_id}**\n"
+            "────────────────────────\n"
+            f"Формула для решения:\n`{hint_formula}`\n\n"
+            "Примени эту формулу к выражению и напиши полученный ответ!"
+        )
+    else:
+        hint_text = (
+            "💡 Чтобы получить формулу-подсказку, сначала запросите задачу командой **/task**.\n\n"
+            "Или откройте интерактивный тренажёр: **/app**"
+        )
+    client.send_message(user_id=user_id, chat_id=cid, text=hint_text)
 
 
 def handle_answer(user_id: str, text: str, client, chat_id: str | int | None = None, db_path: str = DB_NAME, **kwargs) -> bool:
@@ -338,11 +401,13 @@ def handle_answer(user_id: str, text: str, client, chat_id: str | int | None = N
             "👉 Напиши **/stats**, чтобы посмотреть свой прогресс"
         )
     else:
+        hint_formula = session.get("hint")
+        hint_line = f"\n💡 Формула решения: `{hint_formula}`" if hint_formula else ""
         response = (
             "❌ **Увы, ответ не совпал.**\n"
             "────────────────────────\n"
             f"Твой ответ: `{text.strip()}`\n"
-            f"Правильный ответ: `{expected_answer}`\n\n"
+            f"Правильный ответ: `{expected_answer}`{hint_line}\n\n"
             "Не расстраивайся, математика любит упорство! 💪\n\n"
             "👉 Напиши **/task**, чтобы попробовать снова\n"
             "👉 Напиши **/help**, чтобы посмотреть правила записи"
@@ -393,6 +458,13 @@ COMMAND_HANDLERS = {
     "help": handle_help,
     "помощь": handle_help,
     "/помощь": handle_help,
+    "/hint": handle_hint,
+    "hint": handle_hint,
+    "подсказка": handle_hint,
+    "/подсказка": handle_hint,
+    "формула": handle_hint,
+    "/формула": handle_hint,
+    "подскажи": handle_hint,
     "справка": handle_help,
     "/справка": handle_help,
     "/stats": handle_stats,

@@ -83,8 +83,10 @@ def test_webapp_api_task(webapp_test_server):
         assert data.get("status") == "ok"
         assert "task_id" in data
         assert "question" in data
-        assert "expected_answer" in data
         assert data.get("template_id") == 1
+        assert "hint" in data
+        assert "=" in data["hint"]
+        assert "Используйте формулу" not in data["hint"]
 
 
 def test_webapp_api_check_and_stats(webapp_test_server):

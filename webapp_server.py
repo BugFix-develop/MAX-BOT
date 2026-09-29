@@ -48,6 +48,39 @@ FALLBACK_TASKS = [
     (25, "Умножьте: (x - 3)(x^2 + 3x + 9)", "x^3-27", "Разность кубов", "(a - b)(a² + ab + b²) = a³ - b³"),
 ]
 
+TEMPLATE_FORMULAS = {
+    1: "(x - a)(x + a) = x² - a²",
+    2: "(a - x)(a + x) = a² - x²",
+    3: "(kx - a)(kx + a) = k²x² - a²",
+    4: "(x - ay)(x + ay) = x² - a²y²",
+    5: "(kx - my)(kx + my) = k²x² - m²y²",
+    6: "(x² - a)(x² + a) = x⁴ - a²",
+    7: "(x - a)(x + a) = x² - a²",
+    8: "(x + a)² = x² + 2ax + a²",
+    9: "(a + x)² = a² + 2ax + x²",
+    10: "(kx + a)² = k²x² + 2kax + a²",
+    11: "(x + ay)² = x² + 2axy + a²y²",
+    12: "(kx + my)² = k²x² + 2kmxy + m²y²",
+    13: "(x² + a)² = x⁴ + 2ax² + a²",
+    14: "(x - a)² = x² - 2ax + a²",
+    15: "(a - x)² = a² - 2ax + x²",
+    16: "(kx - a)² = k²x² - 2kax + a²",
+    17: "(x - ay)² = x² - 2axy + a²y²",
+    18: "(kx - my)² = k²x² - 2kmxy + m²y²",
+    19: "(x² - a)² = x⁴ - 2ax² + a²",
+    20: "(-x - a)² = x² + 2ax + a²",
+    21: "(x + a)³ = x³ + 3ax² + 3a²x + a³",
+    22: "(x - a)³ = x³ - 3ax² + 3a²x - a³",
+    23: "(kx + a)³ = k³x³ + 3k²ax² + 3ka²x + a³",
+    24: "(kx - a)³ = k³x³ - 3k²ax² + 3ka²x - a³",
+    25: "(x + a)(x² - ax + a²) = x³ + a³",
+    26: "(x - a)(x² + ax + a²) = x³ - a³",
+    27: "x³ + a³ = (x + a)(x² - ax + a²)",
+    28: "x³ - a³ = (x - a)(x² + ax + a²)",
+    29: "k³x³ + a³ = (kx + a)(k²x² - kax + a²)",
+    30: "k³x³ - a³ = (kx - a)(k²x² + kax + a²)",
+}
+
 
 class MiniAppRequestHandler(SimpleHTTPRequestHandler):
     """
@@ -121,6 +154,8 @@ class MiniAppRequestHandler(SimpleHTTPRequestHandler):
             else:
                 category = "Формулы кубов"
 
+            formula_hint = hint or TEMPLATE_FORMULAS.get(t_id, "(a - b)(a + b) = a² - b²")
+
             res = {
                 "status": "ok",
                 "task_id": task_db_id,
@@ -128,7 +163,7 @@ class MiniAppRequestHandler(SimpleHTTPRequestHandler):
                 "question": question,
                 "expected_answer": answer,
                 "category": category,
-                "hint": hint or "Используйте формулу сокращенного умножения"
+                "hint": formula_hint
             }
             self._set_cors_headers(200)
             self.wfile.write(json.dumps(res, ensure_ascii=False).encode("utf-8"))

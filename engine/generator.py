@@ -38,10 +38,12 @@ class TaskGenerator:
 
         question_text = template["question"].format(**context)
         reference_answer = template["answer"].format(**context)
+        formula = template.get("formula", "")
         return Task(
             template_id=template["id"],
             question_text=question_text,
-            reference_answer=reference_answer
+            reference_answer=reference_answer,
+            hint=formula
         )
 
     def get_unique_task(

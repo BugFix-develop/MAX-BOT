@@ -91,6 +91,7 @@ def run_bot_mode(token: str, base_url: str, db_path: str = DB_PATH, webapp_host:
             {"name": "app", "description": "Открыть тренажёр"},
             {"name": "close", "description": "Закрыть тренажёр"},
             {"name": "task", "description": "Решать задачи в чате"},
+            {"name": "hint", "description": "Подсказка формулы для задачи"},
             {"name": "stats", "description": "Моя статистика"},
             {"name": "help", "description": "Правила ввода ответов"},
             {"name": "lesson", "description": "План урока на 45 минут"},
