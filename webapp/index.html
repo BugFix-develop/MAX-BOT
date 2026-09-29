@@ -3,86 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Тренажёр — Формулы сокращённого умножения (7 класс)</title>
-  <meta name="description" content="Интерактивный академический тренажёр формул сокращённого умножения для учеников 7 класса и методический генератор уроков для учителей.">
-  <meta property="og:title" content="Тренажёр — Формулы сокращённого умножения (7 класс)">
-  <meta property="og:description" content="Быстрое прорешивание задач для ученика и конструктор уроков на 45 минут для учителя.">
+  <title>Тренажёр — Формулы сокращённого умножения | Mate Style</title>
+  <meta name="description" content="Интерактивный образовательный тренажёр по математике в стиле Mate academy. Практика для учеников и готовые материалы для учителей.">
+  <meta property="og:title" content="Тренажёр — Формулы сокращённого умножения">
+  <meta property="og:description" content="Онлайн-тренажёр по формулам сокращённого умножения с мгновенной проверкой и конструктором уроков.">
   <meta property="og:type" content="website">
 
-  <!-- Inline Vector SVG Favicon: Academic Geometric Polyhedron -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231D3557'/%3E%3Cpath d='M16 4 L28 10 L16 16 L4 10 Z' fill='none' stroke='%23FFB703' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M4 16 L16 22 L28 16' fill='none' stroke='%23F4F7F6' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M4 22 L16 28 L28 22' fill='none' stroke='%23E63946' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <!-- Inline Vector Favicon: Mate Academy Style Electric Purple Mark -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236600FF'/%3E%3Cpath d='M8 22 L13 10 L16 17 L19 10 L24 22' fill='none' stroke='%23FFFFFF' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
   <!-- MAX Bridge SDK -->
   <script src="https://st.max.ru/js/max-web-app.js"></script>
 
   <style>
     /* ==========================================================================
-       6. ДИЗАЙН-ТОКЕНЫ (Используются исключительно данные значения)
+       ДИЗАЙН-ТОКЕНЫ: MATE ACADEMY СТИЛЬ
+       (Белый, Светло-серый, Электрик-фиолетовый #6600FF, Карточный минимализм)
        ========================================================================== */
     :root {
-      /* Палитра ролей */
-      --bg: #F4F7F6;
-      --brand: #1D3557;
-      --brand-dark: #122238;
-      --cta: #E63946;
-      --cta-hover: #D62839;
-      --cta-active: #B81E2D;
-      --accent: #457B9D;
-      --accent-light: #A8DADC;
-      --stripe: #FFB703;
-      --stripe-hover: #EAA800;
+      /* Палитра Mate Academy */
+      --bg: #F5F6F8;                  /* Воздушный нейтральный фон */
+      --card-bg: #FFFFFF;             /* Чистая белая карточка */
+      --card-surface: #F8F9FA;        /* Вторичная поверхность карточки */
+      --card-border: #E5E7EB;         /* Тонкая мягкая граница */
+      --card-border-hover: #D1D5DB;
 
-      /* Роли карточек */
-      --card-paper: #FFFFFF;
-      --card-sheet: #EBF2EE;
-      --card-dark: #1D3557;
+      /* Фирменные цвета Mate */
+      --brand: #6600FF;               /* Фирменный электрик-фиолетовый */
+      --brand-hover: #5200CC;
+      --brand-active: #4100A3;
+      --brand-light: #F0EDFF;         /* Мягкая лавандовая подложка */
+      --brand-light-border: #D8CEFF;
 
-      /* Валидация и статус */
-      --success: #2A9D8F;
-      --success-light: #E4F4F1;
-      --error: #E63946;
-      --error-light: #FCE8E9;
+      /* Текст */
+      --text-main: #2A2F3C;           /* Глубокий тёмно-серый для заголовков и текста */
+      --text-muted: #6B7280;          /* Читаемый вторичный текст */
+      --text-light: #FFFFFF;
 
-      /* Границы и разделители */
-      --border: #D6E2E0;
-      --border-dark: #2F4858;
-      --border-focus: #1D3557;
+      /* Акценты и валидация */
+      --accent-gold: #FFBB00;         /* Тёплое золото для стриков и звезд */
+      --accent-gold-light: #FFF8E6;
+      --success: #00B074;             /* Свежий зелёный для верных решений */
+      --success-light: #E6F7F1;
+      --success-border: #A3E5D0;
+      --error: #FF3B30;               /* Чёткий красный для ошибок */
+      --error-light: #FEECEB;
+      --error-border: #FCA5A5;
 
-      /* Текст и типографика */
-      --text-dark: #1D3557;
-      --text-muted: #536B78;
-      --text-light: #F4F7F6;
-      --text-light-muted: #C0D6DF;
+      /* Скругления и тени */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-pill: 999px;
 
-      /* Шкала радиусов: 6 / 12 / 16 / 24 / pill(999) */
-      --radius-6: 6px;
-      --radius-12: 12px;
-      --radius-16: 16px;
-      --radius-24: 24px;
-      --radius-pill: 999px; /* Исключительно для бейджей-статусов */
-
-      /* Шкала отступов: 4 / 8 / 12 / 16 / 24 / 40 / 56 / 88 / 128 */
-      --space-4: 4px;
-      --space-8: 8px;
-      --space-12: 12px;
-      --space-16: 16px;
-      --space-24: 24px;
-      --space-40: 40px;
-      --space-56: 56px;
-      --space-88: 88px;
-      --space-128: 128px;
-
-      /* Толщина обводки иконок: строго 2px и 2.4px */
-      --stroke-regular: 2px;
-      --stroke-bold: 2.4px;
-
-      /* Тени для трёх типов поверхностей */
-      --shadow-paper: 0 3px 10px rgba(29, 53, 87, 0.07);
-      --shadow-sheet: 0 4px 14px rgba(29, 53, 87, 0.09);
-      --shadow-dark: 0 10px 28px rgba(18, 34, 56, 0.22);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 8px 24px rgba(102, 0, 255, 0.08);
+      --shadow-brand: 0 4px 14px rgba(102, 0, 255, 0.25);
     }
 
-    /* Базовый сброс и типографика */
+    /* Базовые стили */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -90,123 +71,74 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html {
-      font-size: 16px;
-      background-color: var(--bg);
-    }
-
     body {
       background-color: var(--bg);
-      color: var(--text-dark);
-      font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      line-height: 1.55;
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      padding-bottom: 84px; /* Место под фиксированную нижнюю панель */
+      padding-bottom: 84px; /* Отступ под нижнюю навигацию */
     }
 
-    /* Семейство шрифта для заголовков: Montserrat */
-    h1, h2, h3, h4, .font-heading, .brand-title, .task-formula {
-      font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    /* Заголовки */
+    h1, h2, h3, h4, .brand-title {
       font-weight: 700;
-      color: var(--text-dark);
+      color: var(--text-main);
       letter-spacing: -0.3px;
     }
 
-    /* Ссылка быстрого перехода к содержанию для скринридеров */
-    .skip-link {
-      position: absolute;
-      top: -100px;
-      left: var(--space-16);
-      background: var(--brand);
-      color: var(--text-light);
-      padding: var(--space-8) var(--space-16);
-      border-radius: var(--radius-6);
-      z-index: 1000;
-      text-decoration: none;
-      font-weight: 600;
-      transition: top 0.2s ease;
-    }
-    .skip-link:focus {
-      top: var(--space-16);
-      outline: 3px solid var(--stripe);
-    }
-
-    /* Общие SVG-иконки: толщина 2px или 2.4px */
-    .svg-icon {
-      display: inline-block;
-      vertical-align: middle;
-      flex-shrink: 0;
-    }
-    .svg-icon svg {
-      width: 20px;
-      height: 20px;
-      stroke: currentColor;
-      stroke-width: var(--stroke-regular);
-      vector-effect: non-scaling-stroke;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    .svg-icon-bold svg {
-      stroke-width: var(--stroke-bold);
-    }
-
     /* ==========================================================================
-       ШАПКА (HEADER) И БРЕНДИНГ
+       ШАПКА (HEADER)
        ========================================================================== */
     header {
-      background: var(--card-paper);
-      border-bottom: 1px solid var(--border);
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--card-border);
       position: sticky;
       top: 0;
       z-index: 100;
-    }
-
-    /* Контрастная тёмная полоса #FFB703 под шапкой */
-    .header-stripe {
-      height: var(--space-4);
-      background: var(--stripe);
-      width: 100%;
+      box-shadow: var(--shadow-sm);
     }
 
     .header-inner {
       max-width: 680px;
       margin: 0 auto;
-      padding: var(--space-12) var(--space-16);
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--space-12);
+      gap: 12px;
     }
 
     .brand-wrap {
       display: flex;
       align-items: center;
-      gap: var(--space-12);
+      gap: 12px;
     }
 
-    .brand-badge {
-      width: 44px;
-      height: 44px;
+    /* Mate Academy стиль иконки */
+    .brand-logo {
+      width: 40px;
+      height: 40px;
       background: var(--brand);
-      border-radius: var(--radius-12);
+      border-radius: var(--radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--stripe);
+      color: #FFFFFF;
       flex-shrink: 0;
-      border: 1px solid var(--border-dark);
+      box-shadow: var(--shadow-brand);
     }
 
-    .brand-badge svg {
-      width: 24px;
-      height: 24px;
-      stroke-width: var(--stroke-bold);
-      stroke: var(--stripe);
-      vector-effect: non-scaling-stroke;
+    .brand-logo svg {
+      width: 22px;
+      height: 22px;
+      stroke: #FFFFFF;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
       fill: none;
     }
 
@@ -214,7 +146,7 @@
       font-size: 16px;
       font-weight: 800;
       line-height: 1.2;
-      color: var(--brand);
+      color: var(--text-main);
     }
 
     .brand-subtitle {
@@ -223,632 +155,457 @@
       font-weight: 500;
     }
 
-    /* Статусный бейдж: пилюля строго здесь (radius-pill) */
-    .status-pill {
+    /* Бейдж пользователя в стиле Mate */
+    .user-pill {
       font-size: 12px;
       font-weight: 600;
-      background: var(--card-sheet);
+      background: var(--brand-light);
       color: var(--brand);
-      border: 1px solid var(--border);
-      padding: var(--space-4) var(--space-12);
+      border: 1px solid var(--brand-light-border);
+      padding: 6px 14px;
       border-radius: var(--radius-pill);
-      white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      gap: var(--space-4);
+      gap: 6px;
     }
 
     /* ==========================================================================
-       КОМПОЗИЦИЯ И РИТМ: ОСНОВНОЙ КОНТЕЙНЕР
+       ОСНОВНОЙ КОНТЕНТ И СТИЛЬ КАРТОЧЕК MATE
        ========================================================================== */
     main {
       flex: 1;
       max-width: 680px;
       width: 100%;
       margin: 0 auto;
-      padding: var(--space-16);
+      padding: 16px;
     }
 
-    /* Скрытие неактивных вкладок */
-    .tab-view {
+    .tab-content {
       display: none;
     }
-    .tab-view.active {
+    .tab-content.active {
       display: block;
+      animation: fadeIn 0.2s ease-out;
     }
 
-    /* Асимметричный вводный модуль над карточкой (ритм 56px) */
-    .hero-strip {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: var(--space-12);
-      margin-bottom: var(--space-16);
-      padding-bottom: var(--space-8);
-      border-bottom: 2px solid var(--border);
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .hero-strip-title {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--accent);
+    /* Карточка Mate Academy */
+    .mate-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .hero-strip-meta {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    /* ==========================================================================
-       ТРИ РОЛИ КАРТОЧЕК (Строго без одинаковых теней и радиусов)
-       ========================================================================== */
-
-    /* Роль 1: Плитка на цвете (чистая белая бумага, радиус 16) */
-    .card-paper {
-      background: var(--card-paper);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-16);
-      box-shadow: var(--shadow-paper);
-      padding: var(--space-24);
-      margin-bottom: var(--space-24);
-    }
-
-    /* Роль 2: «Лист» на тёплой бумаге (акцентная левая плашка, радиус 12) */
-    .card-sheet {
-      background: var(--card-sheet);
-      border: 1px solid var(--border);
-      border-left: var(--space-4) solid var(--accent);
-      border-radius: var(--radius-12);
-      box-shadow: var(--shadow-sheet);
-      padding: var(--space-16);
-      margin-bottom: var(--space-24);
-    }
-
-    /* Роль 3: Тёмная акцент-карта (глубокий бренд, полоса #FFB703, радиус 24) */
-    .card-dark {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
-      border-top: var(--space-4) solid var(--stripe);
-      border-radius: var(--radius-24);
-      box-shadow: var(--shadow-dark);
-      color: var(--text-light);
-      padding: var(--space-24);
-      margin-bottom: var(--space-24);
-    }
-    .card-dark h2, .card-dark h3, .card-dark h4 {
-      color: var(--text-light);
-    }
-    .card-dark p, .card-dark .card-subtitle {
-      color: var(--text-light-muted);
-    }
-
-    /* ==========================================================================
-       РАБОЧАЯ ОБЛАСТЬ ЗАДАНИЯ (Главное действие страницы)
-       ========================================================================== */
-    .task-meta-bar {
+    /* Шапка карточки задания */
+    .card-top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--space-12);
-      margin-bottom: var(--space-16);
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
-    .category-tag {
+    .category-badge {
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
       color: var(--brand);
-      background: var(--card-sheet);
-      border: 1px solid var(--border);
-      padding: var(--space-4) var(--space-8);
-      border-radius: var(--radius-6); /* Не пилюля */
+      background: var(--brand-light);
+      border: 1px solid var(--brand-light-border);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
     }
 
-    .streak-indicator {
+    .streak-badge {
       display: inline-flex;
       align-items: center;
-      gap: var(--space-4);
-      background: #FFF8E7;
-      border: 1px solid var(--stripe);
-      color: #996B00;
-      font-size: 13px;
+      gap: 5px;
+      background: var(--accent-gold-light);
+      border: 1px solid #FFE082;
+      color: #B28000;
+      font-size: 12px;
       font-weight: 700;
-      padding: var(--space-4) var(--space-12);
-      border-radius: var(--radius-pill); /* Бейдж статуса */
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
     }
-    .streak-indicator svg {
-      width: 16px;
-      height: 16px;
-      stroke: #996B00;
-      stroke-width: var(--stroke-bold);
-      vector-effect: non-scaling-stroke;
+
+    .streak-badge svg {
+      width: 15px;
+      height: 15px;
+      stroke: #B28000;
+      stroke-width: 2.2;
       fill: none;
     }
 
-    /* Дисплей формулы задания */
-    .task-display {
-      background: var(--card-sheet);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-12);
-      padding: var(--space-24) var(--space-16);
+    /* Блок задачи */
+    .task-hero-box {
+      background: var(--card-surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 24px 16px;
       text-align: center;
-      margin-bottom: var(--space-24);
-      position: relative;
+      margin-bottom: 20px;
     }
 
-    .task-formula {
+    .task-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .task-equation {
       font-size: 24px;
       font-weight: 800;
-      color: var(--brand);
+      color: var(--text-main);
       line-height: 1.3;
       user-select: text;
     }
 
-    .task-instruction {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: var(--space-8);
-      text-align: left;
-    }
-
     /* Поле ввода */
-    .input-field-wrap {
-      margin-bottom: var(--space-24);
+    .input-group {
+      margin-bottom: 18px;
     }
 
-    .input-field-wrap label {
+    .input-label {
       display: block;
       font-size: 13px;
       font-weight: 600;
-      color: var(--brand);
-      margin-bottom: var(--space-8);
+      color: var(--text-main);
+      margin-bottom: 8px;
     }
 
-    .math-input {
+    .input-control {
       width: 100%;
       height: 52px;
       background: #FFFFFF;
-      border: 2px solid var(--border);
-      border-radius: var(--radius-12);
-      padding: 0 var(--space-16);
+      border: 2px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 0 16px;
       font-size: 18px;
       font-weight: 700;
-      font-family: "Roboto", monospace;
-      color: var(--brand);
+      font-family: inherit;
+      color: var(--text-main);
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: all 0.2s ease;
     }
-    .math-input:focus-visible {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.15);
+
+    .input-control:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px var(--brand-light);
     }
 
     /* ==========================================================================
-       МАТЕМАТИЧЕСКАЯ КЛАВИАТУРА (Тач-таргеты не менее 44px)
+       МАТЕМАТИЧЕСКАЯ КЛАВИАТУРА
        ========================================================================== */
-    .keypad-section {
-      margin-bottom: var(--space-24);
-    }
-
-    .keypad-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: var(--text-muted);
-      margin-bottom: var(--space-8);
-    }
-
-    .math-keypad {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: var(--space-8);
-    }
-
-    .key-button {
-      min-height: 46px; /* Больше 44px */
-      min-width: 44px;
-      background: var(--card-paper);
-      color: var(--brand);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-6);
-      font-size: 15px;
-      font-weight: 700;
-      font-family: "Roboto", sans-serif;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.12s ease, transform 0.08s ease;
-      user-select: none;
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      .key-button:hover {
-        background: var(--card-sheet);
-        border-color: var(--accent);
-      }
-    }
-    .key-button:active {
-      transform: scale(0.95);
-      background: #DCE7E5;
-    }
-    .key-button:focus-visible {
-      outline: 2px solid var(--brand);
-      outline-offset: 1px;
-    }
-
-    .key-button-power {
-      background: #EDF4F2;
-      border-color: var(--accent-light);
-      color: var(--brand);
-    }
-
-    .key-button-action {
-      background: var(--error-light);
-      border-color: #F8B4B8;
-      color: var(--error);
-    }
-
-    /* ==========================================================================
-       КНОПКИ ДЕЙСТВИЯ (Строго по ролям, радиус 6 или 12, НЕ pill)
-       ========================================================================== */
-    .actions-grid {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: var(--space-12);
-      margin-bottom: var(--space-16);
-    }
-
-    .btn {
-      min-height: 48px; /* Больше 44px */
-      border-radius: var(--radius-12);
-      font-size: 14px;
-      font-weight: 700;
-      font-family: "Montserrat", sans-serif;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-8);
-      padding: var(--space-12) var(--space-16);
-      text-decoration: none;
-      transition: background-color 0.15s ease, transform 0.08s ease;
-      border: none;
-      user-select: none;
-    }
-    .btn svg {
-      width: 18px;
-      height: 18px;
-      stroke-width: var(--stroke-bold);
-      vector-effect: non-scaling-stroke;
-      fill: none;
-      stroke: currentColor;
-    }
-
-    /* Цвет главного действия: #E63946 */
-    .btn-cta {
-      background: var(--cta);
-      color: var(--text-light);
-    }
-    @media (hover: hover) and (pointer: fine) {
-      .btn-cta:hover {
-        background: var(--cta-hover);
-      }
-    }
-    .btn-cta:active {
-      background: var(--cta-active);
-      transform: scale(0.98);
-    }
-    .btn-cta:focus-visible {
-      outline: 3px solid var(--stripe);
-      outline-offset: 2px;
-    }
-
-    /* Второстепенная кнопка: строгая академическая */
-    .btn-secondary {
-      background: var(--card-paper);
-      color: var(--brand);
-      border: 2px solid var(--brand);
-    }
-    @media (hover: hover) and (pointer: fine) {
-      .btn-secondary:hover {
-        background: var(--card-sheet);
-      }
-    }
-    .btn-secondary:active {
-      transform: scale(0.98);
-      background: #DCE7E5;
-    }
-    .btn-secondary:focus-visible {
-      outline: 3px solid var(--brand);
-      outline-offset: 2px;
-    }
-
-    /* Тонкая сервисная кнопка */
-    .btn-subtle {
-      width: 100%;
-      min-height: 44px;
-      background: transparent;
-      color: var(--accent);
-      border: 1px dashed var(--accent);
-      border-radius: var(--radius-6);
-      font-size: 13px;
-      font-weight: 600;
-    }
-    @media (hover: hover) and (pointer: fine) {
-      .btn-subtle:hover {
-        background: var(--card-sheet);
-      }
-    }
-    .btn-subtle:active {
-      background: #DCE7E5;
-    }
-    .btn-subtle:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-
-    /* ==========================================================================
-       9. ДВИЖЕНИЕ: ОДНА СМЫСЛОВАЯ АНИМАЦИЯ НА ВСЮ СТРАНИЦУ
-       (Академический индикатор вычисления, затухающий в точную галочку решения)
-       ========================================================================== */
-    .proof-pulse-container {
-      display: none; /* Отображается при проверке */
-      align-items: center;
-      gap: var(--space-12);
-      padding: var(--space-12) var(--space-16);
-      background: var(--card-sheet);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-12);
-      margin-top: var(--space-16);
-    }
-    .proof-pulse-container.active {
-      display: flex;
-    }
-
-    .proof-chart-svg {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-    }
-
-    .proof-wave {
-      stroke: var(--brand);
-      stroke-width: var(--stroke-bold);
-      fill: none;
-      stroke-dasharray: 60;
-      stroke-dashoffset: 60;
-      animation: computeProof 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .proof-check {
-      stroke: var(--success);
-      stroke-width: var(--stroke-bold);
-      fill: none;
-      stroke-dasharray: 30;
-      stroke-dashoffset: 30;
-      animation: checkMarkAppear 0.5s 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes computeProof {
-      0% {
-        stroke-dashoffset: 60;
-        opacity: 1;
-      }
-      70% {
-        stroke-dashoffset: 0;
-        opacity: 0.8;
-      }
-      100% {
-        stroke-dashoffset: 0;
-        opacity: 0.2;
-      }
-    }
-
-    @keyframes checkMarkAppear {
-      0% {
-        stroke-dashoffset: 30;
-      }
-      100% {
-        stroke-dashoffset: 0;
-      }
-    }
-
-    /* Поддержка prefers-reduced-motion: статичный финальный кадр */
-    @media (prefers-reduced-motion: reduce) {
-      .proof-wave {
-        stroke-dashoffset: 0;
-        opacity: 0.2;
-        animation: none;
-      }
-      .proof-check {
-        stroke-dashoffset: 0;
-        animation: none;
-      }
-    }
-
-    /* ==========================================================================
-       БЛОКИ ОБРАТНОЙ СВЯЗИ И ПОДСКАЗКИ
-       ========================================================================== */
-    .hint-panel {
-      display: none;
-      background: var(--card-sheet);
-      border: 1px solid var(--border);
-      border-left: var(--space-4) solid var(--stripe);
-      border-radius: var(--radius-12);
-      padding: var(--space-12) var(--space-16);
-      margin-top: var(--space-16);
-      font-size: 13px;
-    }
-    .hint-panel strong {
-      color: var(--brand);
-    }
-
-    .alert-panel {
-      display: none;
-      border-radius: var(--radius-12);
-      padding: var(--space-16);
-      margin-top: var(--space-16);
-      border: 1px solid transparent;
-    }
-    .alert-panel.correct {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-12);
-      background: var(--success-light);
-      border-color: var(--success);
-      color: var(--brand);
-    }
-    .alert-panel.wrong {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-12);
-      background: var(--error-light);
-      border-color: var(--error);
-      color: var(--brand);
-    }
-    .alert-icon-box {
-      width: 24px;
-      height: 24px;
-      flex-shrink: 0;
-      margin-top: 1px; /* optical adjustment */
-    }
-    .alert-panel.correct .alert-icon-box {
-      color: var(--success);
-    }
-    .alert-panel.wrong .alert-icon-box {
-      color: var(--error);
-    }
-    .alert-panel-title {
-      font-weight: 700;
-      font-size: 15px;
-      margin-bottom: var(--space-4);
-    }
-    .alert-panel-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.45;
-    }
-
-    /* ==========================================================================
-       ВКЛАДКА 2: СТАТИСТИКА И ДОКАЗАТЕЛЬСТВА УСПЕВАЕМОСТИ
-       ========================================================================== */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-12);
-      margin-bottom: var(--space-24);
-    }
-
-    .stat-tile {
-      background: var(--card-paper);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-12);
-      padding: var(--space-16) var(--space-8);
-      text-align: center;
-    }
-    .stat-number {
-      font-family: "Montserrat", sans-serif;
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--brand);
-      line-height: 1.1;
-      margin-bottom: var(--space-4);
-    }
-    .stat-caption {
+    .keypad-header {
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--text-muted);
+      margin-bottom: 8px;
     }
 
-    .progress-track {
-      background: var(--border);
+    .math-keypad {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .key-btn {
+      min-height: 44px;
+      background: var(--card-surface);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s ease;
+      user-select: none;
+    }
+
+    .key-btn:hover {
+      background: #ECEEF2;
+      border-color: #D1D5DB;
+    }
+    .key-btn:active {
+      transform: scale(0.95);
+      background: #E2E4E9;
+    }
+
+    .key-btn-power {
+      background: var(--brand-light);
+      border-color: var(--brand-light-border);
+      color: var(--brand);
+    }
+
+    .key-btn-action {
+      background: var(--error-light);
+      border-color: var(--error-border);
+      color: var(--error);
+    }
+
+    /* ==========================================================================
+       КНОПКИ ДЕЙСТВИЯ MATE STYLE
+       ========================================================================== */
+    .action-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      min-height: 48px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border: none;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2.2;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    /* Главная кнопка Mate: #6600FF */
+    .btn-primary {
+      background: var(--brand);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-brand);
+    }
+    .btn-primary:hover {
+      background: var(--brand-hover);
+      box-shadow: 0 6px 18px rgba(102, 0, 255, 0.35);
+    }
+    .btn-primary:active {
+      background: var(--brand-active);
+      transform: scale(0.98);
+    }
+
+    /* Второстепенная кнопка */
+    .btn-secondary {
+      background: #FFFFFF;
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+    }
+    .btn-secondary:hover {
+      background: var(--card-surface);
+      border-color: var(--card-border-hover);
+    }
+    .btn-secondary:active {
+      transform: scale(0.98);
+    }
+
+    /* Тонкая сервисная кнопка */
+    .btn-subtle {
+      width: 100%;
+      min-height: 42px;
+      background: transparent;
+      color: var(--brand);
+      border: 1px dashed var(--brand-light-border);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .btn-subtle:hover {
+      background: var(--brand-light);
+    }
+
+    /* ==========================================================================
+       ПОДСКАЗКА И ОБРАТНАЯ СВЯЗЬ
+       ========================================================================== */
+    .hint-card {
+      display: none;
+      background: var(--brand-light);
+      border: 1px solid var(--brand-light-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--brand);
+    }
+    .hint-card strong {
+      color: var(--text-main);
+    }
+
+    .alert-card {
+      display: none;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 14px;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .alert-card.correct {
+      display: flex;
+      background: var(--success-light);
+      border: 1px solid var(--success-border);
+      color: #007A50;
+    }
+    .alert-card.wrong {
+      display: flex;
+      background: var(--error-light);
+      border: 1px solid var(--error-border);
+      color: #C0261E;
+    }
+    .alert-card-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    .alert-card-desc {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       ВКЛАДКА СТАТИСТИКИ
+       ========================================================================== */
+    .rank-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--brand-light);
+      border: 1px solid var(--brand-light-border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .rank-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: var(--brand);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .rank-avatar svg {
+      width: 24px;
+      height: 24px;
+      stroke-width: 2.2;
+    }
+    .rank-info h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brand);
+    }
+    .rank-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .stats-triad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .stat-pill-box {
+      background: var(--card-surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 14px 8px;
+      text-align: center;
+    }
+    .stat-digit {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+    .stat-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .progress-outer {
+      background: #E5E7EB;
       height: 8px;
       border-radius: var(--radius-pill);
       overflow: hidden;
-      margin: var(--space-8) 0 var(--space-24) 0;
+      margin: 8px 0 16px 0;
     }
-    .progress-fill {
+    .progress-inner {
       height: 100%;
       background: var(--brand);
+      border-radius: var(--radius-pill);
       width: 0%;
       transition: width 0.4s ease;
     }
 
-    .history-card-item {
-      background: var(--card-paper);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-12);
-      padding: var(--space-12) var(--space-16);
-      margin-bottom: var(--space-8);
+    .history-card-row {
+      background: var(--card-surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--space-12);
+      gap: 12px;
     }
-    .history-q-text {
-      font-weight: 700;
-      font-size: 14px;
-      color: var(--brand);
+    .history-q {
+      font-weight: 600;
+      font-size: 13px;
     }
-    .history-ans-text {
-      font-size: 12px;
+    .history-a {
+      font-size: 11px;
       color: var(--text-muted);
     }
 
     /* ==========================================================================
-       ВКЛАДКА 3: ДЛЯ УЧИТЕЛЯ (МЕТОДИЧЕСКИЙ КОНСТРУКТОР)
+       ВКЛАДКА УЧИТЕЛЯ (МЕТОДИЧЕСКИЙ МОДУЛЬ)
        ========================================================================== */
-    .teacher-lead-text {
-      font-size: 14px;
-      color: var(--text-light-muted);
-      margin-bottom: var(--space-24);
-      line-height: 1.6;
-    }
-
-    .teacher-controls {
+    .teacher-action-stack {
       display: flex;
       flex-direction: column;
-      gap: var(--space-12);
-      margin-bottom: var(--space-24);
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
-    .btn-gold {
-      background: var(--stripe);
-      color: var(--brand);
-      font-weight: 800;
-    }
-    @media (hover: hover) and (pointer: fine) {
-      .btn-gold:hover {
-        background: var(--stripe-hover);
-      }
-    }
-    .btn-gold:active {
-      transform: scale(0.98);
-      background: #D99B00;
-    }
-    .btn-gold:focus-visible {
-      outline: 3px solid var(--text-light);
-      outline-offset: 2px;
-    }
-
-    .lesson-output-area {
-      background: #111D2D;
-      border: 1px solid var(--border-dark);
-      border-radius: var(--radius-12);
-      padding: var(--space-16);
-      font-family: "Roboto", monospace;
+    .lesson-box {
+      background: var(--card-surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-family: inherit;
       font-size: 13px;
       line-height: 1.6;
-      color: #E2ECE9;
+      color: var(--text-main);
       white-space: pre-wrap;
       max-height: 380px;
       overflow-y: auto;
@@ -856,71 +613,71 @@
     }
 
     /* ==========================================================================
-       ВКЛАДКА 4: СПРАВОЧНИК 30 ФОРМУЛ
+       ВКЛАДКА СПРАВОЧНИКА
        ========================================================================== */
-    .search-bar-wrap {
+    .search-input-wrap {
       position: relative;
-      margin-bottom: var(--space-16);
+      margin-bottom: 14px;
     }
-    .search-bar-icon {
+    .search-input-wrap svg {
       position: absolute;
-      left: var(--space-16);
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
       pointer-events: none;
     }
-    .search-box-input {
+    .search-input-field {
       width: 100%;
-      height: 48px;
-      background: #FFFFFF;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-12);
-      padding-left: 48px;
-      padding-right: var(--space-16);
+      height: 46px;
+      background: var(--card-surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding-left: 42px;
+      padding-right: 14px;
       font-size: 14px;
-      color: var(--brand);
+      color: var(--text-main);
       outline: none;
     }
-    .search-box-input:focus-visible {
+    .search-input-field:focus {
+      background: #FFFFFF;
       border-color: var(--brand);
-      box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.12);
+      box-shadow: 0 0 0 3px var(--brand-light);
     }
 
-    .formula-entry {
-      background: var(--card-paper);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-12);
-      padding: var(--space-12) var(--space-16);
-      margin-bottom: var(--space-8);
+    .catalog-item {
+      background: var(--card-surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 8px;
       cursor: pointer;
-      transition: background-color 0.12s ease;
+      transition: all 0.12s ease;
     }
-    @media (hover: hover) and (pointer: fine) {
-      .formula-entry:hover {
-        background: var(--card-sheet);
-      }
+    .catalog-item:hover {
+      background: #FFFFFF;
+      border-color: var(--brand);
+      box-shadow: var(--shadow-sm);
     }
-    .formula-entry-header {
+    .catalog-item-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: var(--space-4);
+      margin-bottom: 4px;
     }
-    .formula-name {
+    .catalog-item-name {
       font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .catalog-item-formula {
+      font-size: 14px;
       font-weight: 700;
       color: var(--brand);
     }
-    .formula-body {
-      font-family: "Montserrat", sans-serif;
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--accent);
-    }
 
     /* ==========================================================================
-       НИЖНЯЯ СИСТЕМНАЯ НАВИГАЦИЯ (NAV)
+       НИЖНЯЯ НАВИГАЦИЯ (MATE STYLE)
        ========================================================================== */
     nav.bottom-nav {
       position: fixed;
@@ -928,17 +685,18 @@
       left: 0;
       right: 0;
       height: 68px;
-      background: var(--card-paper);
-      border-top: 1px solid var(--border);
+      background: #FFFFFF;
+      border-top: 1px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: space-around;
       z-index: 200;
       max-width: 680px;
       margin: 0 auto;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
     }
 
-    .nav-tab-btn {
+    .nav-btn {
       flex: 1;
       height: 100%;
       min-height: 48px;
@@ -946,46 +704,40 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: var(--space-4);
+      gap: 3px;
       background: transparent;
       border: none;
       color: var(--text-muted);
       cursor: pointer;
       font-size: 11px;
-      font-weight: 700;
-      font-family: "Montserrat", sans-serif;
-      text-decoration: none;
+      font-weight: 600;
       transition: color 0.15s ease;
     }
-    .nav-tab-btn.active {
+    .nav-btn.active {
       color: var(--brand);
     }
-    .nav-tab-btn svg {
-      width: 22px;
-      height: 22px;
+    .nav-btn svg {
+      width: 20px;
+      height: 20px;
       stroke: currentColor;
-      stroke-width: var(--stroke-regular);
-      vector-effect: non-scaling-stroke;
+      stroke-width: 2;
       fill: none;
     }
-    .nav-tab-btn.active svg {
-      stroke-width: var(--stroke-bold);
-      stroke: var(--cta);
+    .nav-btn.active svg {
+      stroke-width: 2.4;
+      stroke: var(--brand);
     }
 
-    /* ==========================================================================
-       ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ (TOAST)
-       ========================================================================== */
-    .toast-box {
+    /* Toast */
+    .toast-pill {
       position: fixed;
       bottom: 80px;
       left: 50%;
       transform: translateX(-50%) translateY(20px);
-      background: var(--brand);
-      color: var(--text-light);
-      border: 1px solid var(--stripe);
-      padding: var(--space-12) var(--space-24);
-      border-radius: var(--radius-12); /* Не пилюля */
+      background: #18181B;
+      color: #FFFFFF;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
       font-size: 13px;
       font-weight: 600;
       opacity: 0;
@@ -994,40 +746,22 @@
       z-index: 999;
       display: flex;
       align-items: center;
-      gap: var(--space-8);
-      box-shadow: var(--shadow-dark);
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     }
-    .toast-box.show {
+    .toast-pill.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
 
-    /* ==========================================================================
-       8. МОБИЛЬНАЯ ВЕРСИЯ (Адаптация под 390px, без горизонтального скролла)
-       ========================================================================== */
     @media (max-width: 420px) {
-      .header-inner {
-        padding: var(--space-8) var(--space-12);
-      }
-      .brand-title {
-        font-size: 15px;
-      }
-      main {
-        padding: var(--space-12);
-      }
-      .card-paper, .card-dark {
-        padding: var(--space-16);
-      }
-      .actions-grid {
-        grid-template-columns: 1fr; /* На мобильном кнопка проверки на всю ширину */
-      }
-      .task-formula {
-        font-size: 20px;
+      .action-row {
+        grid-template-columns: 1fr;
       }
       .math-keypad {
-        gap: var(--space-4);
+        gap: 5px;
       }
-      .key-button {
+      .key-btn {
         min-height: 44px;
         font-size: 14px;
       }
@@ -1036,69 +770,55 @@
 </head>
 <body>
 
-  <!-- Ссылка для скринридеров: пропустить навигацию -->
-  <a href="#main-content" class="skip-link">Перейти к заданию</a>
-
   <!-- Header -->
   <header>
     <div class="header-inner">
       <div class="brand-wrap">
-        <div class="brand-badge" aria-hidden="true">
+        <div class="brand-logo" title="Тренажёр">
+          <!-- Mate Academy Geometric Code/Math Symbol -->
           <svg viewBox="0 0 24 24">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-            <polyline points="2 17 12 22 22 17"></polyline>
-            <polyline points="2 12 12 17 22 12"></polyline>
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
           </svg>
         </div>
         <div>
-          <div class="brand-title">Тренажёр (7&nbsp;класс)</div>
+          <div class="brand-title">Тренажёр (7 класс)</div>
           <div class="brand-subtitle">Формулы сокращённого умножения</div>
         </div>
       </div>
       <div>
-        <span class="status-pill" id="userPill">Ученик</span>
+        <span class="user-pill" id="userPill">Ученик</span>
       </div>
     </div>
-    <!-- Тёмная/золотая контрастная полоса #FFB703 -->
-    <div class="header-stripe" aria-hidden="true"></div>
   </header>
 
   <!-- Main Content -->
-  <main id="main-content">
+  <main id="main">
 
-    <!-- TAB 1: ТРЕНАЖЁР (Главное действие — решение задачи) -->
-    <section id="tab-trainer" class="tab-view active">
-      
-      <!-- Асимметричный ритм первого экрана -->
-      <div class="hero-strip">
-        <div class="hero-strip-title">Интерактивная практика</div>
-        <div class="hero-strip-meta">Задач в&nbsp;базе: 30&nbsp;шаблонов</div>
-      </div>
-
-      <!-- Роль 1: Плитка на цвете (чистая бумага) -->
-      <article class="card-paper">
-        <div class="task-meta-bar">
-          <span class="category-tag" id="taskCategoryBadge">Разность квадратов</span>
-          <div class="streak-indicator">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+    <!-- TAB 1: ТРЕНАЖЁР -->
+    <section id="tab-trainer" class="tab-content active">
+      <div class="mate-card">
+        <div class="card-top-bar">
+          <span class="category-badge" id="taskCategoryBadge">Разность квадратов</span>
+          <div class="streak-badge">
+            <svg viewBox="0 0 24 24">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
-            <span>Серия:&nbsp;<strong id="streakCount">0</strong></span>
+            <span>Серия: <strong id="streakCount">0</strong></span>
           </div>
         </div>
 
-        <div class="task-instruction">Раскройте скобки или примените формулу:</div>
-
-        <div class="task-display">
-          <div class="task-formula" id="taskQuestion">Загрузка задания…</div>
+        <div class="task-hero-box">
+          <div class="task-label">Раскройте скобки или примените формулу:</div>
+          <div class="task-equation" id="taskQuestion">Загрузка задания…</div>
         </div>
 
-        <div class="input-field-wrap">
-          <label for="answerInput">Ваш ответ:</label>
+        <div class="input-group">
+          <label class="input-label" for="answerInput">Ваш ответ:</label>
           <input 
             type="text" 
             id="answerInput" 
-            class="math-input" 
+            class="input-control" 
             placeholder="Например: x^2 - 16"
             autocomplete="off"
             autocapitalize="off"
@@ -1106,161 +826,147 @@
           />
         </div>
 
-        <!-- Виртуальная клавиатура ввода формул (тач-таргеты от 44px) -->
-        <div class="keypad-section">
-          <div class="keypad-label">Специальные символы и&nbsp;степени</div>
-          <div class="math-keypad" id="keypad">
-            <button type="button" class="key-button key-button-power" onclick="insertSymbol('^2')" title="Возвести в квадрат">x²</button>
-            <button type="button" class="key-button key-button-power" onclick="insertSymbol('^3')" title="Возвести в куб">x³</button>
-            <button type="button" class="key-button" onclick="insertSymbol('x')">x</button>
-            <button type="button" class="key-button" onclick="insertSymbol('y')">y</button>
-            <button type="button" class="key-button" onclick="insertSymbol('+')">+</button>
-            <button type="button" class="key-button" onclick="insertSymbol('-')">−</button>
-            <button type="button" class="key-button" onclick="insertSymbol('(')">(</button>
-            <button type="button" class="key-button" onclick="insertSymbol(')')">)</button>
-            <button type="button" class="key-button" onclick="insertSymbol('a')">a</button>
-            <button type="button" class="key-button" onclick="insertSymbol('b')">b</button>
-            <button type="button" class="key-button key-button-action" onclick="backspaceInput()" title="Удалить последний символ" aria-label="Стереть символ">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.4" fill="none" aria-hidden="true">
-                <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
-                <line x1="18" y1="9" x2="12" y2="15"></line>
-                <line x1="12" y1="9" x2="18" y2="15"></line>
-              </svg>
-            </button>
-            <button type="button" class="key-button key-button-action" onclick="clearInput()" title="Очистить всё поле">C</button>
-          </div>
+        <!-- Виртуальная математическая клавиатура -->
+        <div class="keypad-header">Специальные символы и степени</div>
+        <div class="math-keypad" id="keypad">
+          <button type="button" class="key-btn key-btn-power" onclick="insertSymbol('^2')" title="Возвести в квадрат">x²</button>
+          <button type="button" class="key-btn key-btn-power" onclick="insertSymbol('^3')" title="Возвести в куб">x³</button>
+          <button type="button" class="key-btn" onclick="insertSymbol('x')">x</button>
+          <button type="button" class="key-btn" onclick="insertSymbol('y')">y</button>
+          <button type="button" class="key-btn" onclick="insertSymbol('+')">+</button>
+          <button type="button" class="key-btn" onclick="insertSymbol('-')">−</button>
+          <button type="button" class="key-btn" onclick="insertSymbol('(')">(</button>
+          <button type="button" class="key-btn" onclick="insertSymbol(')')">)</button>
+          <button type="button" class="key-btn" onclick="insertSymbol('a')">a</button>
+          <button type="button" class="key-btn" onclick="insertSymbol('b')">b</button>
+          <button type="button" class="key-btn key-btn-action" onclick="backspaceInput()" title="Стереть символ" aria-label="Стереть символ">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none">
+              <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+              <line x1="18" y1="9" x2="12" y2="15"></line>
+              <line x1="12" y1="9" x2="18" y2="15"></line>
+            </svg>
+          </button>
+          <button type="button" class="key-btn key-btn-action" onclick="clearInput()" title="Очистить всё">C</button>
         </div>
 
-        <!-- Кнопки действий: Главное действие #E63946 -->
-        <div class="actions-grid">
-          <button type="button" class="btn btn-cta" id="checkAnswerBtn" onclick="submitAnswer()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
+        <!-- Кнопки действий -->
+        <div class="action-row">
+          <button type="button" class="btn btn-primary" id="checkAnswerBtn" onclick="submitAnswer()">
+            <svg viewBox="0 0 24 24">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
-            <span>Проверить решение</span>
+            <span>Проверить ответ</span>
           </button>
           <button type="button" class="btn btn-secondary" onclick="loadNewTask()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
               <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
             </svg>
-            <span>Следующее задание</span>
+            <span>Другая задача</span>
           </button>
         </div>
 
         <button type="button" class="btn btn-subtle" onclick="toggleHint()">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10"></circle>
             <line x1="12" y1="16" x2="12" y2="12"></line>
             <line x1="12" y1="8" x2="12.01" y2="8"></line>
           </svg>
-          <span>Показать формулу-подсказку</span>
+          <span>Показать подсказку формулы</span>
         </button>
 
-        <!-- Роль 2: «Лист» на тёплой бумаге для подсказки -->
-        <div class="hint-panel" id="hintBox">
-          <strong>Формула шаблона:</strong>&nbsp;<span id="hintFormula">(a - b)(a + b) = a² - b²</span>
+        <div class="hint-card" id="hintBox">
+          <strong>Формула:</strong> <span id="hintFormula">(a - b)(a + b) = a² - b²</span>
         </div>
 
-        <!-- Смысловая CSS-анимация доказательства точности -->
-        <div class="proof-pulse-container" id="proofContainer" aria-live="polite">
-          <svg class="proof-chart-svg" viewBox="0 0 32 32" aria-hidden="true">
-            <path class="proof-wave" d="M 2 16 Q 8 6, 16 16 T 30 16"></path>
-            <path class="proof-check" d="M 9 16 L 14 21 L 23 11"></path>
-          </svg>
-          <span id="proofStatusText" style="font-size: 13px; font-weight: 600; color: var(--brand);">Анализ математической эквивалентности…</span>
-        </div>
-
-        <!-- Блок вердикта -->
-        <div class="alert-panel" id="feedbackAlert" aria-live="polite">
-          <div class="alert-icon-box" id="feedbackIcon"></div>
+        <div class="alert-card" id="feedbackAlert">
+          <div id="feedbackIcon"></div>
           <div>
-            <div class="alert-panel-title" id="feedbackTitle">Верно!</div>
-            <div class="alert-panel-desc" id="feedbackDesc">Выражение преобразовано точно.</div>
+            <div class="alert-card-title" id="feedbackTitle">Верно!</div>
+            <div class="alert-card-desc" id="feedbackDesc">Отличная работа!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: СТАТИСТИКА -->
+    <section id="tab-stats" class="tab-content">
+      <div class="mate-card">
+        <div class="card-top-bar">
+          <span class="category-badge">Успеваемость</span>
+          <span style="font-size: 12px; color: var(--text-muted);" id="statsLastUpdated">Сегодня</span>
+        </div>
+
+        <div class="rank-card">
+          <div class="rank-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+          </div>
+          <div class="rank-info">
+            <h4 id="rankTitle">Уровень: Ученик</h4>
+            <p id="rankSubtitle">Решайте задания для повышения уровня мастерства!</p>
           </div>
         </div>
 
-      </article>
-    </section>
-
-    <!-- TAB 2: УСПЕВАЕМОСТЬ (Статистика) -->
-    <section id="tab-stats" class="tab-view">
-      <div class="hero-strip">
-        <div class="hero-strip-title">Результаты и&nbsp;мастерство</div>
-        <div class="hero-strip-meta" id="statsLastUpdated">Текущая сессия</div>
-      </div>
-
-      <!-- Роль 3: Тёмная акцент-карта с золотой полосой #FFB703 -->
-      <article class="card-dark">
-        <h3 id="rankTitle" style="font-size: 18px; margin-bottom: var(--space-4);">Уровень: Ученик</h3>
-        <p class="card-subtitle" id="rankSubtitle" style="font-size: 13px; margin-bottom: var(--space-16);">
-          Решайте практические задания для перехода на&nbsp;следующую ступень.
-        </p>
-
-        <div style="font-size: 12px; font-weight: 600; color: var(--stripe);">Шкала освоения курса:</div>
-        <div class="progress-track" aria-label="Прогресс">
-          <div class="progress-fill" id="statProgressBar"></div>
+        <div class="stats-triad">
+          <div class="stat-pill-box">
+            <div class="stat-digit" id="statTotalSolved">0</div>
+            <div class="stat-sub">Решено</div>
+          </div>
+          <div class="stat-pill-box">
+            <div class="stat-digit" id="statCorrectAnswers" style="color: var(--success);">0</div>
+            <div class="stat-sub">Верно</div>
+          </div>
+          <div class="stat-pill-box">
+            <div class="stat-digit" id="statAccuracy">0%</div>
+            <div class="stat-sub">Точность</div>
+          </div>
         </div>
 
-        <button type="button" class="btn btn-gold" style="width: 100%;" onclick="switchTab('trainer')">
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Прогресс курса:</div>
+        <div class="progress-outer">
+          <div class="progress-inner" id="statProgressBar"></div>
+        </div>
+
+        <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="switchTab('trainer')">
           <span>Продолжить тренировку</span>
         </button>
-      </article>
-
-      <!-- Роль 1: Карточки с метриками -->
-      <div class="stats-row">
-        <div class="stat-tile">
-          <div class="stat-number" id="statTotalSolved">0</div>
-          <div class="stat-caption">Решено</div>
-        </div>
-        <div class="stat-tile">
-          <div class="stat-number" id="statCorrectAnswers" style="color: var(--success);">0</div>
-          <div class="stat-caption">Верно</div>
-        </div>
-        <div class="stat-tile">
-          <div class="stat-number" id="statAccuracy">0%</div>
-          <div class="stat-caption">Точность</div>
-        </div>
       </div>
 
-      <!-- Роль 2: «Лист» на тёплой бумаге для истории решений -->
-      <article class="card-sheet">
-        <h4 style="font-size: 14px; margin-bottom: var(--space-12); color: var(--brand);">Журнал недавних ответов</h4>
+      <div class="mate-card">
+        <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;">История решений</h4>
         <div id="historyList">
-          <div style="font-size: 13px; color: var(--text-muted); text-align: center; padding: var(--space-12);">
-            В&nbsp;текущей сессии ответов пока нет.
+          <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 14px;">
+            Пока нет решённых задач. Начните практику во вкладке «Тренажёр»!
           </div>
         </div>
-      </article>
+      </div>
     </section>
 
-    <!-- TAB 3: УЧИТЕЛЮ (Методический конструктор) -->
-    <section id="tab-teacher" class="tab-view">
-      <div class="hero-strip">
-        <div class="hero-strip-title">Методический модуль</div>
-        <div class="hero-strip-meta">Для уроков и&nbsp;репетиторов</div>
-      </div>
+    <!-- TAB 3: ДЛЯ УЧИТЕЛЯ -->
+    <section id="tab-teacher" class="tab-content">
+      <div class="mate-card">
+        <div class="card-top-bar">
+          <span class="category-badge">Методический блок</span>
+          <span style="font-size: 12px; font-weight: 600; color: var(--brand);">Учителю / Репетитору</span>
+        </div>
 
-      <!-- Роль 3: Тёмная акцент-карта с генератором -->
-      <article class="card-dark">
-        <h3 style="font-size: 20px; margin-bottom: var(--space-8);">Конструктор материалов к&nbsp;уроку</h3>
-        <p class="teacher-lead-text">
-          Автоматическая генерация структурированного конспекта на&nbsp;45&nbsp;минут с&nbsp;разминкой, теоретическим опросом, решением у&nbsp;доски и&nbsp;готовыми ответами.
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+          Автоматическая генерация структурированных материалов для уроков математики в 7 классе: тайминг, разминка, отработка с коэффициентами и готовые ответы.
         </p>
 
-        <div class="teacher-controls">
-          <button type="button" class="btn btn-gold" onclick="generateLessonPlan()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
+        <div class="teacher-action-stack">
+          <button type="button" class="btn btn-primary" onclick="generateLessonPlan()">
+            <svg viewBox="0 0 24 24">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
               <polyline points="14 2 14 8 20 8"></polyline>
               <line x1="16" y1="13" x2="8" y2="13"></line>
               <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
-            <span>Сформировать план урока (45&nbsp;мин)</span>
+            <span>Составить план урока (45 мин)</span>
           </button>
-
-          <button type="button" class="btn btn-secondary" style="background: var(--card-paper); color: var(--brand);" onclick="generateTeacherVariant()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
+          <button type="button" class="btn btn-secondary" onclick="generateTeacherVariant()">
+            <svg viewBox="0 0 24 24">
               <line x1="10" y1="6" x2="21" y2="6"></line>
               <line x1="10" y1="12" x2="21" y2="12"></line>
               <line x1="10" y1="18" x2="21" y2="18"></line>
@@ -1268,45 +974,42 @@
               <line x1="4" y1="12" x2="4.01" y2="12"></line>
               <line x1="4" y1="18" x2="4.01" y2="18"></line>
             </svg>
-            <span>Сгенерировать вариант из 15&nbsp;задач</span>
+            <span>Сгенерировать вариант из 15 задач</span>
           </button>
         </div>
 
-        <div id="lessonResultWrap" style="display: none; margin-top: var(--space-16);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-8);">
-            <span style="font-size: 11px; font-weight: 700; color: var(--stripe); text-transform: uppercase; letter-spacing: 0.5px;">Готовый конспект:</span>
-            <button type="button" class="btn btn-secondary" style="min-height: 38px; padding: var(--space-6) var(--space-12); font-size: 12px;" onclick="copyLessonPlan()">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
+        <div id="lessonResultWrap" style="display: none; margin-top: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Готовый материал</span>
+            <button type="button" class="btn btn-secondary" style="min-height: 36px; padding: 4px 12px; font-size: 12px;" onclick="copyLessonPlan()">
+              <svg viewBox="0 0 24 24">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
               </svg>
-              <span>Скопировать конспект</span>
+              <span>Скопировать</span>
             </button>
           </div>
-          <div class="lesson-output-area" id="lessonOutputText"></div>
+          <div class="lesson-box" id="lessonOutputText"></div>
         </div>
-      </article>
+      </div>
     </section>
 
     <!-- TAB 4: СПРАВОЧНИК 30 ФОРМУЛ -->
-    <section id="tab-catalog" class="tab-view">
-      <div class="hero-strip">
-        <div class="hero-strip-title">Академический справочник</div>
-        <div class="hero-strip-meta">30&nbsp;формул курса 7&nbsp;класса</div>
-      </div>
+    <section id="tab-catalog" class="tab-content">
+      <div class="mate-card">
+        <div class="card-top-bar">
+          <span class="category-badge">Справочник 30 формул</span>
+          <span style="font-size: 12px; color: var(--text-muted);">Курс 7 класса</span>
+        </div>
 
-      <!-- Роль 1: Карточка поиска и формул -->
-      <article class="card-paper">
-        <div class="search-bar-wrap">
-          <div class="search-bar-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </div>
+        <div class="search-input-wrap">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
           <input 
             type="text" 
-            class="search-box-input" 
+            class="search-input-field" 
             id="catalogSearchInput" 
             placeholder="Поиск по номеру, названию или формуле…"
             oninput="filterCatalog()"
@@ -1314,64 +1017,65 @@
         </div>
 
         <div id="catalogList">
-          <!-- Заполняется JavaScript -->
+          <!-- Populated by JS -->
         </div>
-      </article>
+      </div>
     </section>
 
   </main>
 
-  <!-- Семантическая нижняя навигация -->
-  <nav class="bottom-nav" aria-label="Основная навигация">
-    <button type="button" class="nav-tab-btn active" onclick="switchTab('trainer')" id="nav-trainer">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+  <!-- Нижняя навигация -->
+  <nav class="bottom-nav">
+    <button type="button" class="nav-btn active" onclick="switchTab('trainer')" id="nav-trainer">
+      <svg viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10"></circle>
-        <polyline points="12 6 12 12 14 14"></polyline>
+        <circle cx="12" cy="12" r="6"></circle>
+        <circle cx="12" cy="12" r="2"></circle>
       </svg>
       <span>Тренажёр</span>
     </button>
-    <button type="button" class="nav-tab-btn" onclick="switchTab('stats')" id="nav-stats">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+    <button type="button" class="nav-btn" onclick="switchTab('stats')" id="nav-stats">
+      <svg viewBox="0 0 24 24">
         <line x1="18" y1="20" x2="18" y2="10"></line>
         <line x1="12" y1="20" x2="12" y2="4"></line>
         <line x1="6" y1="20" x2="6" y2="14"></line>
       </svg>
       <span>Статистика</span>
     </button>
-    <button type="button" class="nav-tab-btn" onclick="switchTab('teacher')" id="nav-teacher">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+    <button type="button" class="nav-btn" onclick="switchTab('teacher')" id="nav-teacher">
+      <svg viewBox="0 0 24 24">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
       </svg>
       <span>Учителю</span>
     </button>
-    <button type="button" class="nav-tab-btn" onclick="switchTab('catalog')" id="nav-catalog">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+    <button type="button" class="nav-btn" onclick="switchTab('catalog')" id="nav-catalog">
+      <svg viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10"></circle>
         <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
       </svg>
-      <span>Справочник</span>
+      <span>Формулы</span>
     </button>
   </nav>
 
   <!-- Всплывающий Toast -->
-  <div class="toast-box" id="toastNotification" role="status" aria-live="polite">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+  <div class="toast-pill" id="toastNotification">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="10"></circle>
       <polyline points="12 6 12 12 14 14"></polyline>
     </svg>
-    <span id="toastText">Материал скопирован в&nbsp;буфер обмена</span>
+    <span id="toastText">Скопировано в буфер</span>
   </div>
 
   <script>
-    // --- Состояние и инициализация приложения ---
+    // --- Состояние приложения ---
     let currentTask = null;
     let streak = 0;
     let userId = "guest_user";
     let userName = "Ученик";
     let allTemplates = [];
 
-    // Автономные задачи на случай отсутствия соединения
+    // Автономные задачи на случай офлайна
     const LOCAL_FALLBACK_TASKS = [
       { template_id: 1, task_id: 101, question: "Раскройте скобки: (x - 3)(x + 3)", answer: "x^2-9", category: "Разность квадратов", hint: "(a - b)(a + b) = a² - b²" },
       { template_id: 2, task_id: 102, question: "Раскройте скобки: (5 - x)(5 + x)", answer: "25-x^2", category: "Разность квадратов", hint: "(a - b)(a + b) = a² - b²" },
@@ -1400,14 +1104,14 @@
         }
       }
 
-      // Проверка по клавише Enter
+      // Нажатие клавиши Enter для отправки ответа
       document.getElementById("answerInput").addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           submitAnswer();
         }
       });
 
-      // Загрузка начальных данных
+      // Загрузка стартовых данных
       loadNewTask();
       loadTemplatesCatalog();
       updateStatsDisplay();
@@ -1415,8 +1119,8 @@
 
     // --- Переключение вкладок ---
     function switchTab(tabId) {
-      document.querySelectorAll(".tab-view").forEach(el => el.classList.remove("active"));
-      document.querySelectorAll(".nav-tab-btn").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(el => el.classList.remove("active"));
 
       const target = document.getElementById(`tab-${tabId}`);
       const navItem = document.getElementById(`nav-${tabId}`);
@@ -1461,7 +1165,7 @@
       input.focus();
     }
 
-    // --- Загрузка нового задания ---
+    // --- Загрузка задачи ---
     async function loadNewTask(preferredTemplateId = null) {
       hideFeedback();
       const questionEl = document.getElementById("taskQuestion");
@@ -1491,10 +1195,10 @@
             hint: data.hint || "(a - b)(a + b) = a² - b²"
           };
         } else {
-          throw new Error("Неверный формат ответа");
+          throw new Error("Неверный формат");
         }
       } catch (err) {
-        console.warn("Использован локальный генератор:", err);
+        console.warn("Фоллбек-задача:", err);
         const idx = Math.floor(Math.random() * LOCAL_FALLBACK_TASKS.length);
         const fb = LOCAL_FALLBACK_TASKS[idx];
         currentTask = {
@@ -1513,7 +1217,7 @@
       inputEl.focus();
     }
 
-    // --- Проверка ответа ---
+    // --- Проверка решения ---
     async function submitAnswer() {
       const input = document.getElementById("answerInput");
       const userAns = input.value.trim();
@@ -1529,10 +1233,6 @@
         return;
       }
 
-      // Запуск смысловой анимации доказательства
-      const proofBox = document.getElementById("proofContainer");
-      proofBox.classList.add("active");
-
       let isCorrect = false;
       let explanation = "";
 
@@ -1540,7 +1240,7 @@
         const resp = await fetch("/api/check", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: jsonSafeStringify({
+          body: JSON.stringify({
             user_id: userId,
             task_id: currentTask.task_id,
             user_answer: userAns,
@@ -1556,24 +1256,20 @@
           throw new Error("Ошибка API");
         }
       } catch (e) {
-        // Локальное математическое сравнение без пробелов
         const cleanUser = userAns.replace(/\s+/g, "").toLowerCase();
         const cleanRef = currentTask.expected.replace(/\s+/g, "").toLowerCase();
         isCorrect = (cleanUser === cleanRef);
         explanation = isCorrect ? "Решение сошлось с эталоном." : `Правильный ответ: ${currentTask.expected}`;
       }
 
-      setTimeout(() => {
-        proofBox.classList.remove("active");
-        renderFeedback(isCorrect, explanation);
-        if (isCorrect) {
-          streak++;
-        } else {
-          streak = 0;
-        }
-        document.getElementById("streakCount").textContent = streak;
-        updateStatsDisplay();
-      }, 700);
+      renderFeedback(isCorrect, explanation);
+      if (isCorrect) {
+        streak++;
+      } else {
+        streak = 0;
+      }
+      document.getElementById("streakCount").textContent = streak;
+      updateStatsDisplay();
     }
 
     function renderFeedback(isCorrect, explanation) {
@@ -1582,11 +1278,11 @@
       const desc = document.getElementById("feedbackDesc");
       const icon = document.getElementById("feedbackIcon");
 
-      alert.className = `alert-panel ${isCorrect ? "correct" : "wrong"}`;
+      alert.className = `alert-card ${isCorrect ? "correct" : "wrong"}`;
 
       if (isCorrect) {
         title.textContent = "Решение верно!";
-        desc.textContent = explanation || "Формула раскрыта без ошибок.";
+        desc.textContent = explanation || "Формула раскрыта абсолютно правильно.";
         icon.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.4" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
       } else {
         title.textContent = "Есть расхождение";
@@ -1597,9 +1293,8 @@
 
     function hideFeedback() {
       const alert = document.getElementById("feedbackAlert");
-      alert.className = "alert-panel";
+      alert.className = "alert-card";
       document.getElementById("hintBox").style.display = "none";
-      document.getElementById("proofContainer").classList.remove("active");
     }
 
     function toggleHint() {
@@ -1622,11 +1317,9 @@
         document.getElementById("statCorrectAnswers").textContent = correct;
         document.getElementById("statAccuracy").textContent = `${accuracy}%`;
 
-        // Шкала освоения
         const progressPercent = Math.min(100, Math.round((correct / 30) * 100));
         document.getElementById("statProgressBar").style.width = `${progressPercent}%`;
 
-        // Ранг мастера
         const rankTitle = document.getElementById("rankTitle");
         const rankSub = document.getElementById("rankSubtitle");
         if (correct >= 25) {
@@ -1637,19 +1330,18 @@
           rankSub.textContent = "Хороший темп решения базовых и составных выражений.";
         } else {
           rankTitle.textContent = "Уровень: Ученик";
-          rankSub.textContent = "Решите больше 10 задач для перехода в статус Практика.";
+          rankSub.textContent = "Решите более 10 задач для перехода на ступень Практика.";
         }
 
-        // Журнал недавних ответов
         const historyList = document.getElementById("historyList");
         if (d.recent_history && Array.isArray(d.recent_history) && d.recent_history.length > 0) {
           historyList.innerHTML = d.recent_history.map(item => `
-            <div class="history-card-item">
+            <div class="history-card-row">
               <div>
-                <div class="history-q-text">${escapeHtml(item.question || item.task_text || "Задание")}</div>
-                <div class="history-ans-text">Ответ: ${escapeHtml(item.userAns || item.user_answer || "—")}</div>
+                <div class="history-q">${escapeHtml(item.question || item.task_text || "Задание")}</div>
+                <div class="history-a">Ответ: ${escapeHtml(item.userAns || item.user_answer || "—")}</div>
               </div>
-              <span class="status-pill" style="color: ${item.isCorrect || item.is_correct ? 'var(--success)' : 'var(--error)'}">
+              <span class="category-badge" style="background: ${item.isCorrect || item.is_correct ? 'var(--success-light)' : 'var(--error-light)'}; color: ${item.isCorrect || item.is_correct ? 'var(--success)' : 'var(--error)'}; border-color: transparent;">
                 ${item.isCorrect || item.is_correct ? 'Верно' : 'Ошибка'}
               </span>
             </div>
@@ -1660,7 +1352,7 @@
       }
     }
 
-    // --- Генерация плана урока для учителя ---
+    // --- Генерация материалов для учителя ---
     async function generateLessonPlan() {
       const wrap = document.getElementById("lessonResultWrap");
       const out = document.getElementById("lessonOutputText");
@@ -1671,7 +1363,7 @@
         const resp = await fetch("/api/lesson", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: jsonSafeStringify({ action: "plan_45min" })
+          body: JSON.stringify({ action: "plan_45min" })
         });
         if (!resp.ok) throw new Error("Ошибка сервера");
         const data = await resp.json();
@@ -1705,7 +1397,6 @@
       }
     }
 
-    // --- Генерация варианта из 15 задач ---
     async function generateTeacherVariant() {
       const wrap = document.getElementById("lessonResultWrap");
       const out = document.getElementById("lessonOutputText");
@@ -1716,7 +1407,7 @@
         const resp = await fetch("/api/lesson", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: jsonSafeStringify({ action: "variant_15tasks" })
+          body: JSON.stringify({ action: "variant_15tasks" })
         });
         if (!resp.ok) throw new Error("Ошибка сервера");
         const data = await resp.json();
@@ -1796,18 +1487,18 @@
     function renderCatalog(list) {
       const container = document.getElementById("catalogList");
       if (!list || list.length === 0) {
-        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: var(--space-16); font-size: 13px;">Ничего не найдено</div>`;
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 16px; font-size: 13px;">Ничего не найдено</div>`;
         return;
       }
 
       container.innerHTML = list.map(t => `
-        <div class="formula-entry" onclick="selectFormulaTemplate(${t.id})">
-          <div class="formula-entry-header">
-            <span class="category-tag">${escapeHtml(t.group || 'ФСУ')}</span>
+        <div class="catalog-item" onclick="selectFormulaTemplate(${t.id})">
+          <div class="catalog-item-header">
+            <span class="category-badge">${escapeHtml(t.group || 'ФСУ')}</span>
             <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">#${t.id}</span>
           </div>
-          <div class="formula-name">${escapeHtml(t.name || 'Формула')}</div>
-          <div class="formula-body">${escapeHtml(t.formula || '')}</div>
+          <div class="catalog-item-name">${escapeHtml(t.name || 'Формула')}</div>
+          <div class="catalog-item-formula">${escapeHtml(t.formula || '')}</div>
         </div>
       `).join("");
     }
@@ -1841,10 +1532,6 @@
       setTimeout(() => {
         toast.classList.remove("show");
       }, 2500);
-    }
-
-    function jsonSafeStringify(obj) {
-      return JSON.stringify(obj);
     }
 
     function escapeHtml(str) {
