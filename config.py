@@ -24,6 +24,13 @@ DB_PATH: str = os.getenv("DB_PATH", str(BASE_DIR / "math_bot.db"))
 
 def get_local_ip() -> str:
     try:
+        import subprocess
+        # Check standard LAN IP using ip route or hostname -I
+        out = subprocess.check_output(["hostname", "-I"], text=True).strip()
+        for ip in out.split():
+            if ip.startswith("192.168.") or ip.startswith("10.") or (ip.startswith("172.") and not ip.startswith("172.18.")):
+                return ip
+        # Fallback to socket
         import socket
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))

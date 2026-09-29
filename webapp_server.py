@@ -273,16 +273,20 @@ def start_tunnel_in_background(port: int = 8080) -> None:
 
     def _tunnel_worker():
         global _tunnel_proc
-        cmd = [
-            "ssh", "-p", "443",
-            "-o", "StrictHostKeyChecking=no",
-            "-o", "ServerAliveInterval=30",
-            f"-R0:localhost:{port}",
-            "qr@a.pinggy.io"
-        ]
+        hosts = ["free.pinggy.io", "qr@a.pinggy.io"]
+        host_idx = 0
         while True:
+            target_host = hosts[host_idx % len(hosts)]
+            host_idx += 1
+            cmd = [
+                "ssh", "-p", "443",
+                "-o", "StrictHostKeyChecking=no",
+                "-o", "ServerAliveInterval=30",
+                f"-R0:localhost:{port}",
+                target_host
+            ]
             try:
-                logger.info("⏳ Запуск публичного HTTPS туннеля для тренажёра...")
+                logger.info("⏳ Запуск публичного HTTPS туннеля для тренажёра (%s)...", target_host)
                 _tunnel_proc = subprocess.Popen(
                     cmd,
                     stdout=subprocess.PIPE,
@@ -292,11 +296,13 @@ def start_tunnel_in_background(port: int = 8080) -> None:
                 )
                 start_t = time.time()
                 url_found = False
-                while time.time() - start_t < 15 and _tunnel_proc.poll() is None:
+                collected_output = []
+                while time.time() - start_t < 20 and _tunnel_proc.poll() is None:
                     line = _tunnel_proc.stdout.readline()
                     if not line:
                         break
-                    m = re.search(r"https://[a-zA-Z0-9\.\-]+(?:free\.pinggy\.net|run\.pinggy\-free\.link)", line)
+                    collected_output.append(line.strip())
+                    m = re.search(r"https://[a-zA-Z0-9\.\-]+(?:\.free\.pinggy\.net|\.run\.pinggy\-free\.link)", line)
                     if m:
                         public_url = m.group(0)
                         config.WEBAPP_URL = public_url
@@ -305,7 +311,7 @@ def start_tunnel_in_background(port: int = 8080) -> None:
                         break
 
                 if not url_found:
-                    logger.warning("Не удалось автоматически получить HTTPS URL туннеля, используется: %s", config.WEBAPP_URL)
+                    logger.warning("Не удалось автоматически получить HTTPS URL туннеля, используется: %s (вывод: %s)", config.WEBAPP_URL, " | ".join(collected_output))
 
                 # Keep reading output so buffer doesn't fill up
                 for _ in _tunnel_proc.stdout:
@@ -316,7 +322,7 @@ def start_tunnel_in_background(port: int = 8080) -> None:
                 logger.warning("Ошибка в фоновом туннеле: %s", e)
 
             # Reconnection backoff
-            time.sleep(5)
+            time.sleep(25)
 
     thread = threading.Thread(target=_tunnel_worker, daemon=True, name="PinggyTunnelThread")
     thread.start()
