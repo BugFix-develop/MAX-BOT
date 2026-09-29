@@ -178,10 +178,28 @@ def get_user_statistics(user_id: str, db_path: str = DB_NAME) -> dict:
         correct = row["correct"] or 0
         accuracy = round((correct / total) * 100, 1) if total > 0 else 0.0
 
+        # Fetch recent task history for display
+        cursor.execute("""
+            SELECT task_text, user_answer, is_correct, created_at
+            FROM task_history
+            WHERE user_id = ? AND user_answer IS NOT NULL
+            ORDER BY created_at DESC
+            LIMIT 20
+        """, (user_id,))
+        recent = []
+        for r in cursor.fetchall():
+            recent.append({
+                "task_text": r["task_text"],
+                "user_answer": r["user_answer"],
+                "is_correct": bool(r["is_correct"]),
+                "created_at": r["created_at"],
+            })
+
         return {
             "total_solved": total,
             "correct_answers": correct,
             "accuracy_percent": accuracy,
+            "recent_history": recent,
         }
     finally:
         conn.close()

@@ -1512,11 +1512,11 @@
         const resp = await fetch("/api/lesson", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "plan_45min" })
+          body: JSON.stringify({ topic: "ФСУ (7 класс)", grade: 7, author_id: userId })
         });
         if (!resp.ok) throw new Error("Ошибка сервера");
         const data = await resp.json();
-        out.textContent = data.content || data.plan || "План успешно сформирован.";
+        out.textContent = data.markdown || data.content || "План успешно сформирован.";
       } catch (e) {
         out.textContent = 
 `ПЛАН УРОКА МАТЕМАТИКИ (7 КЛАСС) — 45 МИНУТ
@@ -1556,11 +1556,11 @@
         const resp = await fetch("/api/lesson", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "variant_15tasks" })
+          body: JSON.stringify({ topic: "ФСУ (7 класс)", grade: 7, author_id: userId })
         });
         if (!resp.ok) throw new Error("Ошибка сервера");
         const data = await resp.json();
-        out.textContent = data.content || data.variant || "Вариант сформирован.";
+        out.textContent = data.variant_15 || data.markdown || "Вариант сформирован.";
       } catch (e) {
         out.textContent =
 `ВАРИАНТ ДЛЯ ПРОВЕРОЧНОЙ РАБОТЫ (15 ЗАДАНИЙ)
