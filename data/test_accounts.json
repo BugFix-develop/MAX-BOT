@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "description": "Тестовые учетные записи для проверки решения хакатона «Образовательные решения» (MAX 2026, трек 594)",
+  "accounts": [
+    {
+      "user_id": "119647896",
+      "username": "@t594_hakaton_max_bot_test_student",
+      "display_name": "Тестовый Ученик (Жюри)",
+      "role": "student",
+      "auth_type": "open_session",
+      "password": "N/A (беспарольный вход через диалог MAX или параметр ?user_id=119647896)",
+      "permissions": [
+        "get_task",
+        "submit_answer",
+        "view_stats",
+        "view_templates",
+        "use_math_keypad"
+      ],
+      "test_url": "https://135.106.228.49.nip.io?user_id=119647896"
+    },
+    {
+      "user_id": "teacher_jury_test",
+      "username": "@jury_teacher",
+      "display_name": "Тестовый Преподаватель (Жюри)",
+      "role": "teacher",
+      "auth_type": "open_session",
+      "password": "N/A (доступен во вкладке «Учителю» и через команду /lesson)",
+      "permissions": [
+        "generate_lesson_plan",
+        "generate_test_variant_15",
+        "copy_lesson_notes",
+        "view_formula_catalog"
+      ],
+      "test_url": "https://135.106.228.49.nip.io?user_id=teacher_jury_test"
+    },
+    {
+      "user_id": "admin_jury_test",
+      "username": "@jury_admin",
+      "display_name": "Администратор / Проверяющий эксперт",
+      "role": "admin",
+      "auth_type": "health_and_monitoring",
+      "password": "N/A (доступ к /health, /api/templates, Docker container logs)",
+      "permissions": [
+        "health_check",
+        "inspect_openapi",
+        "inspect_data_api",
+        "run_automated_tests"
+      ],
+      "test_url": "https://135.106.228.49.nip.io/health"
+    }
+  ]
+}

@@ -9,6 +9,24 @@ servers:
   - url: http://135.106.228.49:8080
     description: Direct IP Server
 paths:
+  /health:
+    get:
+      summary: Проверка работоспособности сервиса (Health Check)
+      responses:
+        '200':
+          description: Сервис функционирует штатно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  service:
+                    type: string
+                    example: max-math-webapp
+
   /api/task:
     get:
       summary: Получить случайную математическую задачу по 30 шаблонам ФСУ

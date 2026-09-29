@@ -1,23 +1,39 @@
 version: "1.0"
-solution_name: "Gubkin's Team - MAX Math Trainer"
+solution_name: "MAX Math Trainer (ФСУ 7 класс)"
 team_id: "t594_hakaton_max_bot"
 base_url: "https://135.106.228.49.nip.io"
+test_accounts_file: "data/test_accounts.json"
+test_dataset_file: "data/test_dataset.json"
+
 required_checks:
+  - name: "Проверка доступности и статуса сервиса (Health Check)"
+    method: "GET"
+    path: "/health"
+    user_role: "admin"
+    expected_status: 200
+    expected_response:
+      content_type: "application/json"
+      required_fields:
+        - "status"
+        - "service"
+
   - name: "Получение случайной математической задачи (ФСУ)"
     method: "GET"
     path: "/api/task"
     params:
       query:
-        user_id: "jury_test_user"
+        user_id: "119647896"
     user_role: "student"
     expected_status: 200
     expected_response:
       content_type: "application/json"
       required_fields:
         - "status"
+        - "task_id"
         - "question"
         - "expected_answer"
         - "category"
+        - "hint"
 
   - name: "Проверка корректного ответа через математический валидатор"
     method: "POST"
@@ -25,9 +41,9 @@ required_checks:
     headers:
       Content-Type: "application/json"
     body:
-      user_id: "jury_test_user"
+      user_id: "119647896"
       task_id: 1
-      user_answer: "x^2 - 16"
+      user_answer: "x² - 16"
       expected_answer: "x^2 - 16"
     user_role: "student"
     expected_status: 200
@@ -37,13 +53,14 @@ required_checks:
         - "status"
         - "is_correct"
         - "feedback"
+        - "stats"
 
-  - name: "Получение персональной статистики и истории решений"
+  - name: "Получение персональной статистики и истории решений ученика"
     method: "GET"
     path: "/api/stats"
     params:
       query:
-        user_id: "jury_test_user"
+        user_id: "119647896"
     user_role: "student"
     expected_status: 200
     expected_response:
@@ -54,7 +71,7 @@ required_checks:
         - "correct_answers"
         - "accuracy_percent"
 
-  - name: "Получение каталога 30 формул сокращённого умножения"
+  - name: "Получение каталога всех 30 формул сокращённого умножения"
     method: "GET"
     path: "/api/templates"
     user_role: "student"
@@ -70,7 +87,7 @@ required_checks:
     body:
       topic: "ФСУ (7 класс)"
       grade: 7
-      author_id: "jury_teacher"
+      author_id: "teacher_jury_test"
     user_role: "teacher"
     expected_status: 200
     expected_response:
