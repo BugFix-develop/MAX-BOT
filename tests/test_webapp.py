@@ -72,7 +72,7 @@ def test_webapp_static_index(webapp_test_server):
         content = response.read().decode("utf-8")
         assert "Тренажёр" in content
         assert "max-web-app.js" in content
-        assert "closeAppBtn" in content
+        assert "userPill" in content
 
 
 def test_webapp_api_task(webapp_test_server):
