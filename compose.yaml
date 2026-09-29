@@ -4,7 +4,10 @@ services:
     container_name: max_math_bot
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - 8080:8080
+    environment:
+      - WEBAPP_URL=https://135.106.228.49.nip.io
+      - ENABLE_TUNNEL=false
     env_file:
       - .env
     volumes:
