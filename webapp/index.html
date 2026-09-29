@@ -289,25 +289,48 @@
       background: var(--card-surface);
       border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
-      padding: 22px 16px;
+      padding: 16px 14px;
       text-align: center;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .task-label {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
       color: var(--text-muted);
       margin-bottom: 8px;
     }
 
     .task-equation {
       font-family: 'JetBrains Mono', 'Manrope', monospace;
-      font-size: 22px;
+      font-size: clamp(22px, 7vw, 30px);
       font-weight: 700;
       color: var(--text-main);
-      line-height: 1.3;
+      line-height: 1.25;
       user-select: text;
+      white-space: nowrap;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 6px 8px;
+      scrollbar-width: none;
+    }
+    .task-equation::-webkit-scrollbar {
+      display: none;
+    }
+
+    .input-control::placeholder {
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #9CA3AF;
+      letter-spacing: 0;
     }
 
     /* Поле ввода */
@@ -864,7 +887,7 @@
         </div>
 
         <div class="task-hero-box">
-          <div class="task-label">Раскройте скобки или примените формулу:</div>
+          <div class="task-label" id="taskLabel">Раскройте скобки:</div>
           <div class="task-equation" id="taskQuestion">Загрузка задания…</div>
         </div>
 
@@ -1325,7 +1348,19 @@
         };
       }
 
-      questionEl.textContent = formatMath(currentTask.question);
+      const rawQ = currentTask.question || "";
+      const labelEl = document.getElementById("taskLabel");
+      if (rawQ.includes(":")) {
+        const colonIdx = rawQ.indexOf(":");
+        const instruction = rawQ.substring(0, colonIdx).trim();
+        const formula = rawQ.substring(colonIdx + 1).trim();
+        if (labelEl) labelEl.textContent = instruction + ":";
+        questionEl.textContent = formatMath(formula);
+      } else {
+        if (labelEl) labelEl.textContent = "Преобразуйте выражение:";
+        questionEl.textContent = formatMath(rawQ);
+      }
+
       categoryBadge.textContent = currentTask.category;
       hintFormula.textContent = formatMath(currentTask.hint);
       inputEl.focus();
