@@ -21,8 +21,8 @@
       --success-bg: rgba(16, 185, 129, 0.12);
       --error: #ef4444;
       --error-bg: rgba(239, 68, 68, 0.12);
-      --accent: #8b5cf6;
-      --accent-light: rgba(139, 92, 246, 0.12);
+      --accent: #0284c7;
+      --accent-light: rgba(2, 132, 199, 0.12);
       --keypad-bg: #1a253a;
       --keypad-hover: #263652;
       --header-bg: rgba(11, 15, 25, 0.92);
@@ -49,8 +49,8 @@
         --success-bg: rgba(5, 150, 105, 0.08);
         --error: #dc2626;
         --error-bg: rgba(220, 38, 38, 0.08);
-        --accent: #7c3aed;
-        --accent-light: rgba(124, 58, 237, 0.08);
+        --accent: #0369a1;
+        --accent-light: rgba(3, 105, 161, 0.08);
         --keypad-bg: #e2e8f0;
         --keypad-hover: #cbd5e1;
         --header-bg: rgba(255, 255, 255, 0.92);
@@ -118,7 +118,7 @@
     }
 
     .logo-badge {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
       width: 36px;
       height: 36px;
       border-radius: 10px;
@@ -126,7 +126,7 @@
       align-items: center;
       justify-content: center;
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
     }
 
     .logo-badge svg {
@@ -366,9 +366,9 @@
     }
 
     .key-btn.power {
-      background: var(--accent-light);
-      color: var(--accent);
-      border-color: rgba(139, 92, 246, 0.3);
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: rgba(59, 130, 246, 0.3);
       font-weight: 700;
     }
 
@@ -504,7 +504,7 @@
     /* Hint Box */
     .hint-box {
       background: var(--accent-light);
-      border: 1px dashed rgba(139, 92, 246, 0.4);
+      border: 1px dashed rgba(2, 132, 199, 0.4);
       color: var(--text-main);
       padding: 12px 14px;
       border-radius: var(--radius-md);
@@ -568,8 +568,8 @@
     }
 
     .rank-banner {
-      background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
-      border: 1px solid rgba(139, 92, 246, 0.25);
+      background: var(--card-surface);
+      border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
       padding: 14px;
       display: flex;
@@ -582,12 +582,12 @@
       width: 44px;
       height: 44px;
       border-radius: 12px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: var(--primary-light);
+      border: 1px solid rgba(59, 130, 246, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--accent);
+      color: var(--primary);
       flex-shrink: 0;
     }
 
