@@ -1166,6 +1166,18 @@
     ];
 
     document.addEventListener("DOMContentLoaded", () => {
+      // Инициализация пользователя: читаем из URL параметров (переданных ботом) или моста MAX
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const qUserId = urlParams.get("user_id") || urlParams.get("userId");
+        if (qUserId) {
+          userId = String(qUserId);
+          localStorage.setItem("max_trainer_user_id", userId);
+        } else if (localStorage.getItem("max_trainer_user_id")) {
+          userId = localStorage.getItem("max_trainer_user_id");
+        }
+      } catch (err) {}
+
       // Инициализация моста MAX Messenger
       if (window.WebApp) {
         try {
@@ -1174,6 +1186,7 @@
           if (window.WebApp.initDataUnsafe && window.WebApp.initDataUnsafe.user) {
             const u = window.WebApp.initDataUnsafe.user;
             userId = String(u.id);
+            localStorage.setItem("max_trainer_user_id", userId);
             userName = u.first_name || (u.username ? "@" + u.username : "Ученик");
             document.getElementById("userPill").textContent = userName;
           }
@@ -1209,14 +1222,9 @@
       updateStatsDisplay();
     });
 
-    // --- Закрытие окна WebApp ---
+    // --- Закрытие окна WebApp и возврат в чат бота ---
     function closeWebApp() {
-      try {
-        if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === 'function') {
-          window.Telegram.WebApp.close();
-          return;
-        }
-      } catch (e) {}
+      // 1. Попытка закрыть через нативные мосты мессенджера
       try {
         if (window.WebApp && typeof window.WebApp.close === 'function') {
           window.WebApp.close();
@@ -1229,7 +1237,22 @@
           return;
         }
       } catch (e) {}
-      window.close();
+      try {
+        if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === 'function') {
+          window.Telegram.WebApp.close();
+          return;
+        }
+      } catch (e) {}
+
+      // 2. Если открыто во встроенном браузере (In-App Browser / Safari / Chrome)
+      try {
+        window.close();
+      } catch (e) {}
+
+      // 3. Перенаправление обратно в диалог с ботом в MAX
+      setTimeout(() => {
+        window.location.href = "https://max.ru/t594_hakaton_max_bot";
+      }, 100);
     }
 
     // --- Переключение вкладок ---

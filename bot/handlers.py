@@ -67,8 +67,11 @@ def handle_start(user_id: str, client, chat_id: str | int | None = None, db_path
         "Нажмите кнопку ниже или отправьте команду **/app**."
     )
 
+    sep = "&" if "?" in app_url else "?"
+    user_app_url = f"{app_url}{sep}user_id={user_id}"
+
     if hasattr(client, "send_app_button"):
-        client.send_app_button(user_id=user_id, chat_id=cid, text=welcome_text, webapp_url=app_url, button_text="Открыть тренажёр")
+        client.send_app_button(user_id=user_id, chat_id=cid, text=welcome_text, webapp_url=user_app_url, button_text="Открыть тренажёр")
     else:
         client.send_message(user_id=user_id, chat_id=cid, text=welcome_text)
 
@@ -99,8 +102,12 @@ def handle_app(user_id: str, client, chat_id: str | int | None = None, *args, **
         "Нажмите кнопку ниже, чтобы запустить приложение, или начните решать прямо в диалоге."
     )
 
+    # Передаем user_id в URL веб-приложения для синхронизации единой статистики с ботом (/stats)
+    sep = "&" if "?" in app_url else "?"
+    user_app_url = f"{app_url}{sep}user_id={user_id}"
+
     if hasattr(client, "send_app_button"):
-        client.send_app_button(user_id=user_id, chat_id=cid, text=app_text, webapp_url=app_url, button_text="Открыть тренажёр")
+        client.send_app_button(user_id=user_id, chat_id=cid, text=app_text, webapp_url=user_app_url, button_text="Открыть тренажёр")
     else:
         buttons = [
             [{"type": "link", "text": "Открыть тренажёр", "url": app_url}],
