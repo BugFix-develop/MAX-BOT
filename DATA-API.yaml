@@ -1,7 +1,7 @@
 version: "1.0"
 solution_name: "Gubkin's Team - MAX Math Trainer"
 team_id: "t594_hakaton_max_bot"
-base_url: "https://oioyj-135-106-228-49.free.pinggy.net"
+base_url: "https://135.106.228.49.nip.io"
 required_checks:
   - name: "Получение случайной математической задачи (ФСУ)"
     method: "GET"

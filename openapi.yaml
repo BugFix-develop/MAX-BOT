@@ -4,7 +4,7 @@ info:
   description: REST API образовательной платформы «Тренажёр ФСУ» для мессенджера MAX
   version: 1.0.0
 servers:
-  - url: https://oioyj-135-106-228-49.free.pinggy.net
+  - url: https://135.106.228.49.nip.io
     description: Production HTTPS Server (Cloud.ru VM)
   - url: http://135.106.228.49:8080
     description: Direct IP Server
