@@ -88,14 +88,14 @@ def run_bot_mode(token: str, base_url: str, db_path: str = DB_PATH, webapp_host:
 
         # Регистрация команд в меню мессенджера MAX для кнопки рядом со скрепкой 📎
         bot_commands = [
-            {"name": "app", "description": "🚀 Открыть тренажёр"},
-            {"name": "close", "description": "❌ Закрыть тренажёр"},
-            {"name": "task", "description": "Решать задачи в чате (7 класс)"},
-            {"name": "stats", "description": "Моя статистика успеваемости"},
-            {"name": "help", "description": "Правила ввода степеней и формул"},
-            {"name": "lesson", "description": "Методический план урока на 45 минут"},
-            {"name": "start", "description": "Главное меню тренажёра"},
-            {"name": "cancel", "description": "Отменить текущее действие"}
+            {"name": "app", "description": "Открыть тренажёр"},
+            {"name": "close", "description": "Закрыть тренажёр"},
+            {"name": "task", "description": "Решать задачи в чате"},
+            {"name": "stats", "description": "Моя статистика"},
+            {"name": "help", "description": "Правила ввода ответов"},
+            {"name": "lesson", "description": "План урока на 45 минут"},
+            {"name": "start", "description": "Главное меню"},
+            {"name": "cancel", "description": "Отменить действие"}
         ]
         client.set_my_commands(bot_commands)
 

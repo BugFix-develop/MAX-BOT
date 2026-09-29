@@ -232,7 +232,7 @@ class MAXClient:
             })
         return self.send_message(user_id=user_id, chat_id=chat_id, text=text, attachments=attachments)
 
-    def send_app_button(self, user_id: str | int | None = None, chat_id: str | int | None = None, text: str = "", webapp_url: str = "", button_text: str = "🚀 Открыть тренажёр") -> dict | None:
+    def send_app_button(self, user_id: str | int | None = None, chat_id: str | int | None = None, text: str = "", webapp_url: str = "", button_text: str = "Открыть тренажёр") -> dict | None:
         """
         Send an invitation message with an interactive WebApp launch button and quick controls.
         """
@@ -241,11 +241,11 @@ class MAXClient:
                 {"type": "link", "text": button_text, "url": webapp_url}
             ],
             [
-                {"type": "callback", "text": "🎯 Решать в чате", "payload": "/task"},
-                {"type": "callback", "text": "📊 Статистика", "payload": "/stats"}
+                {"type": "callback", "text": "Решать в чате", "payload": "/task"},
+                {"type": "callback", "text": "Моя статистика", "payload": "/stats"}
             ],
             [
-                {"type": "callback", "text": "❌ Закрыть тренажёр", "payload": "/close"}
+                {"type": "callback", "text": "Закрыть тренажёр", "payload": "/close"}
             ]
         ]
         return self.send_keyboard(user_id=user_id, chat_id=chat_id, text=text, buttons=buttons)

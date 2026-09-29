@@ -8,42 +8,55 @@
   <script src="https://st.max.ru/js/max-web-app.js"></script>
   <style>
     :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
+      --bg-color: #0b0f19;
+      --card-bg: #131c2e;
+      --card-surface: #182238;
+      --card-border: #22314e;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --primary: #3b82f6;
       --primary-hover: #2563eb;
+      --primary-light: rgba(59, 130, 246, 0.12);
       --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.15);
+      --success-bg: rgba(16, 185, 129, 0.12);
       --error: #ef4444;
-      --error-bg: rgba(239, 68, 68, 0.15);
+      --error-bg: rgba(239, 68, 68, 0.12);
       --accent: #8b5cf6;
-      --keypad-bg: #273549;
-      --keypad-hover: #3b4d66;
-      --header-bg: rgba(15, 23, 42, 0.95);
-      --nav-bg: #182234;
+      --accent-light: rgba(139, 92, 246, 0.12);
+      --keypad-bg: #1a253a;
+      --keypad-hover: #263652;
+      --header-bg: rgba(11, 15, 25, 0.92);
+      --nav-bg: rgba(19, 28, 46, 0.95);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
     }
 
     @media (prefers-color-scheme: light) {
       :root.auto-theme {
-        --bg-color: #f1f5f9;
+        --bg-color: #f8fafc;
         --card-bg: #ffffff;
+        --card-surface: #f1f5f9;
         --card-border: #e2e8f0;
         --text-main: #0f172a;
         --text-muted: #64748b;
         --primary: #2563eb;
         --primary-hover: #1d4ed8;
+        --primary-light: rgba(37, 99, 235, 0.08);
         --success: #059669;
-        --success-bg: rgba(5, 150, 105, 0.12);
+        --success-bg: rgba(5, 150, 105, 0.08);
         --error: #dc2626;
-        --error-bg: rgba(220, 38, 38, 0.12);
+        --error-bg: rgba(220, 38, 38, 0.08);
         --accent: #7c3aed;
+        --accent-light: rgba(124, 58, 237, 0.08);
         --keypad-bg: #e2e8f0;
         --keypad-hover: #cbd5e1;
-        --header-bg: rgba(255, 255, 255, 0.95);
-        --nav-bg: #ffffff;
+        --header-bg: rgba(255, 255, 255, 0.92);
+        --nav-bg: rgba(255, 255, 255, 0.95);
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.08);
       }
     }
 
@@ -58,10 +71,29 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding-bottom: 74px;
+      padding-bottom: 76px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Common SVG icon helper */
+    .icon-svg {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-svg svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
     }
 
     /* Top Bar */
@@ -70,7 +102,8 @@
       top: 0;
       z-index: 100;
       background: var(--header-bg);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--card-border);
       padding: 12px 16px;
       display: flex;
@@ -81,7 +114,7 @@
     .brand-wrap {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .logo-badge {
@@ -92,32 +125,41 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      font-size: 16px;
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    }
+
+    .logo-badge svg {
+      width: 20px;
+      height: 20px;
+      stroke: #ffffff;
+      stroke-width: 2;
+      fill: none;
     }
 
     .brand-title {
       font-size: 15px;
       font-weight: 700;
+      letter-spacing: -0.2px;
       line-height: 1.2;
     }
 
     .brand-subtitle {
       font-size: 11px;
       color: var(--text-muted);
+      font-weight: 500;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .user-pill {
       font-size: 12px;
-      background: var(--card-bg);
+      font-weight: 500;
+      background: var(--card-surface);
       border: 1px solid var(--card-border);
       padding: 4px 10px;
       border-radius: 20px;
@@ -129,37 +171,43 @@
     }
 
     .close-btn {
-      background: rgba(239, 68, 68, 0.15);
+      background: var(--error-bg);
       color: var(--error);
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      border: 1px solid rgba(239, 68, 68, 0.25);
       padding: 6px 12px;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s ease;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+    }
+
+    .close-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2.2;
     }
 
     .close-btn:active {
-      transform: scale(0.95);
-      background: rgba(239, 68, 68, 0.3);
+      transform: scale(0.96);
+      background: rgba(239, 68, 68, 0.2);
     }
 
     /* Main Container */
     main {
       flex: 1;
       padding: 16px;
-      max-width: 680px;
+      max-width: 640px;
       width: 100%;
       margin: 0 auto;
     }
 
     .tab-content {
       display: none;
-      animation: fadeIn 0.25s ease-out;
+      animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .tab-content.active {
@@ -167,7 +215,7 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -175,10 +223,10 @@
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       padding: 18px;
       margin-bottom: 16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-sm);
     }
 
     .card-header {
@@ -190,53 +238,71 @@
 
     .badge {
       font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
       padding: 4px 10px;
       border-radius: 20px;
-      background: rgba(59, 130, 246, 0.15);
+      background: var(--primary-light);
       color: var(--primary);
-      border: 1px solid rgba(59, 130, 246, 0.3);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .streak-badge {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
       color: #f59e0b;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .streak-badge svg {
+      width: 14px;
+      height: 14px;
+      stroke: #f59e0b;
+      stroke-width: 2.2;
     }
 
     /* Task Box */
-    .task-title {
-      font-size: 13px;
+    .task-meta {
+      font-size: 12px;
       color: var(--text-muted);
       margin-bottom: 6px;
       font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .task-question {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 700;
       color: var(--text-main);
-      padding: 16px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 12px;
-      border: 1px dashed var(--card-border);
+      padding: 18px 16px;
+      background: var(--card-surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
       text-align: center;
       margin-bottom: 16px;
       user-select: text;
+      letter-spacing: 0.3px;
     }
 
     /* Answer Input */
     .input-wrap {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .input-label {
       font-size: 12px;
+      font-weight: 600;
       color: var(--text-muted);
       margin-bottom: 6px;
       display: block;
@@ -244,22 +310,32 @@
 
     .answer-input {
       width: 100%;
-      background: var(--bg-color);
+      background: var(--card-surface);
       border: 2px solid var(--card-border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 18px;
+      border-radius: var(--radius-md);
+      padding: 13px 16px;
+      font-size: 17px;
+      font-weight: 600;
       color: var(--text-main);
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.2s ease;
     }
 
     .answer-input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
     }
 
     /* Math Keypad */
+    .keypad-header {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
     .keypad {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -271,135 +347,190 @@
       background: var(--keypad-bg);
       color: var(--text-main);
       border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 10px 4px;
-      font-size: 15px;
+      border-radius: var(--radius-sm);
+      padding: 10px 2px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      text-align: center;
-      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.12s ease;
+      min-height: 42px;
+      user-select: none;
     }
 
     .key-btn:active {
-      transform: scale(0.92);
+      transform: scale(0.94);
       background: var(--keypad-hover);
     }
 
-    .key-btn.action {
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--error);
-      border-color: rgba(239, 68, 68, 0.3);
-    }
-
     .key-btn.power {
-      background: rgba(139, 92, 246, 0.15);
+      background: var(--accent-light);
       color: var(--accent);
       border-color: rgba(139, 92, 246, 0.3);
       font-weight: 700;
+    }
+
+    .key-btn.action {
+      background: var(--error-bg);
+      color: var(--error);
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+
+    .key-btn.action svg {
+      width: 17px;
+      height: 17px;
+      stroke-width: 2.2;
     }
 
     /* Main Action Buttons */
     .btn-row {
       display: flex;
       gap: 10px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .btn {
       flex: 1;
-      padding: 14px 18px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 700;
+      padding: 13px 16px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
       border: none;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      user-select: none;
+    }
+
+    .btn svg {
+      width: 17px;
+      height: 17px;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #2563eb);
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
     }
 
     .btn-primary:active {
-      transform: scale(0.97);
+      transform: scale(0.98);
+      background: var(--primary-hover);
     }
 
     .btn-secondary {
-      background: var(--card-bg);
+      background: var(--card-surface);
       border: 1px solid var(--card-border);
       color: var(--text-main);
     }
 
     .btn-secondary:active {
-      transform: scale(0.97);
-      background: var(--keypad-bg);
+      transform: scale(0.98);
+      background: var(--keypad-hover);
+    }
+
+    .btn-subtle {
+      width: 100%;
+      background: transparent;
+      border: 1px dashed var(--card-border);
+      color: var(--text-muted);
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
+    .btn-subtle:active {
+      background: var(--card-surface);
+      color: var(--text-main);
     }
 
     /* Feedback Alert */
     .alert-box {
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 12px;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-top: 14px;
       display: none;
-      animation: fadeIn 0.2s ease-out;
+      animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .alert-box.success {
-      display: block;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
       background: var(--success-bg);
       border: 1px solid var(--success);
+      color: var(--text-main);
+    }
+
+    .alert-box.success .alert-icon {
       color: var(--success);
+      margin-top: 1px;
     }
 
     .alert-box.error {
-      display: block;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
       background: var(--error-bg);
       border: 1px solid var(--error);
+      color: var(--text-main);
+    }
+
+    .alert-box.error .alert-icon {
       color: var(--error);
+      margin-top: 1px;
+    }
+
+    .alert-content {
+      flex: 1;
     }
 
     .alert-title {
       font-weight: 700;
       font-size: 14px;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .alert-desc {
       font-size: 13px;
-      opacity: 0.95;
+      color: var(--text-muted);
+      line-height: 1.4;
     }
 
     /* Hint Box */
     .hint-box {
-      background: rgba(139, 92, 246, 0.1);
+      background: var(--accent-light);
       border: 1px dashed rgba(139, 92, 246, 0.4);
-      color: var(--accent);
+      color: var(--text-main);
       padding: 12px 14px;
-      border-radius: 10px;
-      margin-top: 10px;
+      border-radius: var(--radius-md);
+      margin-top: 12px;
       font-size: 13px;
       display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .hint-box strong {
+      color: var(--accent);
     }
 
     /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 16px;
     }
 
     .stat-card {
-      background: rgba(0, 0, 0, 0.2);
+      background: var(--card-surface);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: var(--radius-md);
+      padding: 14px 10px;
       text-align: center;
     }
 
@@ -407,56 +538,75 @@
       font-size: 24px;
       font-weight: 800;
       color: var(--text-main);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+      line-height: 1.1;
     }
 
     .stat-label {
       font-size: 11px;
+      font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
 
     .progress-bar-wrap {
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 10px;
-      height: 12px;
+      background: var(--card-surface);
+      border-radius: 20px;
+      height: 10px;
       overflow: hidden;
-      margin: 12px 0;
+      margin: 10px 0 16px 0;
       border: 1px solid var(--card-border);
     }
 
     .progress-bar-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--primary), var(--success));
-      border-radius: 10px;
-      transition: width 0.5s ease;
+      border-radius: 20px;
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       width: 0%;
     }
 
     .rank-banner {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: var(--radius-md);
       padding: 14px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       margin-bottom: 16px;
     }
 
-    .rank-icon {
-      font-size: 32px;
+    .rank-badge-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .rank-badge-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke-width: 2;
     }
 
     .rank-text h4 {
       font-size: 15px;
       font-weight: 700;
+      line-height: 1.2;
     }
 
     .rank-text p {
       font-size: 12px;
       color: var(--text-muted);
+      margin-top: 2px;
     }
 
     /* History Table */
@@ -470,21 +620,33 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 12px;
-      background: rgba(0, 0, 0, 0.15);
+      padding: 10px 14px;
+      background: var(--card-surface);
       border: 1px solid var(--card-border);
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       font-size: 13px;
     }
 
-    .history-status.correct {
-      color: var(--success);
-      font-weight: 700;
+    .history-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 12px;
     }
 
-    .history-status.wrong {
+    .history-status-badge.correct {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .history-status-badge.wrong {
+      background: var(--error-bg);
       color: var(--error);
-      font-weight: 700;
+      border: 1px solid rgba(239, 68, 68, 0.25);
     }
 
     /* Teacher / Lesson Builder */
@@ -496,30 +658,53 @@
     }
 
     .lesson-output {
-      background: rgba(0, 0, 0, 0.25);
+      background: var(--card-surface);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: var(--radius-md);
+      padding: 16px;
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.65;
       white-space: pre-wrap;
-      font-family: monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       max-height: 380px;
       overflow-y: auto;
       user-select: text;
     }
 
     /* Formula Catalog */
+    .search-input-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
     .search-box {
       width: 100%;
-      background: var(--bg-color);
+      background: var(--card-surface);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      padding: 10px 14px 10px 38px;
       color: var(--text-main);
       font-size: 14px;
-      margin-bottom: 14px;
       outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .search-box:focus {
+      border-color: var(--primary);
     }
 
     .catalog-list {
@@ -529,12 +714,12 @@
     }
 
     .formula-card {
-      background: rgba(0, 0, 0, 0.2);
+      background: var(--card-surface);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      padding: 14px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.18s ease;
     }
 
     .formula-card:hover {
@@ -548,13 +733,30 @@
       margin-bottom: 6px;
       font-size: 12px;
       color: var(--text-muted);
+      font-weight: 500;
     }
 
     .formula-math {
       font-size: 16px;
       font-weight: 700;
       color: var(--text-main);
-      font-family: serif;
+      font-family: "SF Pro Text", "Segoe UI", serif;
+      letter-spacing: 0.2px;
+    }
+
+    .formula-action-hint {
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .formula-action-hint svg {
+      width: 12px;
+      height: 12px;
     }
 
     /* Bottom Navigation Bar */
@@ -570,7 +772,8 @@
       align-items: center;
       justify-content: space-around;
       z-index: 100;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
     .nav-item {
@@ -585,35 +788,41 @@
       font-size: 11px;
       font-weight: 600;
       gap: 4px;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
+      user-select: none;
     }
 
     .nav-item.active {
       color: var(--primary);
     }
 
-    .nav-item .icon {
-      font-size: 20px;
+    .nav-item .nav-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
     }
 
     /* Toast Notification */
     .toast {
       position: fixed;
-      bottom: 80px;
+      bottom: 78px;
       left: 50%;
-      transform: translateX(-50%) translateY(20px);
+      transform: translateX(-50%) translateY(16px);
       background: #1e293b;
-      color: #fff;
-      border: 1px solid var(--primary);
+      color: #ffffff;
+      border: 1px solid var(--card-border);
       padding: 10px 18px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 600;
       opacity: 0;
       pointer-events: none;
-      transition: all 0.25s ease;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-md);
       z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .toast.show {
@@ -627,7 +836,14 @@
   <!-- Header -->
   <header>
     <div class="brand-wrap">
-      <div class="logo-badge">📐</div>
+      <div class="logo-badge" title="Тренажёр">
+        <!-- Modern Geometric Ruler/Compass Math SVG Logo -->
+        <svg viewBox="0 0 24 24">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
       <div>
         <div class="brand-title">Тренажёр (7 класс)</div>
         <div class="brand-subtitle">Мини-приложение МАХ</div>
@@ -636,7 +852,11 @@
     <div class="header-actions">
       <div class="user-pill" id="userPill">Ученик</div>
       <button class="close-btn" id="closeAppBtn" title="Закрыть приложение">
-        <span>✕</span> Закрыть
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+        <span>Закрыть</span>
       </button>
     </div>
   </header>
@@ -650,12 +870,17 @@
         <div class="card-header">
           <span class="badge" id="taskCategoryBadge">Разность квадратов</span>
           <div class="streak-badge">
-            <span>🔥 Серия:</span>
-            <span id="streakCount">0</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span>Серия: <span id="streakCount">0</span></span>
           </div>
         </div>
 
-        <div class="task-title" id="taskTitle">Задание #1</div>
+        <div class="task-meta">
+          <span id="taskTitle">Задание #1</span>
+          <span>Формулы сокращённого умножения</span>
+        </div>
         <div class="task-question" id="taskQuestion">Загрузка задачи...</div>
 
         <div class="input-wrap">
@@ -672,32 +897,48 @@
         </div>
 
         <!-- Virtual Math Keypad -->
+        <div class="keypad-header">Специальные символы ввода</div>
         <div class="keypad">
-          <button class="key-btn power" onclick="insertSymbol('^2')">^2</button>
-          <button class="key-btn power" onclick="insertSymbol('^3')">^3</button>
+          <button class="key-btn power" onclick="insertSymbol('^2')" title="Возвести в квадрат">x²</button>
+          <button class="key-btn power" onclick="insertSymbol('^3')" title="Возвести в куб">x³</button>
           <button class="key-btn" onclick="insertSymbol('x')">x</button>
           <button class="key-btn" onclick="insertSymbol('y')">y</button>
           <button class="key-btn" onclick="insertSymbol('+')">+</button>
-          <button class="key-btn" onclick="insertSymbol('-')">-</button>
+          <button class="key-btn" onclick="insertSymbol('-')">−</button>
           <button class="key-btn" onclick="insertSymbol('(')">(</button>
           <button class="key-btn" onclick="insertSymbol(')')">)</button>
           <button class="key-btn" onclick="insertSymbol('a')">a</button>
           <button class="key-btn" onclick="insertSymbol('b')">b</button>
-          <button class="key-btn action" onclick="backspaceInput()">⌫</button>
-          <button class="key-btn action" onclick="clearInput()">C</button>
+          <button class="key-btn action" onclick="backspaceInput()" title="Удалить последний символ">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+              <line x1="18" y1="9" x2="12" y2="15"></line>
+              <line x1="12" y1="9" x2="18" y2="15"></line>
+            </svg>
+          </button>
+          <button class="key-btn action" onclick="clearInput()" title="Очистить поле ввода">C</button>
         </div>
 
         <div class="btn-row">
           <button class="btn btn-primary" id="checkAnswerBtn" onclick="submitAnswer()">
-            <span>⚡ Проверить ответ</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Проверить ответ</span>
           </button>
           <button class="btn btn-secondary" onclick="loadNewTask()">
-            <span>🔄 Другая задача</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+            </svg>
+            <span>Другая задача</span>
           </button>
         </div>
 
-        <button class="btn btn-secondary" style="width: 100%; margin-top: 6px;" onclick="toggleHint()">
-          <span>💡 Подсказка формулы</span>
+        <button class="btn btn-subtle" onclick="toggleHint()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.4 1.2 4.5 3 5.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3c1.8-1.2 3-3.3 3-5.7a7 7 0 0 0-7-7z"/>
+          </svg>
+          <span>Подсказка формулы</span>
         </button>
 
         <div class="hint-box" id="hintBox">
@@ -705,8 +946,16 @@
         </div>
 
         <div class="alert-box" id="feedbackAlert">
-          <div class="alert-title" id="feedbackTitle">Верно!</div>
-          <div class="alert-desc" id="feedbackDesc">Отличная работа!</div>
+          <div class="alert-icon" id="feedbackIcon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 14 14"></polyline>
+            </svg>
+          </div>
+          <div class="alert-content">
+            <div class="alert-title" id="feedbackTitle">Верно!</div>
+            <div class="alert-desc" id="feedbackDesc">Отличная работа!</div>
+          </div>
         </div>
       </div>
     </section>
@@ -720,10 +969,15 @@
         </div>
 
         <div class="rank-banner">
-          <div class="rank-icon" id="rankIcon">🌱</div>
+          <div class="rank-badge-icon" id="rankIconWrap">
+            <!-- Rank icon SVG rendered dynamically -->
+            <svg id="rankSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
           <div class="rank-text">
             <h4 id="rankTitle">Уровень: Ученик</h4>
-            <p id="rankSubtitle">Решайте больше задач, чтобы повысить свой статус!</p>
+            <p id="rankSubtitle">Решайте больше задач, чтобы повысить уровень мастерства!</p>
           </div>
         </div>
 
@@ -742,23 +996,27 @@
           </div>
         </div>
 
-        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Общий прогресс:</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">Общий прогресс:</div>
         <div class="progress-bar-wrap">
           <div class="progress-bar-fill" id="statProgressBar"></div>
         </div>
 
-        <button class="btn btn-primary" style="width: 100%; margin-top: 14px;" onclick="switchTab('trainer')">
-          <span>🚀 Тренироваться дальше</span>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="switchTab('trainer')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+          <span>Продолжить тренировку</span>
         </button>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <span class="badge">История попыток</span>
+          <span class="badge">История решений</span>
         </div>
         <div class="history-list" id="historyList">
-          <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 12px;">
-            Пока нет решенных задач. Начните тренировку во вкладке «Тренажёр»!
+          <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 14px;">
+            Пока нет решённых задач. Начните практику во вкладке «Тренажёр»!
           </div>
         </div>
       </div>
@@ -769,27 +1027,46 @@
       <div class="card">
         <div class="card-header">
           <span class="badge">Методический блок</span>
-          <span style="font-size: 12px; color: var(--accent);">Учителю / Репетитору</span>
+          <span style="font-size: 12px; color: var(--accent); font-weight: 600;">Учителю / Репетитору</span>
         </div>
 
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
-          Генерация готовых материалов для проведения урока математики в 7 классе с таймингом, устной разминкой, практикой и ответами.
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+          Автоматическая генерация структурированных материалов для урока математики в 7 классе: тайминг, разминка, отработка с коэффициентами и готовые ответы.
         </p>
 
         <div class="teacher-actions">
           <button class="btn btn-primary" onclick="generateLessonPlan()">
-            <span>📋 Составить план урока (45 мин)</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span>Составить план урока (45 мин)</span>
           </button>
           <button class="btn btn-secondary" onclick="generateTeacherVariant()">
-            <span>🔢 Сгенерировать вариант из 15 задач</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <line x1="10" y1="6" x2="21" y2="6"></line>
+              <line x1="10" y1="12" x2="21" y2="12"></line>
+              <line x1="10" y1="18" x2="21" y2="18"></line>
+              <line x1="4" y1="6" x2="4.01" y2="6"></line>
+              <line x1="4" y1="12" x2="4.01" y2="12"></line>
+              <line x1="4" y1="18" x2="4.01" y2="18"></line>
+            </svg>
+            <span>Сгенерировать вариант из 15 задач</span>
           </button>
         </div>
 
-        <div id="lessonResultWrap" style="display: none; margin-top: 14px;">
+        <div id="lessonResultWrap" style="display: none; margin-top: 16px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">ГОТОВЫЙ МАТЕРИАЛ:</span>
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Готовый материал</span>
             <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="copyLessonPlan()">
-              📋 Скопировать
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Скопировать</span>
             </button>
           </div>
           <div class="lesson-output" id="lessonOutputText"></div>
@@ -801,17 +1078,25 @@
     <section id="tab-catalog" class="tab-content">
       <div class="card">
         <div class="card-header">
-          <span class="badge">30 шаблонов формул</span>
-          <span style="font-size: 12px; color: var(--text-muted);">7 класс</span>
+          <span class="badge">Справочник 30 формул</span>
+          <span style="font-size: 12px; color: var(--text-muted);">Курс 7 класса</span>
         </div>
 
-        <input 
-          type="text" 
-          class="search-box" 
-          id="catalogSearchInput" 
-          placeholder="🔍 Поиск по номеру, формуле или группе..."
-          oninput="filterCatalog()"
-        />
+        <div class="search-input-wrap">
+          <div class="search-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            class="search-box" 
+            id="catalogSearchInput" 
+            placeholder="Поиск по номеру, названию или формуле..."
+            oninput="filterCatalog()"
+          />
+        </div>
 
         <div class="catalog-list" id="catalogList">
           <!-- Populated by JavaScript -->
@@ -824,25 +1109,54 @@
   <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
     <div class="nav-item active" onclick="switchTab('trainer')" id="nav-trainer">
-      <span class="icon">🎯</span>
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+          <circle cx="12" cy="12" r="6"></circle>
+          <circle cx="12" cy="12" r="2"></circle>
+        </svg>
+      </div>
       <span>Тренажёр</span>
     </div>
     <div class="nav-item" onclick="switchTab('stats')" id="nav-stats">
-      <span class="icon">📊</span>
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+      </div>
       <span>Статистика</span>
     </div>
     <div class="nav-item" onclick="switchTab('teacher')" id="nav-teacher">
-      <span class="icon">📚</span>
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+      </div>
       <span>Учителю</span>
     </div>
     <div class="nav-item" onclick="switchTab('catalog')" id="nav-catalog">
-      <span class="icon">💡</span>
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+        </svg>
+      </div>
       <span>Формулы</span>
     </div>
   </nav>
 
   <!-- Toast Notification -->
-  <div class="toast" id="toastNotification">Скопировано!</div>
+  <div class="toast" id="toastNotification">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    <span id="toastText">Скопировано в буфер обмена</span>
+  </div>
 
   <script>
     // --- State & App Initialization ---
@@ -898,7 +1212,7 @@
         }
       });
 
-      // Load initial task and catalog
+      // Load initial task, catalog and statistics
       loadNewTask();
       loadTemplatesCatalog();
       updateStatsDisplay();
@@ -953,7 +1267,8 @@
     // --- Toast Notification ---
     function showToast(text) {
       const toast = document.getElementById("toastNotification");
-      toast.textContent = text;
+      const toastText = document.getElementById("toastText");
+      toastText.textContent = text;
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 2200);
     }
@@ -997,7 +1312,7 @@
       hint.style.display = (hint.style.display === "block") ? "none" : "block";
     }
 
-    // Client-side Answer Normalization (MuSlim & Stepan standard)
+    // Client-side Answer Normalization
     function normalizeAnswer(ans) {
       if (!ans) return "";
       let s = ans.toLowerCase();
@@ -1012,7 +1327,7 @@
       const input = document.getElementById("answerInput");
       const rawAnswer = input.value.trim();
       if (!rawAnswer) {
-        showToast("Пожалуйста, введи ответ!");
+        showToast("Пожалуйста, введите ответ!");
         input.focus();
         return;
       }
@@ -1020,6 +1335,7 @@
       const feedback = document.getElementById("feedbackAlert");
       const feedbackTitle = document.getElementById("feedbackTitle");
       const feedbackDesc = document.getElementById("feedbackDesc");
+      const feedbackIcon = document.getElementById("feedbackIcon");
 
       let isCorrect = false;
       let expected = currentTask.answer || currentTask.expected_answer || "";
@@ -1057,16 +1373,29 @@
         streak += 1;
         document.getElementById("streakCount").textContent = streak;
         feedback.className = "alert-box success";
-        feedbackTitle.textContent = "🎉 Абсолютно верно!";
-        feedbackDesc.textContent = `Твой ответ «${rawAnswer}» полностью совпал. Переходи к следующей задаче!`;
-        showToast("Отлично! Ответ верный! 🚀");
-        setTimeout(() => loadNewTask(), 1400);
+        feedbackIcon.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        `;
+        feedbackTitle.textContent = "Верно!";
+        feedbackDesc.textContent = `Ваш ответ «${rawAnswer}» правильный. Отличная работа!`;
+        showToast("Ответ верный! Переход к следующей задаче");
+        setTimeout(() => loadNewTask(), 1200);
       } else {
         streak = 0;
         document.getElementById("streakCount").textContent = streak;
         feedback.className = "alert-box error";
-        feedbackTitle.textContent = "❌ Ответ не совпал";
-        feedbackDesc.textContent = `Твой ответ: «${rawAnswer}». Правильный эталон: «${expected}». Попробуй снова или нажми «💡 Подсказка формулы».`;
+        feedbackIcon.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+          </svg>
+        `;
+        feedbackTitle.textContent = "Ответ не совпал";
+        feedbackDesc.textContent = `Ваш ответ: «${rawAnswer}». Ожидалось: «${expected}». Попробуйте ещё раз или откройте подсказку формулы.`;
       }
     }
 
@@ -1119,29 +1448,42 @@
       document.getElementById("statAccuracy").textContent = `${accuracy}%`;
       document.getElementById("statProgressBar").style.width = `${accuracy}%`;
 
-      // Rank Badges
-      const rankIcon = document.getElementById("rankIcon");
+      // Rank Badges with clean SVGs
+      const rankIconWrap = document.getElementById("rankIconWrap");
       const rankTitle = document.getElementById("rankTitle");
       const rankSubtitle = document.getElementById("rankSubtitle");
 
       if (accuracy >= 80 && total >= 5) {
-        rankIcon.textContent = "🏆";
+        rankIconWrap.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+          </svg>
+        `;
         rankTitle.textContent = "Уровень: Эксперт";
-        rankSubtitle.textContent = "Превосходный результат! Все формулы отскакивают от зубов!";
+        rankSubtitle.textContent = "Отличный темп и точность! Вы уверенно владеете формулами сокращённого умножения.";
       } else if (accuracy >= 50 && total >= 3) {
-        rankIcon.textContent = "🥈";
+        rankIconWrap.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        `;
         rankTitle.textContent = "Уровень: Практик";
-        rankSubtitle.textContent = "Уверенный темп! Ещё немного практики до звания эксперта!";
+        rankSubtitle.textContent = "Хороший результат. Закрепите сложные формулы с коэффициентами.";
       } else {
-        rankIcon.textContent = "🌱";
+        rankIconWrap.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        `;
         rankTitle.textContent = "Уровень: Ученик";
-        rankSubtitle.textContent = "Изучайте справочник формул и продолжайте тренировки!";
+        rankSubtitle.textContent = "Изучайте формулы в справочнике и тренируйтесь для повышения точности.";
       }
 
       // Render History List
       const historyList = document.getElementById("historyList");
       if (history.length === 0) {
-        historyList.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 12px;">Пока нет решенных задач.</div>`;
+        historyList.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 14px;">Пока нет решённых задач.</div>`;
       } else {
         historyList.innerHTML = history.slice(0, 6).map(item => `
           <div class="history-item">
@@ -1149,8 +1491,14 @@
               <div style="font-weight: 600;">${item.question || item.task_text || "Задача"}</div>
               <div style="font-size: 11px; color: var(--text-muted);">Ответ: ${item.userAns || item.user_answer || "—"}</div>
             </div>
-            <div class="history-status ${item.isCorrect || item.is_correct ? 'correct' : 'wrong'}">
-              ${item.isCorrect || item.is_correct ? '✅ Верно' : '❌ Ошибка'}
+            <div class="history-status-badge ${item.isCorrect || item.is_correct ? 'correct' : 'wrong'}">
+              ${item.isCorrect || item.is_correct ? `
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Верно</span>
+              ` : `
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                <span>Ошибка</span>
+              `}
             </div>
           </div>
         `).join("");
@@ -1161,7 +1509,7 @@
     async function generateLessonPlan() {
       const wrap = document.getElementById("lessonResultWrap");
       const out = document.getElementById("lessonOutputText");
-      out.textContent = "⏳ Формирую структурированный методический конспект на 45 минут...";
+      out.textContent = "Формирование методического конспекта на 45 минут...";
       wrap.style.display = "block";
 
       try {
@@ -1179,17 +1527,17 @@
 
       // Fallback lesson plan
       out.textContent = 
-`# 📚 Методический план урока: Формулы сокращенного умножения (7 класс)
+`# Методический план урока: Формулы сокращенного умножения (7 класс)
 Тайминг урока: 45 минут
 
 ## 1. Организационный момент и устная разминка (5 минут)
-Цель: активизация памяти, проверка базовых навыков умножения одночленов.
-• Задание 1: Раскройте скобки (x - 3)(x + 3) = x² - 9
-• Задание 2: Раскройте скобки (x + 4)² = x² + 8x + 16
-• Задание 3: Раскройте скобки (y - 5)² = y² - 10y + 25
+Цель: повторение свойств степеней и базовых формул.
+• Задание 1: Раскройте скобки: (x - 3)(x + 3) = x² - 9
+• Задание 2: Раскройте скобки: (x + 4)² = x² + 8x + 16
+• Задание 3: Раскройте скобки: (y - 5)² = y² - 10y + 25
 
 ## 2. Изучение и закрепление у доски (15 минут)
-Работа с формулами, содержащими коэффициенты:
+Отработка формул с коэффициентами и сложными переменными:
 • Пример 1: (2x - 3)(2x + 3) = 4x² - 9
 • Пример 2: (3x + 2y)² = 9x² + 12xy + 4y²
 • Пример 3: (5a - 2b)² = 25a² - 20ab + 4b²
@@ -1202,15 +1550,15 @@
 3) (3x - 4y)(3x + 4y)
 4) (-x - 3)² = x² + 6x + 9
 
-## 4. Домашнее задание и итоги (5 минут)
-Повторить 3 группы формул ФСУ в чат-боте МАХ (команда /app).
+## 4. Домашнее задание и подведение итогов (5 минут)
+Отработать формулы в тренажёре чат-бота МАХ (команда /app).
 Домашний вариант: (x + 7)², (4x - 1)(4x + 1), (2x - 3y)².`;
     }
 
     async function generateTeacherVariant() {
       const wrap = document.getElementById("lessonResultWrap");
       const out = document.getElementById("lessonOutputText");
-      out.textContent = "⏳ Составляю вариант из 15 задач по всем 30 шаблонам...";
+      out.textContent = "Составление варианта из 15 задач по всем шаблонам курса...";
       wrap.style.display = "block";
 
       try {
@@ -1225,7 +1573,7 @@
       } catch (e) {}
 
       out.textContent = 
-`# 📝 Вариант для самостоятельной работы: 15 задач (7 класс)
+`# Вариант для самостоятельной работы: 15 задач (7 класс)
 
 1. Раскройте скобки: (x - 4)(x + 4)
 2. Раскройте скобки: (6 - x)(6 + x)
@@ -1244,7 +1592,7 @@
 15. Раскройте скобки: (x + 3)^3
 
 ────────────────────────
-🔑 Ответы для учителя:
+Ответы для учителя:
 1. x^2-16  |  2. 36-x^2  |  3. 9x^2-4  |  4. x^2-9y^2  |  5. 4x^2-25y^2
 6. x^4-16  |  7. x^2-0.04  |  8. x^2+10x+25  |  9. 49+14x+x^2  |  10. 9x^2+24x+16
 11. x^2+4xy+4y^2  |  12. 4x^2+12xy+9y^2  |  13. x^2-12x+36  |  14. x^2+10x+25  |  15. x^3+9x^2+27x+27`;
@@ -1254,9 +1602,9 @@
       const text = document.getElementById("lessonOutputText").textContent;
       if (!text) return;
       navigator.clipboard.writeText(text).then(() => {
-        showToast("План скопирован в буфер! 📋");
+        showToast("План скопирован в буфер обмена");
       }).catch(() => {
-        showToast("Выделите текст для копирования.");
+        showToast("Выделите текст для копирования");
       });
     }
 
@@ -1310,7 +1658,7 @@
     function renderCatalog(items) {
       const container = document.getElementById("catalogList");
       if (!items || items.length === 0) {
-        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 14px;">Ничего не найдено</div>`;
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 16px;">Ничего не найдено</div>`;
         return;
       }
       container.innerHTML = items.map(t => `
@@ -1320,7 +1668,13 @@
             <span style="color: var(--primary); font-weight: 600;">${t.group || 'ФСУ'}</span>
           </div>
           <div class="formula-math">${t.formula || t.name}</div>
-          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Нажми, чтобы тренировать этот шаблон ➔</div>
+          <div class="formula-action-hint">
+            <span>Тренировать формулу</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </div>
         </div>
       `).join("");
     }
