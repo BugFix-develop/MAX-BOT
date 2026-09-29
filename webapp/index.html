@@ -874,7 +874,7 @@
             type="text" 
             id="answerInput" 
             class="input-control" 
-            placeholder="Например: x^2 - 16"
+            placeholder="Например: x² - 16"
             autocomplete="off"
             autocapitalize="off"
             spellcheck="false"
@@ -884,8 +884,8 @@
         <!-- Виртуальная математическая клавиатура -->
         <div class="keypad-header">Специальные символы и степени</div>
         <div class="math-keypad" id="keypad">
-          <button type="button" class="key-btn key-btn-power" onclick="insertSymbol('^2')" title="Возвести в квадрат">x²</button>
-          <button type="button" class="key-btn key-btn-power" onclick="insertSymbol('^3')" title="Возвести в куб">x³</button>
+          <button type="button" class="key-btn key-btn-power" onclick="insertPower('²')" title="Возвести в квадрат">x²</button>
+          <button type="button" class="key-btn key-btn-power" onclick="insertPower('³')" title="Возвести в куб">x³</button>
           <button type="button" class="key-btn" onclick="insertSymbol('x')">x</button>
           <button type="button" class="key-btn" onclick="insertSymbol('y')">y</button>
           <button type="button" class="key-btn" onclick="insertSymbol('+')">+</button>
@@ -1135,11 +1135,11 @@
       { template_id: 1, task_id: 101, question: "Раскройте скобки: (x - 3)(x + 3)", answer: "x^2-9", category: "Разность квадратов", hint: "(a - b)(a + b) = a² - b²" },
       { template_id: 2, task_id: 102, question: "Раскройте скобки: (5 - x)(5 + x)", answer: "25-x^2", category: "Разность квадратов", hint: "(a - b)(a + b) = a² - b²" },
       { template_id: 3, task_id: 103, question: "Раскройте скобки: (2x - 4)(2x + 4)", answer: "4x^2-16", category: "Разность квадратов", hint: "(kx - a)(kx + a) = k²x² - a²" },
-      { template_id: 8, task_id: 108, question: "Раскройте скобки: (x + 4)^2", answer: "x^2+8x+16", category: "Квадрат суммы", hint: "(a + b)² = a² + 2ab + b²" },
-      { template_id: 10, task_id: 110, question: "Раскройте скобки: (2x + 3)^2", answer: "4x^2+12x+9", category: "Квадрат суммы", hint: "(kx + a)² = k²x² + 2kax + a²" },
-      { template_id: 14, task_id: 114, question: "Раскройте скобки: (x - 5)^2", answer: "x^2-10x+25", category: "Квадрат разности", hint: "(a - b)² = a² - 2ab + b²" },
-      { template_id: 21, task_id: 121, question: "Раскройте скобки: (x + 2)^3", answer: "x^3+6x^2+12x+8", category: "Куб суммы", hint: "(a + b)³ = a³ + 3a²b + 3ab² + b³" },
-      { template_id: 25, task_id: 125, question: "Умножьте: (x - 3)(x^2 + 3x + 9)", answer: "x^3-27", category: "Разность кубов", hint: "(a - b)(a² + ab + b²) = a³ - b³" }
+      { template_id: 8, task_id: 108, question: "Раскройте скобки: (x + 4)²", answer: "x^2+8x+16", category: "Квадрат суммы", hint: "(a + b)² = a² + 2ab + b²" },
+      { template_id: 10, task_id: 110, question: "Раскройте скобки: (2x + 3)²", answer: "4x^2+12x+9", category: "Квадрат суммы", hint: "(kx + a)² = k²x² + 2kax + a²" },
+      { template_id: 14, task_id: 114, question: "Раскройте скобки: (x - 5)²", answer: "x^2-10x+25", category: "Квадрат разности", hint: "(a - b)² = a² - 2ab + b²" },
+      { template_id: 21, task_id: 121, question: "Раскройте скобки: (x + 2)³", answer: "x^3+6x^2+12x+8", category: "Куб суммы", hint: "(a + b)³ = a³ + 3a²b + 3ab² + b³" },
+      { template_id: 25, task_id: 125, question: "Умножьте: (x - 3)(x² + 3x + 9)", answer: "x^3-27", category: "Разность кубов", hint: "(a - b)(a² + ab + b²) = a³ - b³" }
     ];
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -1160,6 +1160,20 @@
       }
 
       // Нажатие клавиши Enter для отправки ответа
+      // Автоматическое превращение X^2 и X2 в красивый X² при вводе
+      const ansInput = document.getElementById("answerInput");
+      ansInput.addEventListener("input", function() {
+        const cursor = this.selectionStart;
+        const oldVal = this.value;
+        const newVal = formatMath(oldVal);
+        if (newVal !== oldVal) {
+          this.value = newVal;
+          const diff = oldVal.length - newVal.length;
+          const newPos = Math.max(0, cursor - diff);
+          this.setSelectionRange(newPos, newPos);
+        }
+      });
+
       document.getElementById("answerInput").addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           submitAnswer();
@@ -1208,6 +1222,28 @@
       if (tabId === "stats") {
         updateStatsDisplay();
       }
+    }
+
+    
+    // --- Математическое форматирование степеней: X^2 и X2 превращаются в красивый X² ---
+    function formatMath(expr) {
+      if (!expr) return "";
+      return String(expr)
+        .replace(/\^2/g, "²")
+        .replace(/\^3/g, "³")
+        .replace(/\^4/g, "⁴")
+        .replace(/\^5/g, "⁵")
+        .replace(/([a-zA-Z\)])2(?![0-9])/g, "$1²")
+        .replace(/([a-zA-Z\)])3(?![0-9])/g, "$1³");
+    }
+
+    function insertPower(pow) {
+      const input = document.getElementById("answerInput");
+      const start = input.selectionStart || input.value.length;
+      const val = input.value;
+      const prevChar = start > 0 ? val[start - 1] : "";
+      const symbol = (/[a-zA-Z0-9\)]/.test(prevChar)) ? pow : ("x" + pow);
+      insertSymbol(symbol);
     }
 
     // --- Виртуальная клавиатура ---
@@ -1289,9 +1325,9 @@
         };
       }
 
-      questionEl.textContent = currentTask.question;
+      questionEl.textContent = formatMath(currentTask.question);
       categoryBadge.textContent = currentTask.category;
-      hintFormula.textContent = currentTask.hint;
+      hintFormula.textContent = formatMath(currentTask.hint);
       inputEl.focus();
     }
 
@@ -1360,11 +1396,11 @@
 
       if (isCorrect) {
         title.textContent = "Решение верно!";
-        desc.textContent = explanation || "Формула раскрыта абсолютно правильно.";
+        desc.textContent = formatMath(explanation) || "Формула раскрыта абсолютно правильно.";
         icon.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
       } else {
         title.textContent = "Есть расхождение";
-        desc.textContent = explanation || `Эталон: ${currentTask ? currentTask.expected : ""}`;
+        desc.textContent = formatMath(explanation) || `Эталон: ${currentTask ? formatMath(currentTask.expected) : ""}`;
         icon.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
       }
     }
@@ -1416,8 +1452,8 @@
           historyList.innerHTML = d.recent_history.map(item => `
             <div class="history-card-row">
               <div>
-                <div class="history-q">${escapeHtml(item.question || item.task_text || "Задание")}</div>
-                <div class="history-a">Ответ: ${escapeHtml(item.userAns || item.user_answer || "—")}</div>
+                <div class="history-q">${escapeHtml(formatMath(item.question || item.task_text || "Задание"))}</div>
+                <div class="history-a">Ответ: ${escapeHtml(formatMath(item.userAns || item.user_answer || "—"))}</div>
               </div>
               <span class="category-badge" style="background: ${item.isCorrect || item.is_correct ? 'var(--success-light)' : 'var(--error-light)'}; color: ${item.isCorrect || item.is_correct ? 'var(--success)' : 'var(--error)'}; border-color: transparent;">
                 ${item.isCorrect || item.is_correct ? 'Верно' : 'Ошибка'}
@@ -1575,8 +1611,8 @@
             <span class="category-badge">${escapeHtml(t.group || 'ФСУ')}</span>
             <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">#${t.id}</span>
           </div>
-          <div class="catalog-item-name">${escapeHtml(t.name || 'Формула')}</div>
-          <div class="catalog-item-formula">${escapeHtml(t.formula || '')}</div>
+          <div class="catalog-item-name">${escapeHtml(formatMath(t.name || 'Формула'))}</div>
+          <div class="catalog-item-formula">${escapeHtml(formatMath(t.formula || ''))}</div>
         </div>
       `).join("");
     }

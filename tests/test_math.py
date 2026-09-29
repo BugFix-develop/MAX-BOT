@@ -10,13 +10,20 @@ class TestValidator(unittest.TestCase):
         self.assertEqual(normalize_answer("х^2 + 4х + 4"), "x^2+4x+4")
     
     def test_normalize_powers(self):
-        #Проверка разных форматов степеней (**, во 2, в квадрате, ²)
+        #Проверка разных форматов степеней (**, во 2, в квадрате, ², x2)
         self.assertEqual(normalize_answer("x**2 + 4x + 4"), "x^2+4x+4")
-    
+        self.assertEqual(normalize_answer("x² + 4x + 4"), "x^2+4x+4")
+        self.assertEqual(normalize_answer("x2 + 4x + 4"), "x^2+4x+4")
+        self.assertEqual(normalize_answer("4x2 + 12x + 9"), "4x^2+12x+9")
+        self.assertEqual(normalize_answer("(x+2)2"), "(x+2)^2")
+
     def test_check_answer_correct(self):
         #Проверка совпадения правильных ответов
         is_correct, msg = check_answer("х**2 + 4*x + 4", "x^2 + 4x + 4")
         self.assertTrue(is_correct)
+        #Проверка красивого формата x² и x2
+        self.assertTrue(check_answer("x² + 4x + 4", "x^2 + 4x + 4")[0])
+        self.assertTrue(check_answer("x2 + 4x + 4", "x^2 + 4x + 4")[0])
 
     def test_check_answer_incorrect(self):
         #Проверка неверного ответа
