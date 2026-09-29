@@ -22,3 +22,8 @@ MAX_API_BASE_URL: str = os.getenv("MAX_API_BASE_URL", "https://platform-api2.max
 
 DB_PATH: str = os.getenv("DB_PATH", str(BASE_DIR / "math_bot.db"))
 
+WEBAPP_PORT: int = int(os.getenv("WEBAPP_PORT", "8080"))
+WEBAPP_HOST: str = os.getenv("WEBAPP_HOST", "0.0.0.0")
+BOT_USERNAME: str = os.getenv("BOT_USERNAME", "t594_hakaton_max_bot")
+WEBAPP_URL: str = os.getenv("WEBAPP_URL", f"https://max.ru/{BOT_USERNAME}?startapp")
+

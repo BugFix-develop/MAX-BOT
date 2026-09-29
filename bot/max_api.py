@@ -220,7 +220,7 @@ class MAXClient:
     def send_keyboard(self, user_id: str | int | None = None, chat_id: str | int | None = None, text: str = "", buttons: list[list[dict]] | None = None) -> dict | None:
         """
         Send an inline keyboard markup.
-        Each button: {"type": "callback", "text": "...", "payload": "..."}
+        Supports button types: 'callback', 'link', 'open_app'.
         """
         attachments = []
         if buttons:
@@ -231,6 +231,25 @@ class MAXClient:
                 }
             })
         return self.send_message(user_id=user_id, chat_id=chat_id, text=text, attachments=attachments)
+
+    def send_app_button(self, user_id: str | int | None = None, chat_id: str | int | None = None, text: str = "", webapp_url: str = "", button_text: str = "🚀 Открыть тренажёр ФСУ") -> dict | None:
+        """
+        Send an invitation message with an interactive WebApp launch button and quick controls.
+        """
+        buttons = [
+            [
+                {"type": "link", "text": button_text, "url": webapp_url}
+            ],
+            [
+                {"type": "callback", "text": "🎯 Решать в чате", "payload": "/task"},
+                {"type": "callback", "text": "📊 Статистика", "payload": "/stats"}
+            ],
+            [
+                {"type": "callback", "text": "❌ Закрыть приложение", "payload": "/close"}
+            ]
+        ]
+        return self.send_keyboard(user_id=user_id, chat_id=chat_id, text=text, buttons=buttons)
+
 
     def extract_message_event(self, update: dict) -> tuple[str, str, str | int | None] | None:
         """

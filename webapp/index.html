@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Тренажёр ФСУ — Бот МАХ</title>
+  <!-- MAX Bridge SDK -->
+  <script src="https://st.max.ru/js/max-web-app.js"></script>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --error: #ef4444;
+      --error-bg: rgba(239, 68, 68, 0.15);
+      --accent: #8b5cf6;
+      --keypad-bg: #273549;
+      --keypad-hover: #3b4d66;
+      --header-bg: rgba(15, 23, 42, 0.95);
+      --nav-bg: #182234;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root.auto-theme {
+        --bg-color: #f1f5f9;
+        --card-bg: #ffffff;
+        --card-border: #e2e8f0;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --success: #059669;
+        --success-bg: rgba(5, 150, 105, 0.12);
+        --error: #dc2626;
+        --error-bg: rgba(220, 38, 38, 0.12);
+        --accent: #7c3aed;
+        --keypad-bg: #e2e8f0;
+        --keypad-hover: #cbd5e1;
+        --header-bg: rgba(255, 255, 255, 0.95);
+        --nav-bg: #ffffff;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding-bottom: 74px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Bar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--header-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-pill {
+      font-size: 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 20px;
+      color: var(--text-muted);
+      max-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .close-btn {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--error);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .close-btn:active {
+      transform: scale(0.95);
+      background: rgba(239, 68, 68, 0.3);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      padding: 16px;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .streak-badge {
+      font-size: 12px;
+      font-weight: 700;
+      color: #f59e0b;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Task Box */
+    .task-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .task-question {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      border: 1px dashed var(--card-border);
+      text-align: center;
+      margin-bottom: 16px;
+      user-select: text;
+    }
+
+    /* Answer Input */
+    .input-wrap {
+      margin-bottom: 12px;
+    }
+
+    .input-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .answer-input {
+      width: 100%;
+      background: var(--bg-color);
+      border: 2px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 18px;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .answer-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Math Keypad */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .key-btn {
+      background: var(--keypad-bg);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 4px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .key-btn:active {
+      transform: scale(0.92);
+      background: var(--keypad-hover);
+    }
+
+    .key-btn.action {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--error);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .key-btn.power {
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--accent);
+      border-color: rgba(139, 92, 246, 0.3);
+      font-weight: 700;
+    }
+
+    /* Main Action Buttons */
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #2563eb);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.97);
+      background: var(--keypad-bg);
+    }
+
+    /* Feedback Alert */
+    .alert-box {
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .alert-box.success {
+      display: block;
+      background: var(--success-bg);
+      border: 1px solid var(--success);
+      color: var(--success);
+    }
+
+    .alert-box.error {
+      display: block;
+      background: var(--error-bg);
+      border: 1px solid var(--error);
+      color: var(--error);
+    }
+
+    .alert-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .alert-desc {
+      font-size: 13px;
+      opacity: 0.95;
+    }
+
+    /* Hint Box */
+    .hint-box {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px dashed rgba(139, 92, 246, 0.4);
+      color: var(--accent);
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 13px;
+      display: none;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .progress-bar-wrap {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+      height: 12px;
+      overflow: hidden;
+      margin: 12px 0;
+      border: 1px solid var(--card-border);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 10px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    .rank-banner {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .rank-icon {
+      font-size: 32px;
+    }
+
+    .rank-text h4 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .rank-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* History Table */
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .history-status.correct {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .history-status.wrong {
+      color: var(--error);
+      font-weight: 700;
+    }
+
+    /* Teacher / Lesson Builder */
+    .teacher-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .lesson-output {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: monospace;
+      max-height: 380px;
+      overflow-y: auto;
+      user-select: text;
+    }
+
+    /* Formula Catalog */
+    .search-box {
+      width: 100%;
+      background: var(--bg-color);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-size: 14px;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    .catalog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .formula-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .formula-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .formula-card-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .formula-math {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      font-family: serif;
+    }
+
+    /* Bottom Navigation Bar */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: var(--nav-bg);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item .icon {
+      font-size: 20px;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid var(--primary);
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body class="auto-theme">
+
+  <!-- Header -->
+  <header>
+    <div class="brand-wrap">
+      <div class="logo-badge">ФСУ</div>
+      <div>
+        <div class="brand-title">Тренажёр ФСУ (7 класс)</div>
+        <div class="brand-subtitle">Мини-приложение МАХ</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="user-pill" id="userPill">Ученик</div>
+      <button class="close-btn" id="closeAppBtn" title="Закрыть приложение">
+        <span>✕</span> Закрыть
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Tab 1: Тренажёр -->
+    <section id="tab-trainer" class="tab-content active">
+      <div class="card">
+        <div class="card-header">
+          <span class="badge" id="taskCategoryBadge">Разность квадратов</span>
+          <div class="streak-badge">
+            <span>🔥 Серия:</span>
+            <span id="streakCount">0</span>
+          </div>
+        </div>
+
+        <div class="task-title" id="taskTitle">Задание #1</div>
+        <div class="task-question" id="taskQuestion">Загрузка задачи...</div>
+
+        <div class="input-wrap">
+          <label class="input-label" for="answerInput">Введи ответ (раскрой скобки):</label>
+          <input 
+            type="text" 
+            id="answerInput" 
+            class="answer-input" 
+            placeholder="Например: x^2 - 16"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <!-- Virtual Math Keypad -->
+        <div class="keypad">
+          <button class="key-btn power" onclick="insertSymbol('^2')">^2</button>
+          <button class="key-btn power" onclick="insertSymbol('^3')">^3</button>
+          <button class="key-btn" onclick="insertSymbol('x')">x</button>
+          <button class="key-btn" onclick="insertSymbol('y')">y</button>
+          <button class="key-btn" onclick="insertSymbol('+')">+</button>
+          <button class="key-btn" onclick="insertSymbol('-')">-</button>
+          <button class="key-btn" onclick="insertSymbol('(')">(</button>
+          <button class="key-btn" onclick="insertSymbol(')')">)</button>
+          <button class="key-btn" onclick="insertSymbol('a')">a</button>
+          <button class="key-btn" onclick="insertSymbol('b')">b</button>
+          <button class="key-btn action" onclick="backspaceInput()">⌫</button>
+          <button class="key-btn action" onclick="clearInput()">C</button>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="checkAnswerBtn" onclick="submitAnswer()">
+            <span>⚡ Проверить ответ</span>
+          </button>
+          <button class="btn btn-secondary" onclick="loadNewTask()">
+            <span>🔄 Другая задача</span>
+          </button>
+        </div>
+
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 6px;" onclick="toggleHint()">
+          <span>💡 Подсказка формулы</span>
+        </button>
+
+        <div class="hint-box" id="hintBox">
+          <strong>Формула:</strong> <span id="hintFormula">(a - b)(a + b) = a² - b²</span>
+        </div>
+
+        <div class="alert-box" id="feedbackAlert">
+          <div class="alert-title" id="feedbackTitle">Верно!</div>
+          <div class="alert-desc" id="feedbackDesc">Отличная работа!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2: Статистика -->
+    <section id="tab-stats" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">Успеваемость</span>
+          <span style="font-size: 12px; color: var(--text-muted);" id="statsLastUpdated">Сегодня</span>
+        </div>
+
+        <div class="rank-banner">
+          <div class="rank-icon" id="rankIcon">🌱</div>
+          <div class="rank-text">
+            <h4 id="rankTitle">Уровень: Ученик</h4>
+            <p id="rankSubtitle">Решайте больше задач, чтобы получить статус Эксперта ФСУ!</p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="statTotalSolved">0</div>
+            <div class="stat-label">Решено</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statCorrectAnswers" style="color: var(--success);">0</div>
+            <div class="stat-label">Верно</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statAccuracy">0%</div>
+            <div class="stat-label">Точность</div>
+          </div>
+        </div>
+
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Общий прогресс:</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="statProgressBar"></div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; margin-top: 14px;" onclick="switchTab('trainer')">
+          <span>🚀 Тренироваться дальше</span>
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">История попыток</span>
+        </div>
+        <div class="history-list" id="historyList">
+          <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 12px;">
+            Пока нет решенных задач. Начните тренировку во вкладке «Тренажёр»!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: Для учителя -->
+    <section id="tab-teacher" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">Методический блок</span>
+          <span style="font-size: 12px; color: var(--accent);">Учителю / Репетитору</span>
+        </div>
+
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+          Генерация готовых материалов для проведения урока математики в 7 классе с таймингом, устной разминкой, практикой и ответами.
+        </p>
+
+        <div class="teacher-actions">
+          <button class="btn btn-primary" onclick="generateLessonPlan()">
+            <span>📋 Составить план урока (45 мин)</span>
+          </button>
+          <button class="btn btn-secondary" onclick="generateTeacherVariant()">
+            <span>🔢 Сгенерировать вариант из 15 задач</span>
+          </button>
+        </div>
+
+        <div id="lessonResultWrap" style="display: none; margin-top: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">ГОТОВЫЙ МАТЕРИАЛ:</span>
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="copyLessonPlan()">
+              📋 Скопировать
+            </button>
+          </div>
+          <div class="lesson-output" id="lessonOutputText"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: Справочник 30 формул -->
+    <section id="tab-catalog" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <span class="badge">30 шаблонов ФСУ</span>
+          <span style="font-size: 12px; color: var(--text-muted);">7 класс</span>
+        </div>
+
+        <input 
+          type="text" 
+          class="search-box" 
+          id="catalogSearchInput" 
+          placeholder="🔍 Поиск по номеру, формуле или группе..."
+          oninput="filterCatalog()"
+        />
+
+        <div class="catalog-list" id="catalogList">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('trainer')" id="nav-trainer">
+      <span class="icon">🎯</span>
+      <span>Тренажёр</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('stats')" id="nav-stats">
+      <span class="icon">📊</span>
+      <span>Статистика</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('teacher')" id="nav-teacher">
+      <span class="icon">📚</span>
+      <span>Учителю</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('catalog')" id="nav-catalog">
+      <span class="icon">💡</span>
+      <span>Формулы</span>
+    </div>
+  </nav>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toastNotification">Скопировано!</div>
+
+  <script>
+    // --- State & App Initialization ---
+    let currentTask = null;
+    let streak = 0;
+    let userId = "guest_user";
+    let userName = "Ученик";
+    let allTemplates = [];
+
+    // Fallback tasks in case backend API is offline
+    const LOCAL_FALLBACK_TASKS = [
+      { template_id: 1, task_id: 101, question: "Раскройте скобки: (x - 3)(x + 3)", answer: "x^2-9", category: "Разность квадратов", hint: "(a - b)(a + b) = a² - b²" },
+      { template_id: 2, task_id: 102, question: "Раскройте скобки: (5 - x)(5 + x)", answer: "25-x^2", category: "Разность квадратов", hint: "(a - b)(a + b) = a² - b²" },
+      { template_id: 3, task_id: 103, question: "Раскройте скобки: (2x - 4)(2x + 4)", answer: "4x^2-16", category: "Разность квадратов", hint: "(kx - a)(kx + a) = k²x² - a²" },
+      { template_id: 8, task_id: 108, question: "Раскройте скобки: (x + 4)^2", answer: "x^2+8x+16", category: "Квадрат суммы", hint: "(a + b)² = a² + 2ab + b²" },
+      { template_id: 10, task_id: 110, question: "Раскройте скобки: (2x + 3)^2", answer: "4x^2+12x+9", category: "Квадрат суммы", hint: "(kx + a)² = k²x² + 2kax + a²" },
+      { template_id: 14, task_id: 114, question: "Раскройте скобки: (x - 5)^2", answer: "x^2-10x+25", category: "Квадрат разности", hint: "(a - b)² = a² - 2ab + b²" },
+      { template_id: 21, task_id: 121, question: "Раскройте скобки: (x + 2)^3", answer: "x^3+6x^2+12x+8", category: "Куб суммы", hint: "(a + b)³ = a³ + 3a²b + 3ab² + b³" },
+      { template_id: 25, task_id: 125, question: "Умножьте: (x - 3)(x^2 + 3x + 9)", answer: "x^3-27", category: "Разность кубов", hint: "(a - b)(a² + ab + b²) = a³ - b³" }
+    ];
+
+    // MAX Bridge Integration
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.WebApp) {
+        try {
+          window.WebApp.ready();
+          if (window.WebApp.expand) window.WebApp.expand();
+          if (window.WebApp.initDataUnsafe && window.WebApp.initDataUnsafe.user) {
+            const u = window.WebApp.initDataUnsafe.user;
+            userId = String(u.id);
+            userName = u.first_name || (u.username ? "@" + u.username : "Ученик");
+            document.getElementById("userPill").textContent = userName;
+          }
+        } catch (e) {
+          console.warn("MAX WebApp bridge init error:", e);
+        }
+      }
+
+      // Close app handler
+      document.getElementById("closeAppBtn").addEventListener("click", () => {
+        if (window.WebApp && window.WebApp.close) {
+          window.WebApp.close();
+        } else {
+          showToast("Приложение закрыто. Возврат в чат.");
+          window.close();
+        }
+      });
+
+      // Enter key handler on input
+      document.getElementById("answerInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          submitAnswer();
+        }
+      });
+
+      // Load initial task and catalog
+      loadNewTask();
+      loadTemplatesCatalog();
+      updateStatsDisplay();
+    });
+
+    // --- Tab Switching ---
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".nav-item").forEach(el => el.classList.remove("active"));
+
+      const target = document.getElementById(`tab-${tabId}`);
+      const navItem = document.getElementById(`nav-${tabId}`);
+      if (target) target.classList.add("active");
+      if (navItem) navItem.classList.add("active");
+
+      if (tabId === "stats") {
+        updateStatsDisplay();
+      }
+    }
+
+    // --- Virtual Keypad Actions ---
+    function insertSymbol(sym) {
+      const input = document.getElementById("answerInput");
+      const start = input.selectionStart || input.value.length;
+      const end = input.selectionEnd || input.value.length;
+      const val = input.value;
+      input.value = val.substring(0, start) + sym + val.substring(end);
+      input.focus();
+      input.setSelectionRange(start + sym.length, start + sym.length);
+    }
+
+    function backspaceInput() {
+      const input = document.getElementById("answerInput");
+      const start = input.selectionStart || input.value.length;
+      const end = input.selectionEnd || input.value.length;
+      if (start === end && start > 0) {
+        input.value = input.value.substring(0, start - 1) + input.value.substring(end);
+        input.setSelectionRange(start - 1, start - 1);
+      } else if (start !== end) {
+        input.value = input.value.substring(0, start) + input.value.substring(end);
+        input.setSelectionRange(start, start);
+      }
+      input.focus();
+    }
+
+    function clearInput() {
+      const input = document.getElementById("answerInput");
+      input.value = "";
+      input.focus();
+    }
+
+    // --- Toast Notification ---
+    function showToast(text) {
+      const toast = document.getElementById("toastNotification");
+      toast.textContent = text;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    // --- Task Engine & Validation ---
+    async function loadNewTask(preferredTemplateId = null) {
+      const questionEl = document.getElementById("taskQuestion");
+      const titleEl = document.getElementById("taskTitle");
+      const categoryBadge = document.getElementById("taskCategoryBadge");
+      const input = document.getElementById("answerInput");
+      const feedback = document.getElementById("feedbackAlert");
+      const hintBox = document.getElementById("hintBox");
+
+      feedback.className = "alert-box";
+      feedback.style.display = "none";
+      hintBox.style.display = "none";
+      input.value = "";
+
+      let url = `/api/task?user_id=${encodeURIComponent(userId)}`;
+      if (preferredTemplateId) url += `&template_id=${preferredTemplateId}`;
+
+      try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error("API offline");
+        const data = await resp.json();
+        currentTask = data;
+      } catch (err) {
+        // Fallback to local task
+        currentTask = LOCAL_FALLBACK_TASKS[Math.floor(Math.random() * LOCAL_FALLBACK_TASKS.length)];
+      }
+
+      titleEl.textContent = `Задание #${currentTask.template_id}`;
+      questionEl.textContent = currentTask.question;
+      categoryBadge.textContent = currentTask.category || "ФСУ (7 класс)";
+      document.getElementById("hintFormula").textContent = currentTask.hint || "Раскройте формулу сокращенного умножения";
+      input.focus();
+    }
+
+    function toggleHint() {
+      const hint = document.getElementById("hintBox");
+      hint.style.display = (hint.style.display === "block") ? "none" : "block";
+    }
+
+    // Client-side Answer Normalization (MuSlim & Stepan standard)
+    function normalizeAnswer(ans) {
+      if (!ans) return "";
+      let s = ans.toLowerCase();
+      s = s.replace(/\s+/g, "");
+      s = s.replace(/х/g, "x").replace(/у/g, "y").replace(/а/g, "a").replace(/с/g, "c");
+      s = s.replace(/\*\*2|во2|вквадрате/g, "^2");
+      s = s.replace(/\*\*3|в3|вкубе/g, "^3");
+      return s;
+    }
+
+    async function submitAnswer() {
+      const input = document.getElementById("answerInput");
+      const rawAnswer = input.value.trim();
+      if (!rawAnswer) {
+        showToast("Пожалуйста, введи ответ!");
+        input.focus();
+        return;
+      }
+
+      const feedback = document.getElementById("feedbackAlert");
+      const feedbackTitle = document.getElementById("feedbackTitle");
+      const feedbackDesc = document.getElementById("feedbackDesc");
+
+      let isCorrect = false;
+      let expected = currentTask.answer || currentTask.expected_answer || "";
+
+      // Try server API check
+      try {
+        const resp = await fetch("/api/check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: userId,
+            task_id: currentTask.task_id,
+            user_answer: rawAnswer,
+            expected_answer: expected
+          })
+        });
+        if (resp.ok) {
+          const res = await resp.json();
+          isCorrect = res.is_correct;
+          expected = res.expected_answer;
+        } else {
+          throw new Error("Local check fallback");
+        }
+      } catch (err) {
+        // Local normalization comparison
+        const normUser = normalizeAnswer(rawAnswer);
+        const normExpected = normalizeAnswer(expected);
+        isCorrect = (normUser === normExpected);
+      }
+
+      // Record in local session history
+      saveLocalAttempt(currentTask.question, rawAnswer, expected, isCorrect);
+
+      if (isCorrect) {
+        streak += 1;
+        document.getElementById("streakCount").textContent = streak;
+        feedback.className = "alert-box success";
+        feedbackTitle.textContent = "🎉 Абсолютно верно!";
+        feedbackDesc.textContent = `Твой ответ «${rawAnswer}» полностью совпал. Переходи к следующей задаче!`;
+        showToast("Отлично! Ответ верный! 🚀");
+        setTimeout(() => loadNewTask(), 1400);
+      } else {
+        streak = 0;
+        document.getElementById("streakCount").textContent = streak;
+        feedback.className = "alert-box error";
+        feedbackTitle.textContent = "❌ Ответ не совпал";
+        feedbackDesc.textContent = `Твой ответ: «${rawAnswer}». Правильный эталон: «${expected}». Попробуй снова или нажми «💡 Подсказка формулы».`;
+      }
+    }
+
+    // Local Storage Progress Tracker
+    function getStoredAttempts() {
+      try {
+        return JSON.parse(localStorage.getItem("fsu_attempts") || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function saveLocalAttempt(question, userAns, expectedAns, isCorrect) {
+      const attempts = getStoredAttempts();
+      attempts.unshift({
+        question,
+        userAns,
+        expectedAns,
+        isCorrect,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      localStorage.setItem("fsu_attempts", JSON.stringify(attempts.slice(0, 30)));
+    }
+
+    async function updateStatsDisplay() {
+      let total = 0, correct = 0, accuracy = 0;
+      let history = [];
+
+      try {
+        const resp = await fetch(`/api/stats?user_id=${encodeURIComponent(userId)}`);
+        if (resp.ok) {
+          const data = await resp.json();
+          total = data.total_solved || 0;
+          correct = data.correct_answers || 0;
+          accuracy = data.accuracy_percent || 0;
+          history = data.history || [];
+        } else {
+          throw new Error("Offline stats");
+        }
+      } catch {
+        const localAttempts = getStoredAttempts();
+        total = localAttempts.length;
+        correct = localAttempts.filter(a => a.isCorrect).length;
+        accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+        history = localAttempts;
+      }
+
+      document.getElementById("statTotalSolved").textContent = total;
+      document.getElementById("statCorrectAnswers").textContent = correct;
+      document.getElementById("statAccuracy").textContent = `${accuracy}%`;
+      document.getElementById("statProgressBar").style.width = `${accuracy}%`;
+
+      // Rank Badges
+      const rankIcon = document.getElementById("rankIcon");
+      const rankTitle = document.getElementById("rankTitle");
+      const rankSubtitle = document.getElementById("rankSubtitle");
+
+      if (accuracy >= 80 && total >= 5) {
+        rankIcon.textContent = "🏆";
+        rankTitle.textContent = "Уровень: Эксперт ФСУ";
+        rankSubtitle.textContent = "Превосходный результат! Все 30 формул отскакивают от зубов!";
+      } else if (accuracy >= 50 && total >= 3) {
+        rankIcon.textContent = "🥈";
+        rankTitle.textContent = "Уровень: Практик";
+        rankSubtitle.textContent = "Уверенный темп! Ещё немного практики до звания эксперта!";
+      } else {
+        rankIcon.textContent = "🌱";
+        rankTitle.textContent = "Уровень: Ученик";
+        rankSubtitle.textContent = "Изучайте справочник формул и продолжайте тренировки!";
+      }
+
+      // Render History List
+      const historyList = document.getElementById("historyList");
+      if (history.length === 0) {
+        historyList.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 12px;">Пока нет решенных задач.</div>`;
+      } else {
+        historyList.innerHTML = history.slice(0, 6).map(item => `
+          <div class="history-item">
+            <div>
+              <div style="font-weight: 600;">${item.question || item.task_text || "Задача"}</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Ответ: ${item.userAns || item.user_answer || "—"}</div>
+            </div>
+            <div class="history-status ${item.isCorrect || item.is_correct ? 'correct' : 'wrong'}">
+              ${item.isCorrect || item.is_correct ? '✅ Верно' : '❌ Ошибка'}
+            </div>
+          </div>
+        `).join("");
+      }
+    }
+
+    // --- Teacher Actions ---
+    async function generateLessonPlan() {
+      const wrap = document.getElementById("lessonResultWrap");
+      const out = document.getElementById("lessonOutputText");
+      out.textContent = "⏳ Формирую структурированный методический конспект на 45 минут...";
+      wrap.style.display = "block";
+
+      try {
+        const resp = await fetch("/api/lesson", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ topic: "ФСУ (7 класс)", grade: 7, author_id: userId })
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          out.textContent = data.markdown;
+          return;
+        }
+      } catch (e) {}
+
+      // Fallback lesson plan
+      out.textContent = 
+`# 📚 Методический план урока: Формулы сокращенного умножения (7 класс)
+Тайминг урока: 45 минут
+
+## 1. Организационный момент и устная разминка (5 минут)
+Цель: активизация памяти, проверка базовых навыков умножения одночленов.
+• Задание 1: Раскройте скобки (x - 3)(x + 3) = x² - 9
+• Задание 2: Раскройте скобки (x + 4)² = x² + 8x + 16
+• Задание 3: Раскройте скобки (y - 5)² = y² - 10y + 25
+
+## 2. Изучение и закрепление у доски (15 минут)
+Работа с формулами, содержащими коэффициенты:
+• Пример 1: (2x - 3)(2x + 3) = 4x² - 9
+• Пример 2: (3x + 2y)² = 9x² + 12xy + 4y²
+• Пример 3: (5a - 2b)² = 25a² - 20ab + 4b²
+
+## 3. Самостоятельная работа по уровням (20 минут)
+Базовый уровень:
+1) (x - 6)(x + 6)
+2) (2x + 5)²
+Продвинутый уровень:
+3) (3x - 4y)(3x + 4y)
+4) (-x - 3)² = x² + 6x + 9
+
+## 4. Домашнее задание и итоги (5 минут)
+Повторить 3 группы формул ФСУ в чат-боте МАХ (команда /app).
+Домашний вариант: (x + 7)², (4x - 1)(4x + 1), (2x - 3y)².`;
+    }
+
+    async function generateTeacherVariant() {
+      const wrap = document.getElementById("lessonResultWrap");
+      const out = document.getElementById("lessonOutputText");
+      out.textContent = "⏳ Составляю вариант из 15 задач по всем 30 шаблонам...";
+      wrap.style.display = "block";
+
+      try {
+        const resp = await fetch("/api/lesson?variant=15");
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.variant_15) {
+            out.textContent = data.variant_15;
+            return;
+          }
+        }
+      } catch (e) {}
+
+      out.textContent = 
+`# 📝 Вариант для самостоятельной работы: 15 задач (ФСУ 7 класс)
+
+1. Раскройте скобки: (x - 4)(x + 4)
+2. Раскройте скобки: (6 - x)(6 + x)
+3. Раскройте скобки: (3x - 2)(3x + 2)
+4. Раскройте скобки: (x - 3y)(x + 3y)
+5. Раскройте скобки: (2x - 5y)(2x + 5y)
+6. Раскройте скобки: (x^2 - 4)(x^2 + 4)
+7. Раскройте скобки: (x - 0.2)(x + 0.2)
+8. Раскройте скобки: (x + 5)^2
+9. Раскройте скобки: (7 + x)^2
+10. Раскройте скобки: (3x + 4)^2
+11. Раскройте скобки: (x + 2y)^2
+12. Раскройте скобки: (2x + 3y)^2
+13. Раскройте скобки: (x - 6)^2
+14. Раскройте скобки: (-x - 5)^2
+15. Раскройте скобки: (x + 3)^3
+
+────────────────────────
+🔑 Ответы для учителя:
+1. x^2-16  |  2. 36-x^2  |  3. 9x^2-4  |  4. x^2-9y^2  |  5. 4x^2-25y^2
+6. x^4-16  |  7. x^2-0.04  |  8. x^2+10x+25  |  9. 49+14x+x^2  |  10. 9x^2+24x+16
+11. x^2+4xy+4y^2  |  12. 4x^2+12xy+9y^2  |  13. x^2-12x+36  |  14. x^2+10x+25  |  15. x^3+9x^2+27x+27`;
+    }
+
+    function copyLessonPlan() {
+      const text = document.getElementById("lessonOutputText").textContent;
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("План скопирован в буфер! 📋");
+      }).catch(() => {
+        showToast("Выделите текст для копирования.");
+      });
+    }
+
+    // --- Formula Catalog ---
+    async function loadTemplatesCatalog() {
+      try {
+        const resp = await fetch("/api/templates");
+        if (resp.ok) {
+          allTemplates = await resp.json();
+          renderCatalog(allTemplates);
+          return;
+        }
+      } catch (e) {}
+
+      // Built-in 30 formula reference catalog
+      allTemplates = [
+        { id: 1, name: "Разность квадратов (базовая)", formula: "(x - a)(x + a) = x² - a²", group: "Разность квадратов" },
+        { id: 2, name: "Разность квадратов (зеркальная)", formula: "(a - x)(a + x) = a² - x²", group: "Разность квадратов" },
+        { id: 3, name: "Разность квадратов (коэффициент kx)", formula: "(kx - a)(kx + a) = k²x² - a²", group: "Разность квадратов" },
+        { id: 4, name: "Разность квадратов (две переменные)", formula: "(x - ay)(x + ay) = x² - a²y²", group: "Разность квадратов" },
+        { id: 5, name: "Разность квадратов (двойной коэффициент)", formula: "(kx - my)(kx + my) = k²x² - m²y²", group: "Разность квадратов" },
+        { id: 6, name: "Разность квадратов (квадрат переменной)", formula: "(x² - a)(x² + a) = x⁴ - a²", group: "Разность квадратов" },
+        { id: 7, name: "Разность квадратов (десятичные дроби)", formula: "(x - a)(x + a) = x² - a²", group: "Разность квадратов" },
+        { id: 8, name: "Квадрат суммы (базовый)", formula: "(x + a)² = x² + 2ax + a²", group: "Квадрат суммы/разности" },
+        { id: 9, name: "Квадрат суммы (зеркальный)", formula: "(a + x)² = a² + 2ax + x²", group: "Квадрат суммы/разности" },
+        { id: 10, name: "Квадрат суммы с коэффициентом", formula: "(kx + a)² = k²x² + 2kax + a²", group: "Квадрат суммы/разности" },
+        { id: 11, name: "Квадрат суммы двух переменных", formula: "(x + ay)² = x² + 2axy + a²y²", group: "Квадрат суммы/разности" },
+        { id: 12, name: "Квадрат суммы (kx + my)²", formula: "(kx + my)² = k²x² + 2kmxy + m²y²", group: "Квадрат суммы/разности" },
+        { id: 13, name: "Квадрат суммы с x²", formula: "(x² + a)² = x⁴ + 2ax² + a²", group: "Квадрат суммы/разности" },
+        { id: 14, name: "Квадрат разности (базовый)", formula: "(x - a)² = x² - 2ax + a²", group: "Квадрат суммы/разности" },
+        { id: 15, name: "Квадрат разности (зеркальный)", formula: "(a - x)² = a² - 2ax + x²", group: "Квадрат суммы/разности" },
+        { id: 16, name: "Квадрат разности с коэффициентом", formula: "(kx - a)² = k²x² - 2kax + a²", group: "Квадрат суммы/разности" },
+        { id: 17, name: "Квадрат разности двух переменных", formula: "(x - ay)² = x² - 2axy + a²y²", group: "Квадрат суммы/разности" },
+        { id: 18, name: "Квадрат разности (kx - my)²", formula: "(kx - my)² = k²x² - 2kmxy + m²y²", group: "Квадрат суммы/разности" },
+        { id: 19, name: "Квадрат разности с x²", formula: "(x² - a)² = x⁴ - 2ax² + a²", group: "Квадрат суммы/разности" },
+        { id: 20, name: "Квадрат с отрицательными знаками", formula: "(-x - a)² = x² + 2ax + a²", group: "Квадрат суммы/разности" },
+        { id: 21, name: "Куб суммы", formula: "(x + a)³ = x³ + 3ax² + 3a²x + a³", group: "Кубы формул" },
+        { id: 22, name: "Куб разности", formula: "(x - a)³ = x³ - 3ax² + 3a²x - a³", group: "Кубы формул" },
+        { id: 23, name: "Куб суммы с коэффициентом", formula: "(kx + a)³ = k³x³ + 3k²ax² + 3ka²x + a³", group: "Кубы формул" },
+        { id: 24, name: "Куб разности с коэффициентом", formula: "(kx - a)³ = k³x³ - 3k²ax² + 3ka²x - a³", group: "Кубы формул" },
+        { id: 25, name: "Сумма кубов (раскрытие)", formula: "(x + a)(x² - ax + a²) = x³ + a³", group: "Кубы формул" },
+        { id: 26, name: "Разность кубов (раскрытие)", formula: "(x - a)(x² + ax + a²) = x³ - a³", group: "Кубы формул" },
+        { id: 27, name: "Разложение суммы кубов", formula: "x³ + a³ = (x + a)(x² - ax + a²)", group: "Кубы формул" },
+        { id: 28, name: "Разложение разности кубов", formula: "x³ - a³ = (x - a)(x² + ax + a²)", group: "Кубы формул" },
+        { id: 29, name: "Сумма кубов с коэффициентом", formula: "k³x³ + a³ = (kx + a)(k²x² - kax + a²)", group: "Кубы формул" },
+        { id: 30, name: "Разность кубов с коэффициентом", formula: "k³x³ - a³ = (kx - a)(k²x² + kax + a²)", group: "Кубы формул" }
+      ];
+      renderCatalog(allTemplates);
+    }
+
+    function renderCatalog(items) {
+      const container = document.getElementById("catalogList");
+      if (!items || items.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 14px;">Ничего не найдено</div>`;
+        return;
+      }
+      container.innerHTML = items.map(t => `
+        <div class="formula-card" onclick="trainTemplate(${t.id})">
+          <div class="formula-card-top">
+            <span>Шаблон #${t.id}</span>
+            <span style="color: var(--primary); font-weight: 600;">${t.group || 'ФСУ'}</span>
+          </div>
+          <div class="formula-math">${t.formula || t.name}</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Нажми, чтобы тренировать этот шаблон ➔</div>
+        </div>
+      `).join("");
+    }
+
+    function filterCatalog() {
+      const query = document.getElementById("catalogSearchInput").value.toLowerCase();
+      const filtered = allTemplates.filter(t => 
+        String(t.id).includes(query) || 
+        (t.name && t.name.toLowerCase().includes(query)) ||
+        (t.formula && t.formula.toLowerCase().includes(query)) ||
+        (t.group && t.group.toLowerCase().includes(query))
+      );
+      renderCatalog(filtered);
+    }
+
+    function trainTemplate(id) {
+      switchTab("trainer");
+      loadNewTask(id);
+      showToast(`Выбран шаблон #${id}`);
+    }
+  </script>
+</body>
+</html>

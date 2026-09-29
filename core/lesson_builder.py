@@ -241,3 +241,35 @@ def build_lesson_plan(
             print(f"[WARN] Не удалось сохранить план в БД: {e}")
 
     return full_markdown
+
+
+def build_teacher_variant(grade: int = 7, count: int = 15) -> str:
+    """Генерация подборки из N задач с эталонными ответами для самостоятельной работы или контрольного среза."""
+    selected_template_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 21]
+    if count != 15:
+        selected_template_ids = (selected_template_ids * (count // len(selected_template_ids) + 1))[:count]
+
+    tasks = [_get_task(tid) for tid in selected_template_ids]
+
+    doc = [
+        f"# 📝 Вариант для самостоятельной работы: {len(tasks)} задач (ФСУ {grade} класс)\n",
+        "**Инструкция:** Раскройте скобки или преобразуйте выражение, используя формулы сокращенного умножения.\n",
+        "### 🎯 Задания:\n"
+    ]
+
+    for i, t in enumerate(tasks, 1):
+        q_fmt = _format_math(t.question)
+        doc.append(f"{i}. `{q_fmt}`")
+
+    doc.append("\n────────────────────────\n### 🔑 Ответы для учителя:\n")
+    answers_row = []
+    for i, t in enumerate(tasks, 1):
+        ans_fmt = _format_math(t.expected_answer)
+        answers_row.append(f"**{i}:** `{ans_fmt}`")
+
+    # Форматируем ответы блоками по 3 в строке
+    for chunk_start in range(0, len(answers_row), 3):
+        chunk = answers_row[chunk_start:chunk_start + 3]
+        doc.append("  |  ".join(chunk))
+
+    return "\n".join(doc)
