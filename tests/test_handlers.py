@@ -51,7 +51,7 @@ def test_handle_start(temp_db):
 
     assert len(client.sent_messages) == 1
     msg = client.sent_messages[0]["text"]
-    assert "Добро пожаловать в тренажёр ФСУ" in msg
+    assert "Добро пожаловать в Тренажёр" in msg
     assert "/task" in msg
     assert USER_SESSIONS[user_id]["state"] == "MAIN_MENU"
 
@@ -169,7 +169,7 @@ def test_auto_start_on_empty_text(temp_db):
 
     handle_message(user_id=user_id, text="", client=client, chat_id=chat_id, db_path=temp_db)
     assert len(client.sent_messages) == 1
-    assert "Добро пожаловать в тренажёр ФСУ" in client.sent_messages[0]["text"]
+    assert "Добро пожаловать в Тренажёр" in client.sent_messages[0]["text"]
     assert client.sent_messages[0]["chat_id"] == chat_id
 
 
@@ -179,7 +179,22 @@ def test_start_command_aliases(temp_db):
     for idx, cmd in enumerate(aliases):
         uid = f"user_alias_{idx}"
         handle_message(user_id=uid, text=cmd, client=client, db_path=temp_db)
-        assert "Добро пожаловать в тренажёр ФСУ" in client.sent_messages[-1]["text"]
+        assert "Добро пожаловать в Тренажёр" in client.sent_messages[-1]["text"]
+
+
+
+def test_trainer_command_aliases(temp_db):
+    client = DummyClient()
+    trainer_aliases = [
+        "/app", "app", "тренажер", "тренажёр", "/тренажер", "/тренажёр",
+        "открыть тренажер", "открыть тренажёр", "🚀 открыть тренажёр", "🚀 открыть тренажер"
+    ]
+    for idx, cmd in enumerate(trainer_aliases):
+        uid = f"user_trainer_{idx}"
+        handle_message(user_id=uid, text=cmd, client=client, db_path=temp_db)
+        assert len(client.sent_messages) == idx + 1
+        msg = client.sent_messages[-1]["text"]
+        assert "Интерактивный «Тренажёр»" in msg
 
 
 def test_max_bot_started_event():

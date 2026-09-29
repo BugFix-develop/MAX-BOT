@@ -88,9 +88,9 @@ def run_bot_mode(token: str, base_url: str, db_path: str = DB_PATH, webapp_host:
 
         # Регистрация команд в меню мессенджера MAX для кнопки рядом со скрепкой 📎
         bot_commands = [
-            {"name": "app", "description": "🚀 Открыть мини-приложение ФСУ"},
-            {"name": "close", "description": "❌ Закрыть мини-приложение"},
-            {"name": "task", "description": "Решать задачи по ФСУ (7 класс)"},
+            {"name": "app", "description": "🚀 Открыть тренажёр"},
+            {"name": "close", "description": "❌ Закрыть тренажёр"},
+            {"name": "task", "description": "Решать задачи в чате (7 класс)"},
             {"name": "stats", "description": "Моя статистика успеваемости"},
             {"name": "help", "description": "Правила ввода степеней и формул"},
             {"name": "lesson", "description": "Методический план урока на 45 минут"},
@@ -98,6 +98,7 @@ def run_bot_mode(token: str, base_url: str, db_path: str = DB_PATH, webapp_host:
             {"name": "cancel", "description": "Отменить текущее действие"}
         ]
         client.set_my_commands(bot_commands)
+
 
         # Автоматическая отправка /start при старте бота всем известным активным пользователям
         try:

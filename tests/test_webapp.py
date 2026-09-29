@@ -70,7 +70,7 @@ def test_webapp_static_index(webapp_test_server):
     with urllib.request.urlopen(url) as response:
         assert response.status == 200
         content = response.read().decode("utf-8")
-        assert "Тренажёр ФСУ" in content
+        assert "Тренажёр" in content
         assert "max-web-app.js" in content
         assert "closeAppBtn" in content
 
@@ -174,8 +174,8 @@ def test_handle_app_command():
     call = client.app_buttons[0]
     assert call["user_id"] == user_id
     assert call["chat_id"] == 123
-    assert "Интерактивное мини-приложение" in call["text"]
-    assert call["url"] == WEBAPP_URL
+    assert "Интерактивный «Тренажёр»" in call["text"]
+    assert "http" in call["url"]
 
 
 def test_handle_close_command():
@@ -188,7 +188,7 @@ def test_handle_close_command():
     assert USER_SESSIONS[user_id]["state"] == "MAIN_MENU"
     assert len(client.sent_keyboards) == 1
     call = client.sent_keyboards[0]
-    assert "Сессия мини-приложения завершена" in call["text"]
+    assert "Тренажёр закрыт" in call["text"]
     assert any(btn["payload"] == "/app" for row in call["buttons"] for btn in row)
 
 
@@ -212,6 +212,7 @@ def test_handle_start_includes_webapp_invitation():
     handle_start(user_id=user_id, client=client, chat_id=999)
     assert len(client.app_buttons) == 1
     call = client.app_buttons[0]
-    assert "Интерактивное мини-приложение" in call["text"]
+    assert "Интерактивный тренажёр" in call["text"]
     assert "/app" in call["text"]
     assert "скрепкой" in call["text"]
+

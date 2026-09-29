@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Тренажёр ФСУ — Бот МАХ</title>
+  <title>Тренажёр — Бот МАХ</title>
   <!-- MAX Bridge SDK -->
   <script src="https://st.max.ru/js/max-web-app.js"></script>
   <style>
@@ -627,9 +627,9 @@
   <!-- Header -->
   <header>
     <div class="brand-wrap">
-      <div class="logo-badge">ФСУ</div>
+      <div class="logo-badge">📐</div>
       <div>
-        <div class="brand-title">Тренажёр ФСУ (7 класс)</div>
+        <div class="brand-title">Тренажёр (7 класс)</div>
         <div class="brand-subtitle">Мини-приложение МАХ</div>
       </div>
     </div>
@@ -723,7 +723,7 @@
           <div class="rank-icon" id="rankIcon">🌱</div>
           <div class="rank-text">
             <h4 id="rankTitle">Уровень: Ученик</h4>
-            <p id="rankSubtitle">Решайте больше задач, чтобы получить статус Эксперта ФСУ!</p>
+            <p id="rankSubtitle">Решайте больше задач, чтобы повысить свой статус!</p>
           </div>
         </div>
 
@@ -801,7 +801,7 @@
     <section id="tab-catalog" class="tab-content">
       <div class="card">
         <div class="card-header">
-          <span class="badge">30 шаблонов ФСУ</span>
+          <span class="badge">30 шаблонов формул</span>
           <span style="font-size: 12px; color: var(--text-muted);">7 класс</span>
         </div>
 
@@ -1126,8 +1126,8 @@
 
       if (accuracy >= 80 && total >= 5) {
         rankIcon.textContent = "🏆";
-        rankTitle.textContent = "Уровень: Эксперт ФСУ";
-        rankSubtitle.textContent = "Превосходный результат! Все 30 формул отскакивают от зубов!";
+        rankTitle.textContent = "Уровень: Эксперт";
+        rankSubtitle.textContent = "Превосходный результат! Все формулы отскакивают от зубов!";
       } else if (accuracy >= 50 && total >= 3) {
         rankIcon.textContent = "🥈";
         rankTitle.textContent = "Уровень: Практик";
@@ -1225,7 +1225,7 @@
       } catch (e) {}
 
       out.textContent = 
-`# 📝 Вариант для самостоятельной работы: 15 задач (ФСУ 7 класс)
+`# 📝 Вариант для самостоятельной работы: 15 задач (7 класс)
 
 1. Раскройте скобки: (x - 4)(x + 4)
 2. Раскройте скобки: (6 - x)(6 + x)

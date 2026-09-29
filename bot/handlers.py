@@ -47,17 +47,20 @@ def handle_start(user_id: str, client, chat_id: str | int | None = None, db_path
     USER_SESSIONS[user_id] = {"state": "MAIN_MENU", "chat_id": cid}
     get_or_create_user(max_user_id=user_id, role="student", chat_id=cid, db_path=db_path)
 
+    import config
+    app_url = getattr(config, "WEBAPP_URL", f"http://{config.LOCAL_IP}:{config.WEBAPP_PORT}")
+
     welcome_text = (
-        "👋 **Добро пожаловать в тренажёр ФСУ!**\n"
+        "👋 **Добро пожаловать в Тренажёр!**\n"
         "────────────────────────\n"
         "Я чат-бот **«Образовательные решения»** по математике для 7 класса.\n\n"
-        "🚀 **Новинка: Интерактивное мини-приложение!**\n"
-        "Теперь можно решать задачи в удобном визуальном приложении прямо внутри МАХ — с экранной математической клавиатурой (`^2`, `^3`, `x`, `y`), дашбордом успеваемости и полным каталогом формул!\n\n"
+        "🚀 **Интерактивный тренажёр:**\n"
+        "Решай задачи в удобном визуальном приложении прямо внутри МАХ — с экранной математической клавиатурой (`^2`, `^3`, `x`, `y`), дашбордом успеваемости и каталогом формул!\n\n"
         "📎 **Меню команд рядом со скрепкой:**\n"
-        "Нажми кнопку `[ / ]` внизу экрана (рядом с полем прикрепления файлов 📎), чтобы быстро вызывать или закрывать приложение.\n\n"
+        "Нажми кнопку `[ / ]` внизу экрана (рядом с полем прикрепления файлов 📎), чтобы быстро вызывать или закрывать тренажёр.\n\n"
         "⚡ **Главные команды:**\n"
-        "👉 `/app` — 🚀 **Открыть мини-приложение ФСУ**\n"
-        "👉 `/close` — ❌ **Закрыть мини-приложение**\n"
+        "👉 `/app` — 🚀 **Открыть тренажёр**\n"
+        "👉 `/close` — ❌ **Закрыть тренажёр**\n"
         "👉 `/task` — получить задачу в чате\n"
         "👉 `/stats` — посмотреть свой прогресс\n"
         "👉 `/lesson` — составить 45-мин план урока (для учителей)\n"
@@ -66,78 +69,82 @@ def handle_start(user_id: str, client, chat_id: str | int | None = None, db_path
     )
 
     if hasattr(client, "send_app_button"):
-        client.send_app_button(user_id=user_id, chat_id=cid, text=welcome_text, webapp_url=WEBAPP_URL)
+        client.send_app_button(user_id=user_id, chat_id=cid, text=welcome_text, webapp_url=app_url, button_text="🚀 Открыть тренажёр")
     else:
         client.send_message(user_id=user_id, chat_id=cid, text=welcome_text)
 
 
 def handle_app(user_id: str, client, chat_id: str | int | None = None, *args, **kwargs) -> None:
     """
-    Обработчик команды /app (кнопка меню «🚀 Открыть мини-приложение»):
-    - Отправляет карточку с описанием возможностей Mini App
-    - Прикрепляет кнопку прямого открытия приложения (link / open_app)
+    Обработчик команды /app (кнопка меню «🚀 Открыть тренажёр»):
+    - Отправляет карточку с описанием возможностей тренажёра
+    - Прикрепляет кнопку прямого открытия приложения (link)
     - Поясняет, как использовать меню команд рядом с ячейкой прикрепления файлов 📎
     """
     cid = chat_id or USER_SESSIONS.get(user_id, {}).get("chat_id")
     USER_SESSIONS[user_id] = {"state": "MAIN_MENU", "chat_id": cid}
 
+    import config
+    app_url = getattr(config, "WEBAPP_URL", f"http://{config.LOCAL_IP}:{config.WEBAPP_PORT}")
+
     app_text = (
-        "📱 **Интерактивное мини-приложение «Тренажёр ФСУ»**\n"
+        "📱 **Интерактивный «Тренажёр»**\n"
         "────────────────────────\n"
-        "Теперь решать задачи по математике стало ещё удобнее прямо внутри МАХ!\n\n"
-        "✨ **В мини-приложении тебя ждут:**\n"
+        "Удобный визуальный тренажёр по математике (7 класс) прямо в МАХ!\n\n"
+        "✨ **В тренажёре тебя ждут:**\n"
         "• 🎯 Интерактивные карточки с мгновенной проверкой\n"
         "• ⌨️ Экранная математическая клавиатура (`^2`, `^3`, `x`, `y`)\n"
         "• 📊 Дашборд успеваемости с бейджами мастерства\n"
         "• 📚 Генератор конспектов уроков на 45 минут для учителей\n"
-        "• 💡 Интерактивный справочник 30 формул Степана\n\n"
+        "• 💡 Интерактивный справочник 30 формул\n\n"
         "📎 **Меню команд рядом со скрепкой:**\n"
-        "Используй значок `[ / ]` рядом с ячейкой прикрепления файлов 📎 для быстрого открытия/закрытия приложения.\n\n"
-        "Нажми кнопку ниже, чтобы запустить тренажёр: 👇"
+        "Используй значок `[ / ]` рядом с ячейкой прикрепления файлов 📎 для быстрого открытия/закрытия тренажёра.\n\n"
+        f"🌐 **Прямая ссылка:** {app_url}\n\n"
+        "Нажми кнопку ниже, чтобы запустить тренажёр, или начни решать прямо в чате: 👇"
     )
 
     if hasattr(client, "send_app_button"):
-        client.send_app_button(user_id=user_id, chat_id=cid, text=app_text, webapp_url=WEBAPP_URL)
+        client.send_app_button(user_id=user_id, chat_id=cid, text=app_text, webapp_url=app_url, button_text="🚀 Открыть тренажёр")
     else:
         buttons = [
-            [{"type": "link", "text": "🚀 Открыть тренажёр ФСУ", "url": WEBAPP_URL}],
+            [{"type": "link", "text": "🚀 Открыть тренажёр", "url": app_url}],
             [{"type": "callback", "text": "🎯 Решать в чате", "payload": "/task"}, {"type": "callback", "text": "📊 Статистика", "payload": "/stats"}],
-            [{"type": "callback", "text": "❌ Закрыть приложение", "payload": "/close"}]
+            [{"type": "callback", "text": "❌ Закрыть тренажёр", "payload": "/close"}]
         ]
         if hasattr(client, "send_keyboard"):
             client.send_keyboard(user_id=user_id, chat_id=cid, text=app_text, buttons=buttons)
         else:
-            client.send_message(user_id=user_id, chat_id=cid, text=f"{app_text}\n\n👉 Ссылка: {WEBAPP_URL}")
+            client.send_message(user_id=user_id, chat_id=cid, text=f"{app_text}\n\n👉 Ссылка: {app_url}")
 
 
 def handle_close(user_id: str, client, chat_id: str | int | None = None, *args, **kwargs) -> None:
     """
-    Обработчик команды /close (кнопка меню «❌ Закрыть мини-приложение»):
-    - Сбрасывает активную сессию мини-приложения
+    Обработчик команды /close (кнопка меню «❌ Закрыть тренажёр»):
+    - Сбрасывает активную сессию тренажёра
     - Подтверждает закрытие приложения и предлагает продолжить работу в чате
     """
     cid = chat_id or USER_SESSIONS.get(user_id, {}).get("chat_id")
     USER_SESSIONS[user_id] = {"state": "MAIN_MENU", "chat_id": cid}
 
     close_text = (
-        "👋 **Сессия мини-приложения завершена**\n"
+        "✅ **Тренажёр закрыт**\n"
         "────────────────────────\n"
-        "Мини-приложение закрыто. Ты вернулся в стандартный диалоговый режим чата.\n\n"
-        "💡 Ты всегда можешь продолжить тренировку прямо здесь текстом:\n"
-        "👉 `/task` — получить задачу в чате\n"
-        "👉 `/stats` — посмотреть свой прогресс\n"
-        "👉 `/app` — снова открыть интерактивное мини-приложение\n\n"
-        "Также используй меню команд `[ / ]` рядом с ячейкой прикрепления файлов 📎."
+        "Сессия работы с тренажёром завершена.\n"
+        "Ты можешь продолжить тренировку прямо здесь в чате:\n\n"
+        "• Напиши **/task**, чтобы решить задачу в диалоге 🎯\n"
+        "• Напиши **/app**, чтобы снова открыть тренажёр 🚀\n"
+        "• Или выбери нужную команду из меню рядом со скрепкой 📎"
     )
 
-    reopen_buttons = [
-        [{"type": "callback", "text": "🚀 Открыть снова", "payload": "/app"}],
+    buttons = [
+        [{"type": "callback", "text": "🚀 Открыть тренажёр", "payload": "/app"}],
         [{"type": "callback", "text": "🎯 Решать в чате", "payload": "/task"}]
     ]
     if hasattr(client, "send_keyboard"):
-        client.send_keyboard(user_id=user_id, chat_id=cid, text=close_text, buttons=reopen_buttons)
+        client.send_keyboard(user_id=user_id, chat_id=cid, text=close_text, buttons=buttons)
     else:
         client.send_message(user_id=user_id, chat_id=cid, text=close_text)
+
 
 
 def handle_help(user_id: str, client, chat_id: str | int | None = None, *args, **kwargs) -> None:
@@ -411,7 +418,21 @@ COMMAND_HANDLERS = {
     "/приложение": handle_app,
     "приложение": handle_app,
     "🚀 открыть мини-приложение": handle_app,
+    "открыть мини-приложение": handle_app,
+    "🚀 открыть тренажёр": handle_app,
+    "открыть тренажёр": handle_app,
+    "🚀 открыть тренажер": handle_app,
+    "открыть тренажер": handle_app,
+    "тренажёр": handle_app,
+    "тренажер": handle_app,
+    "/тренажёр": handle_app,
+    "/тренажер": handle_app,
+    "открыть": handle_app,
+    "/открыть": handle_app,
+    "🚀 открыть": handle_app,
     "🚀 открыть тренажёр фсу": handle_app,
+    "открыть тренажёр фсу": handle_app,
+    "открыть тренажер фсу": handle_app,
     "/close": handle_close,
     "close": handle_close,
     "/закрыть": handle_close,
@@ -419,6 +440,10 @@ COMMAND_HANDLERS = {
     "закрыть приложение": handle_close,
     "/закрыть_приложение": handle_close,
     "❌ закрыть приложение": handle_close,
+    "закрыть тренажер": handle_close,
+    "закрыть тренажёр": handle_close,
+    "❌ закрыть тренажёр": handle_close,
+    "❌ закрыть тренажер": handle_close,
     "❌ закрыть": handle_close,
     "/cancel": handle_cancel,
     "cancel": handle_cancel,
@@ -466,10 +491,10 @@ def handle_message(user_id: str, text: str, client, chat_id: str | int | None = 
     fallback_text = (
         "🤖 **Команда не распознана**\n"
         "────────────────────────\n"
-        "Я чат-бот для тренировки формул сокращенного умножения (7 класс).\n\n"
+        "Я чат-бот тренажёра по математике (7 класс).\n\n"
         "⚡ **Доступные команды (меню рядом со скрепкой 📎):**\n"
-        "• `/app` — 🚀 открыть интерактивное мини-приложение\n"
-        "• `/close` — ❌ закрыть сессию мини-приложения\n"
+        "• `/app` — 🚀 открыть тренажёр\n"
+        "• `/close` — ❌ закрыть тренажёр\n"
         "• `/task` — получить математическую задачу в чате\n"
         "• `/stats` — твоя статистика успеваемости\n"
         "• `/help` — правила ввода формул и степеней\n"
@@ -478,4 +503,5 @@ def handle_message(user_id: str, text: str, client, chat_id: str | int | None = 
         "Напиши **/app**, чтобы открыть тренажёр, или **/task**, чтобы решать в чате! 🎯"
     )
     client.send_message(user_id=user_id, chat_id=cid, text=fallback_text)
+
 

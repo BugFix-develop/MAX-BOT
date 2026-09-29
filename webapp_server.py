@@ -255,16 +255,92 @@ def create_server(host: str = "0.0.0.0", port: int = 8080, db_path: str = DB_PAT
     return server
 
 
+_tunnel_proc = None
+
+
+def start_tunnel_in_background(port: int = 8080) -> None:
+    """
+    Spawns a background thread that establishes an HTTPS tunnel via pinggy (over SSH port 443).
+    Once connected, updates config.WEBAPP_URL with the public HTTPS URL so that MAX Messenger
+    clients on any device can open the WebApp directly without 'такого нет' errors.
+    """
+    import subprocess
+    import re
+    import time
+    import config
+
+    global _tunnel_proc
+
+    def _tunnel_worker():
+        global _tunnel_proc
+        cmd = [
+            "ssh", "-p", "443",
+            "-o", "StrictHostKeyChecking=no",
+            "-o", "ServerAliveInterval=30",
+            f"-R0:localhost:{port}",
+            "qr@a.pinggy.io"
+        ]
+        while True:
+            try:
+                logger.info("⏳ Запуск публичного HTTPS туннеля для тренажёра...")
+                _tunnel_proc = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    bufsize=1
+                )
+                start_t = time.time()
+                url_found = False
+                while time.time() - start_t < 15 and _tunnel_proc.poll() is None:
+                    line = _tunnel_proc.stdout.readline()
+                    if not line:
+                        break
+                    m = re.search(r"https://[a-zA-Z0-9\.\-]+(?:free\.pinggy\.net|run\.pinggy\-free\.link)", line)
+                    if m:
+                        public_url = m.group(0)
+                        config.WEBAPP_URL = public_url
+                        logger.info("🌐 Публичный HTTPS URL тренажёра успешно активирован: %s", public_url)
+                        url_found = True
+                        break
+
+                if not url_found:
+                    logger.warning("Не удалось автоматически получить HTTPS URL туннеля, используется: %s", config.WEBAPP_URL)
+
+                # Keep reading output so buffer doesn't fill up
+                for _ in _tunnel_proc.stdout:
+                    pass
+
+                _tunnel_proc.wait()
+            except Exception as e:
+                logger.warning("Ошибка в фоновом туннеле: %s", e)
+
+            # Reconnection backoff
+            time.sleep(5)
+
+    thread = threading.Thread(target=_tunnel_worker, daemon=True, name="PinggyTunnelThread")
+    thread.start()
+
+
 def start_server_in_thread(host: str = "0.0.0.0", port: int = 8080, db_path: str = DB_PATH) -> tuple[ThreadingHTTPServer, threading.Thread]:
     """
     Starts the WebApp server in a background daemon thread.
+    Also starts the public HTTPS tunnel if enabled in config.
     Returns (server_instance, thread).
     """
     server = create_server(host=host, port=port, db_path=db_path)
     thread = threading.Thread(target=server.serve_forever, daemon=True, name="WebAppServerThread")
     thread.start()
-    logger.info("🌐 Веб-сервер мини-приложения успешно запущен на http://%s:%d", host, port)
+    logger.info("🌐 Веб-сервер тренажёра успешно запущен на http://%s:%d", host, port)
+
+    import config
+    if getattr(config, "ENABLE_TUNNEL", True) and "?startapp" not in os.getenv("WEBAPP_URL", ""):
+        # If user explicitly provided a custom public URL in .env, don't override it with pinggy
+        if not os.getenv("WEBAPP_URL"):
+            start_tunnel_in_background(port=port)
+
     return server, thread
+
 
 
 def run_standalone(host: str = "0.0.0.0", port: int = 8080, db_path: str = DB_PATH):
